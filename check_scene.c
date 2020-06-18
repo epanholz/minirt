@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 16:51:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/05/31 18:32:52 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/06/18 13:12:32 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void		check_camera(char *s, int p, t_minirt *m)
 
 void		check_alight(char *s, int p, t_minirt *m)
 {
-	if (m->scene.a_light == 1)
+	if (m->scene.ambient_light == 1)
 		ft_error(INVAL);
-	m->scene.a_light = 1;
+	m->scene.ambient_light = 1;
 	m->utils.i = p;
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;

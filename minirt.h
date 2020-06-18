@@ -6,16 +6,18 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/05/31 18:34:21 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/06/18 13:23:42 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* 
 MY FILES
-read_file.c
-check_map.c
-check_map_utils.c
-object_list.c
+test_main.c 
+read_file.c 
+get_scene.c 
+check_scene.c
+check_scene_utils.c 
+object_list.c 
 */
 
 #ifndef MINIRT_H
@@ -42,7 +44,7 @@ typedef enum		e_error
 
 typedef enum		e_objects
 {
-	ALIGHT, CAM, LIGHT, PLA, SPH,
+	LIGHT, PLA, SPH,
 	SQU, CYL, TRI
 }					t_objects;
 
@@ -69,9 +71,17 @@ typedef struct  	s_utils
 typedef struct 		s_scene 
 {
 	int				res;
-	int				r1;
-	int				r2;
-	int				a_light;
+	int				ambient_light;
+	int				camera;
+	int				res_x;
+	int				res_y;
+	double			l_ratio;
+	int				l_r;
+	int				l_b;
+	int				l_g;
+	t_vec3			c_view_point;
+	t_vec3			c_norm_vec;
+	int				c_fov;
 }					t_scene;
 
 typedef	struct		s_alight
@@ -182,7 +192,7 @@ void		check_square(char *s, int p, t_minirt *m);
 void		check_cylinder(char *s, int p, t_minirt *m);
 void		check_triangle(char *s, int p, t_minirt *m);
 void		get_res(char *s, int p, t_minirt *m);
-t_alight	*get_ambient_light(char *s, int p, t_minirt *m);
+void		get_ambient_light(char *s, int p, t_minirt *m);
 void		make_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
 

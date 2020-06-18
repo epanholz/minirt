@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/05/31 19:50:54 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/06/18 13:29:05 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,54 +33,47 @@ void		get_res(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 			ft_error(INVAL);
-	m->scene.r1 = ft_atod(s, m, INT);
+	m->scene.res_x = ft_atod(s, m, INT);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 			ft_error(INVAL);
-	m->scene.r2 = ft_atod(s, m, INT);
+	m->scene.res_y = ft_atod(s, m, INT);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
 			ft_error(INVAL);
+	printf("%d %d [RES]\n", m->scene.res_x, m->scene.res_y);
 }
 
-t_alight	*get_ambient_light(char *s, int p, t_minirt *m)
+void		get_ambient_light(char *s, int p, t_minirt *m)
 {
-	t_alight	*alight;
-
-	alight = (t_alight*)malloc(sizeof(t_alight));
-
 	check_alight(s, p, m);
 	m->utils.i = p;
 
-	alight->light_b = ft_atod_loop(s, m, FLOAT);
-	alight->r= ft_atod_loop(s, m, INT);
-	alight->b= ft_atod_loop(s, m, INT);
-	alight->g= ft_atod_loop(s, m, INT);
+	m->scene.l_ratio = ft_atod_loop(s, m, FLOAT);
+	m->scene.l_r = ft_atod_loop(s, m, INT);
+	m->scene.l_b= ft_atod_loop(s, m, INT);
+	m->scene.l_g= ft_atod_loop(s, m, INT);
 	
-	printf("%0.1f, %d, %d, %d ", alight->light_b, alight->r, alight->b, alight->g);
-	return(alight);
+	printf("%0.1f, %d, %d, %d [A LIGHT]\n", m->scene.l_ratio, m->scene.l_r, m->scene.l_b, m->scene.l_g);
 }
 
-t_cam		*get_camera(char *s, int p, t_minirt *m)
+void		get_camera(char *s, int p, t_minirt *m)
 {
-	t_cam	*cam;
-
-	cam = (t_cam*)malloc(sizeof(t_cam));
 	check_camera(s, p, m);
+	m->scene.camera = 1;
 	m->utils.i = p;
 
-	cam->view_point.x = ft_atod_loop(s, m, FLOAT);
-	cam->view_point.y = ft_atod_loop(s, m, FLOAT);
-	cam->view_point.z = ft_atod_loop(s, m, FLOAT);
-	cam->norm_vec.x = ft_atod_loop(s, m, FLOAT);
-	cam->norm_vec.y = ft_atod_loop(s, m, FLOAT);
-	cam->norm_vec.z = ft_atod_loop(s, m, FLOAT);
-	cam->fov = ft_atod_loop(s, m, INT);
+	m->scene.c_view_point.x = ft_atod_loop(s, m, FLOAT);
+	m->scene.c_view_point.y = ft_atod_loop(s, m, FLOAT);
+	m->scene.c_view_point.z = ft_atod_loop(s, m, FLOAT);
+	m->scene.c_norm_vec.x = ft_atod_loop(s, m, FLOAT);
+	m->scene.c_norm_vec.y = ft_atod_loop(s, m, FLOAT);
+	m->scene.c_norm_vec.z = ft_atod_loop(s, m, FLOAT);
+	m->scene.c_fov = ft_atod_loop(s, m, INT);
 
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d ", cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
-	return(cam);
+	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d [CAM]\n", m->scene.c_view_point.x, m->scene.c_view_point.y, m->scene.c_view_point.z, m->scene.c_norm_vec.x, m->scene.c_norm_vec.y, m->scene.c_norm_vec.z, m->scene.c_fov);
 }
 
 t_light		*get_light(char *s, int p, t_minirt *m)
@@ -232,11 +225,10 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 
 	if (arg[p] == 'R' && arg[p + 1] == ' ')
 		get_res(arg, p + 1, minirt);
-		
-	// else if (arg[p] == 'A' && arg[p + 1] == ' ')
-	// 	get_ambient_light(arg, p + 1, minirt);
-	// else if (arg[p] == 'c' && arg[p + 1] == ' ')
-	// 	get_camera(arg, p + 1, minirt);
+	else if (arg[p] == 'A' && arg[p + 1] == ' ')
+		get_ambient_light(arg, p + 1, minirt);
+	else if (arg[p] == 'c' && arg[p + 1] == ' ')
+		get_camera(arg, p + 1, minirt);
 	// else if (arg[p] == 'l')
 	// 	get_light(arg, p + 1, minirt);
 	// else if (arg[p] == 'p' && arg[p + 1] == 'l')
@@ -251,10 +243,11 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 	//	get_triangle(arg, p + 2, minirt);
 
 
-	else if (arg[p] == 'A' && arg[p + 1] == ' ')
-		add_object(head, ALIGHT, get_ambient_light(arg, p + 1, minirt));
-	else if (arg[p] == 'c' && arg[p + 1] == ' ')
-		add_object(head, CAM, get_camera(arg, p + 1, minirt));
+	// else if (arg[p] == 'A' && arg[p + 1] == ' ')
+	// 	add_object(head, ALIGHT, get_ambient_light(arg, p + 1, minirt));
+	// else if (arg[p] == 'c' && arg[p + 1] == ' ')
+	// 	add_object(head, CAM, get_camera(arg, p + 1, minirt));
+
 	else if (arg[p] == 'l')
 		add_object(head, LIGHT, get_light(arg, p + 1, minirt));
 	else if (arg[p] == 'p' && arg[p + 1] == 'l')
@@ -288,4 +281,6 @@ void		check_map(char *map, t_minirt *minirt)
 			index++;
 		minirt->utils.i = 0;
 	}
+	if (minirt->scene.camera == 0 || minirt->scene.ambient_light == 0 || minirt->scene.res == 0)
+		ft_error(INVAL);
 }

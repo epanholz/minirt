@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/10 20:04:00 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/06/18 16:50:39 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ int		check_save(char *str)
 	return(0);
 }
 
+int		rgbt(int t, int r, int g, int b)
+{
+	return(t << 24 | r << 16 | g << 8 | b);
+}
+
 int	main()
 {
 	t_minirt	minirt;
@@ -52,18 +57,22 @@ int	main()
 	char		*buff;
 
 	minirt.scene.res = 0;
-	minirt.scene.a_light = 0;
+	minirt.scene.ambient_light = 0;
+	minirt.scene.camera = 0;
+
 	buff = NULL;
-	fd = open("scene.rt", O_RDONLY);
+	fd = open("7-wolfie.rt", O_RDONLY);
 	buff = read_file(fd, buff);
 	check_map(buff, &minirt);
 
 	// minirt.var.mlx = mlx_init();
-	// minirt.var.win = mlx_new_window(minirt.var.mlx, minirt.scene.r1, minirt.scene.r2, "Scene Window");
-	// mlx_string_put(minirt.var.mlx, minirt.var.win, 40, 40, 0xffd1f7, "Hi Angi! <3");
+	// minirt.var.win = mlx_new_window(minirt.var.mlx, minirt.scene.res_x, minirt.scene.res_y, "Scene Window");
+	// mlx_string_put(minirt.var.mlx, minirt.var.win, 200, 250, rgbt(0, minirt.scene.l_r, minirt.scene.l_g, minirt.scene.l_b), "A LIGHT COLOR");
 	// mlx_hook(minirt.var.win, 17, 0L, close_button, &minirt);
 	// mlx_hook(minirt.var.win, 2, 1L<<0, close_key, &minirt);
-	// mlx_loop(minirt.var.win);
+	// mlx_loop(minirt.var.mlx);
+
+ // gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c
 
 	return (0);
 }
