@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/06/18 12:32:07 by epanholz      ########   odam.nl          #
+#    Updated: 2020/06/20 18:07:58 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,33 @@ FLAGS = -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework A
 all: $(NAME)
 
 $(NAME): 
-	gcc $(FLAGS) -o $(NAME) $(SRC)
+	@printf "\n"
+	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m"
+	@gcc $(FLAGS) -o $(NAME) $(SRC)
+	@printf "\n"
 
 clean:
-	rm $(NAME)
+	@printf "\n"
+	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ ʀᴇᴍᴏᴠɪɴɢ ᴇxᴇᴄᴜᴛᴀʙʟᴇ ♥\n\e[0m"
+	@rm $(NAME)
+	@printf "\n"
 
 re: clean all
+
+circle:
+	@printf "\n"
+	@printf "\e[1;36m█▀▀ █▀▀█ █▀▄▀█ █▀▀█ ░▀░ █░░ ░▀░ █▀▀▄ █▀▀▀ 　 █▀▀ ░▀░ █▀▀█ █▀▀ █░░ █▀▀\n\e[0m"
+	@printf "\e[1;36m█░░ █░░█ █░▀░█ █░░█ ▀█▀ █░░ ▀█▀ █░░█ █░▀█ 　 █░░ ▀█▀ █▄▄▀ █░░ █░░ █▀▀\n\e[0m"
+	@printf "\e[1;36m▀▀▀ ▀▀▀▀ ▀░░░▀ █▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀▀ 　 ▀▀▀ ▀▀▀ ▀░▀▀ ▀▀▀ ▀▀▀ ▀▀▀\n\e[0m"
+	@gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit circle.c
+	@./a.out
+	@printf "\n"
+
+square:
+	@printf "\n"
+	@printf "\e[1;36m█▀▀ █▀▀█ █▀▄▀█ █▀▀█ ░▀░ █░░ ░▀░ █▀▀▄ █▀▀▀ 　 █▀▀ █▀▀█ █░░█ █▀▀█ █▀▀█ █▀▀\n\e[0m"
+	@printf "\e[1;36m█░░ █░░█ █░▀░█ █░░█ ▀█▀ █░░ ▀█▀ █░░█ █░▀█ 　 ▀▀█ █░░█ █░░█ █▄▄█ █▄▄▀ █▀▀\n\e[0m"
+	@printf "\e[1;36m▀▀▀ ▀▀▀▀ ▀░░░▀ █▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀▀ 　 ▀▀▀ ▀▀▀█ ░▀▀▀ ▀░░▀ ▀░▀▀ ▀▀▀\n\e[0m"
+	@gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit square.c
+	@./a.out
+	@printf "\n"

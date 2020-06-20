@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/18 16:58:40 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/20 14:50:39 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main()
 	// minirt.var.win = mlx_new_window(minirt.var.mlx, minirt.scene.res_x, minirt.scene.res_y, "Scene Window");
 	// mlx_string_put(minirt.var.mlx, minirt.var.win, 200, 250, rgbt(0, minirt.scene.l_r, minirt.scene.l_g, minirt.scene.l_b), "A LIGHT COLOR");
 	// mlx_hook(minirt.var.win, 17, 0L, close_button, &minirt);
-	// mlx_hook(minirt.var.win, 2, 1L<<0, close_key, &minirt);
+	// mlx_key_hook(var.win, close_key, &var);
 	// mlx_loop(minirt.var.mlx);
 
  // gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/21 16:08:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/18 17:32:39 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/20 17:56:47 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ typedef struct  s_var {
         void    *mlx;
         void    *win;
 		void	*img;
+		char    *addr;
+    	int     bits_per_pixel;
+    	int     line_length;
+    	int     endian;
 }               t_var;
 
 
@@ -31,15 +35,26 @@ int		close_key(int keycode, t_var *var)
 	if (keycode == 53)
 	{
     	mlx_destroy_window(var->mlx, var->win);
-		exit(1);
+		mlx_destroy_image(var->mlx, var->img);
+		exit(0);
 	}
 	return (0);
 }
 
-int		close_button(void)
+int		close_button(t_var *var)
 {
-	exit(1);
+	mlx_destroy_window(var->mlx, var->win);
+	mlx_destroy_image(var->mlx, var->img);
+	exit(0);
 	return (0);
+}
+
+void            my_mlx_pixel_put(t_var *var, int x, int y, int color)
+{
+    char    *dst;
+
+    dst = var->addr + (y * var->line_length + x * (var->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
 }
 
 int     main(void)
@@ -51,22 +66,26 @@ int     main(void)
 	i = 50;
 	j = 150;
     var.mlx = mlx_init();
-    var.win = mlx_new_window(var.mlx, 200, 200, "Hey Zino!");
-	// var.img = mlx_new_image(var.mlx, 200, 200);
+    var.win = mlx_new_window(var.mlx, 200, 200, "Squareeee");
+	mlx_key_hook(var.win, close_key, &var);
+	mlx_hook(var.win, 17, 0L, close_button, &var);
+	var.img = mlx_new_image(var.mlx, 200, 200);
+	var.addr = mlx_get_data_addr(var.img, &var.bits_per_pixel, &var.line_length, &var.endian);
 	while (i < 150 && j > 50)
 	{
-		mlx_pixel_put(var.mlx, var.win, 50, i, rgbt(0,255,182,193));
-		mlx_pixel_put(var.mlx, var.win, i, 50, rgbt(0,255,182,193));
-		mlx_pixel_put(var.mlx, var.win, 150, j, rgbt(0,255,182,193));
-		mlx_pixel_put(var.mlx, var.win, j, 150, rgbt(0,255,182,193));
+		my_mlx_pixel_put(&var, 50, i, rgbt(0,255,182,193));
+		my_mlx_pixel_put(&var, i, 50, rgbt(0,255,182,193));
+		my_mlx_pixel_put(&var, 150, j, rgbt(0,255,182,193));
+		my_mlx_pixel_put(&var, j, 150, rgbt(0,255,182,193));
 		i++;
 		j--;
 	}
-	mlx_string_put(var.mlx, var.win, 40, 40, 0xffd1f7, "LOOK ZINO");
-	mlx_hook(var.win, 17, 0L, close_button, &var);
-	mlx_hook(var.win, 2, 1L<<0, close_key, &var);
+    my_mlx_pixel_put(&var, 5, 5, rgbt(0,255,182,193));
+	mlx_put_image_to_window(var.mlx, var.win, var.img, 0, 0);
     mlx_loop(var.mlx);
 }    	
+
+// gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit
 
 /* 
 -- mlx_put_image_to_window -- 
@@ -98,4 +117,11 @@ Creates a new MLX compatible image.
 @return void *        the image instance reference.
 
 void    *mlx_new_image(void *mlx_ptr,int width,int height);
-*/
+
+man man/man3/mlx_loop.3
+man man/man3/mlx_new_image.3
+man man/man3/mlx_new_window.3
+man man/man3/mlx_pixel_put.3
+man man/man3/mlx.3
+
+ */
