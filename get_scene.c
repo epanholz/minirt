@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/18 13:29:05 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/24 16:58:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,25 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 	printf("%0.1f, %d, %d, %d [A LIGHT]\n", m->scene.l_ratio, m->scene.l_r, m->scene.l_b, m->scene.l_g);
 }
 
-void		get_camera(char *s, int p, t_minirt *m)
+t_cam		*get_camera(char *s, int p, t_minirt *m)
 {
+	t_cam	*cam;
+
+	cam = (t_cam*)malloc(sizeof(t_cam));
 	check_camera(s, p, m);
 	m->scene.camera = 1;
 	m->utils.i = p;
 
-	m->scene.c_view_point.x = ft_atod_loop(s, m, FLOAT);
-	m->scene.c_view_point.y = ft_atod_loop(s, m, FLOAT);
-	m->scene.c_view_point.z = ft_atod_loop(s, m, FLOAT);
-	m->scene.c_norm_vec.x = ft_atod_loop(s, m, FLOAT);
-	m->scene.c_norm_vec.y = ft_atod_loop(s, m, FLOAT);
-	m->scene.c_norm_vec.z = ft_atod_loop(s, m, FLOAT);
-	m->scene.c_fov = ft_atod_loop(s, m, INT);
+	cam->view_point.x = ft_atod_loop(s, m, FLOAT);
+	cam->view_point.y = ft_atod_loop(s, m, FLOAT);
+	cam->view_point.z = ft_atod_loop(s, m, FLOAT);
+	cam->norm_vec.x = ft_atod_loop(s, m, FLOAT);
+	cam->norm_vec.y = ft_atod_loop(s, m, FLOAT);
+	cam->norm_vec.z = ft_atod_loop(s, m, FLOAT);
+	cam->fov = ft_atod_loop(s, m, INT);
 
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d [CAM]\n", m->scene.c_view_point.x, m->scene.c_view_point.y, m->scene.c_view_point.z, m->scene.c_norm_vec.x, m->scene.c_norm_vec.y, m->scene.c_norm_vec.z, m->scene.c_fov);
+	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d ", cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
+	return(cam);
 }
 
 t_light		*get_light(char *s, int p, t_minirt *m)
@@ -227,8 +231,9 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 		get_res(arg, p + 1, minirt);
 	else if (arg[p] == 'A' && arg[p + 1] == ' ')
 		get_ambient_light(arg, p + 1, minirt);
-	else if (arg[p] == 'c' && arg[p + 1] == ' ')
-		get_camera(arg, p + 1, minirt);
+
+	// else if (arg[p] == 'c' && arg[p + 1] == ' ')
+	// 	get_camera(arg, p + 1, minirt);
 	// else if (arg[p] == 'l')
 	// 	get_light(arg, p + 1, minirt);
 	// else if (arg[p] == 'p' && arg[p + 1] == 'l')
@@ -245,20 +250,19 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 
 	// else if (arg[p] == 'A' && arg[p + 1] == ' ')
 	// 	add_object(head, ALIGHT, get_ambient_light(arg, p + 1, minirt));
-	// else if (arg[p] == 'c' && arg[p + 1] == ' ')
-	// 	add_object(head, CAM, get_camera(arg, p + 1, minirt));
-
-	else if (arg[p] == 'l')
+	else if (arg[p] == 'c' && arg[p + 1] == ' ')
+		add_object(head, CAM, get_camera(arg, p + 1, minirt));
+	else if (arg[p] == 'l' && arg[p + 1] == ' ')
 		add_object(head, LIGHT, get_light(arg, p + 1, minirt));
-	else if (arg[p] == 'p' && arg[p + 1] == 'l')
+	else if (arg[p] == 'p' && arg[p + 1] == 'l' && arg[p + 2] == ' ')
 		add_object(head, PLA, get_plane(arg, p + 2, minirt));
-	else if (arg[p] == 's' && arg[p + 1] == 'p')
+	else if (arg[p] == 's' && arg[p + 1] == 'p' && arg[p + 2] == ' ')
 		add_object(head, SPH, get_sphere(arg, p + 2, minirt));
-	else if (arg[p] == 's' && arg[p + 1] == 'q')
+	else if (arg[p] == 's' && arg[p + 1] == 'q' && arg[p + 2] == ' ')
 		add_object(head, SQU, get_square(arg, p + 2, minirt));
-	else if (arg[p] == 'c' && arg[p + 1] == 'y')
+	else if (arg[p] == 'c' && arg[p + 1] == 'y' && arg[p + 2] == ' ')
 		add_object(head, CYL, get_cylinder(arg, p + 2, minirt));
-	else if (arg[p] == 't' && arg[p + 1] == 'r')
+	else if (arg[p] == 't' && arg[p + 1] == 'r' && arg[p + 2] == ' ')
 		add_object(head, TRI, get_triangle(arg, p + 2, minirt));
 	else
 		ft_error(INVAL);

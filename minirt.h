@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/18 13:23:42 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/24 13:46:23 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum		e_error
 
 typedef enum		e_objects
 {
-	LIGHT, PLA, SPH,
+	CAM, LIGHT, PLA, SPH,
 	SQU, CYL, TRI
 }					t_objects;
 
@@ -79,18 +79,7 @@ typedef struct 		s_scene
 	int				l_r;
 	int				l_b;
 	int				l_g;
-	t_vec3			c_view_point;
-	t_vec3			c_norm_vec;
-	int				c_fov;
 }					t_scene;
-
-typedef	struct		s_alight
-{
-	double			light_b;
-	int				r;
-	int				b;
-	int				g;
-}					t_alight;
 
 typedef	struct		s_cam
 {

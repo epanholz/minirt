@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/06/22 14:11:29 by pani_zino     ########   odam.nl          #
+#    Updated: 2020/06/24 14:00:13 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = minirt
 SRC = test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c
 
 INC = minirt.h
+
 FLAGS = -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit
 
 
@@ -23,7 +24,7 @@ all: $(NAME)
 $(NAME): 
 	@printf "\n"
 	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m"
-	@gcc $(FLAGS) -o $(NAME) $(SRC)
+	@gcc $(FLAGS) -g -o $(NAME) $(SRC)
 	@printf "\n"
 
 clean:
