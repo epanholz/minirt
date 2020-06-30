@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/06/24 14:00:13 by epanholz      ########   odam.nl          #
+#    Updated: 2020/06/30 16:03:34 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,5 +46,19 @@ square:
 	@printf "\n"
 	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴄᴏᴍᴘɪʟɪɴɢ ꜱQᴜᴀʀᴇ ♥\n\e[0m"
 	@gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit square.c
+	@./a.out
+	@printf "\n"
+
+test:
+	@printf "\n"
+	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴛʀʏɪɴɢ ᴏᴜᴛ ꜱᴏᴍᴇ ꜱᴛᴜꜰꜰ ♥\n\e[0m"
+	@gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit trying_stuff.c
+	@./a.out
+	@printf "\n"
+
+tracer:
+	@printf "\n"
+	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ test tracer ♥\n\e[0m"
+	@gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit test_tracer.c
 	@./a.out
 	@printf "\n"

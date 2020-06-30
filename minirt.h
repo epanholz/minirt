@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/24 13:46:23 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/30 16:56:08 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum		e_error
 
 typedef enum		e_objects
 {
-	CAM, LIGHT, PLA, SPH,
+	CAM = 1, LIGHT, PLA, SPH,
 	SQU, CYL, TRI
 }					t_objects;
 
@@ -58,8 +58,13 @@ typedef	struct		s_vec3
 
 typedef struct  	s_var 
 {
-    void    		*mlx;
-    void    		*win;
+    void			*mlx;
+    void			*win;
+	void			*img;
+	char			*addr;
+    int				bits_per_pixel;
+    int				line_length;
+    int				endian;
 }              		t_var;
 
 typedef struct  	s_utils 

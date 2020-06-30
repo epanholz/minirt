@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/20 14:50:39 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/30 17:45:16 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,15 @@ int		rgbt(int t, int r, int g, int b)
 	return(t << 24 | r << 16 | g << 8 | b);
 }
 
+void            my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
+{
+    char    *dst;
+
+    dst = minirt->var.addr + (y * minirt->var.line_length + x * (minirt->var.bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
+}
+
+
 int	main()
 {
 	t_minirt	minirt;
@@ -65,12 +74,15 @@ int	main()
 	buff = read_file(fd, buff);
 	check_map(buff, &minirt);
 
-	// minirt.var.mlx = mlx_init();
-	// minirt.var.win = mlx_new_window(minirt.var.mlx, minirt.scene.res_x, minirt.scene.res_y, "Scene Window");
-	// mlx_string_put(minirt.var.mlx, minirt.var.win, 200, 250, rgbt(0, minirt.scene.l_r, minirt.scene.l_g, minirt.scene.l_b), "A LIGHT COLOR");
-	// mlx_hook(minirt.var.win, 17, 0L, close_button, &minirt);
-	// mlx_key_hook(var.win, close_key, &var);
-	// mlx_loop(minirt.var.mlx);
+	minirt.var.mlx = mlx_init();
+	minirt.var.win = mlx_new_window(minirt.var.mlx, minirt.scene.res_x, minirt.scene.res_y, "Scene Window");
+	minirt.var.img = mlx_new_image(minirt.var.mlx, minirt.scene.res_x, minirt.scene.res_y);
+	minirt.var.addr = mlx_get_data_addr(minirt.var.img, &minirt.var.bits_per_pixel, &minirt.var.line_length, &minirt.var.endian);
+	my_mlx_pixel_put(&minirt, 500, 500, rgbt(0,255,182,193));
+	mlx_put_image_to_window(minirt.var.mlx, minirt.var.win, minirt.var.img, 0, 0);
+	mlx_hook(minirt.var.win, 17, 0L, close_button, &minirt);
+	mlx_key_hook(minirt.var.win, close_key, &minirt);
+	mlx_loop(minirt.var.mlx);
 
  // gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c
 

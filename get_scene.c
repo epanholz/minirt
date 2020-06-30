@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/24 16:58:18 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/06/30 17:48:03 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_cam		*get_camera(char *s, int p, t_minirt *m)
 
 	cam = (t_cam*)malloc(sizeof(t_cam));
 	check_camera(s, p, m);
-	m->scene.camera = 1;
+	m->scene.camera++;
 	m->utils.i = p;
 
 	cam->view_point.x = ft_atod_loop(s, m, FLOAT);
@@ -225,31 +225,10 @@ t_tri		*get_triangle(char *s, int p, t_minirt *minirt)
 
 void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 {
-	// (void)head;
-
 	if (arg[p] == 'R' && arg[p + 1] == ' ')
 		get_res(arg, p + 1, minirt);
 	else if (arg[p] == 'A' && arg[p + 1] == ' ')
 		get_ambient_light(arg, p + 1, minirt);
-
-	// else if (arg[p] == 'c' && arg[p + 1] == ' ')
-	// 	get_camera(arg, p + 1, minirt);
-	// else if (arg[p] == 'l')
-	// 	get_light(arg, p + 1, minirt);
-	// else if (arg[p] == 'p' && arg[p + 1] == 'l')
-	// 	get_plane(arg, p + 2, minirt);
-	// else if (arg[p] == 's' && arg[p + 1] == 'p')
-	// 	get_sphere(arg, p + 2, minirt);
-	// else if (arg[p] == 's' && arg[p + 1] == 'q')
-	// 	get_square(arg, p + 2, minirt);
-	//lse if (arg[p] == 's' && arg[p + 1] == 'q')
-	//	get_square(arg, p + 2, minirt);
-	//else if (arg[p] == 't' && arg[p + 1] == 'r')
-	//	get_triangle(arg, p + 2, minirt);
-
-
-	// else if (arg[p] == 'A' && arg[p + 1] == ' ')
-	// 	add_object(head, ALIGHT, get_ambient_light(arg, p + 1, minirt));
 	else if (arg[p] == 'c' && arg[p + 1] == ' ')
 		add_object(head, CAM, get_camera(arg, p + 1, minirt));
 	else if (arg[p] == 'l' && arg[p + 1] == ' ')
@@ -267,6 +246,25 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 	else
 		ft_error(INVAL);
 }
+
+
+void		traverse_list(t_object_list **head)
+{
+	t_object_list	*current;
+	t_cam 			*cam;
+
+	current = *head;
+	while (current)
+	{
+		if (current->object_type == CAM)
+		{
+			cam = current->scene_object;	
+			printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d \n",  cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
+		}
+		current = current->next;
+	}
+}
+
 
 void		check_map(char *map, t_minirt *minirt)
 {
@@ -287,4 +285,5 @@ void		check_map(char *map, t_minirt *minirt)
 	}
 	if (minirt->scene.camera == 0 || minirt->scene.ambient_light == 0 || minirt->scene.res == 0)
 		ft_error(INVAL);
+	// traverse_list(&head);
 }
