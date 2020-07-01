@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/18 13:20:24 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/01 13:12:28 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	add_object(t_object_list **head, int type, void *scene)
 			current = current->next;
 		current->next = newnode;
 	}
-	printf("[OBJ TYPE: %d]\n", newnode->object_type);
+	//printf("[OBJ TYPE: %d]\n", newnode->object_type);
 }
 
 

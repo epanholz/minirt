@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/30 17:48:03 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/01 13:14:26 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void		get_res(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
 			ft_error(INVAL);
-	printf("%d %d [RES]\n", m->scene.res_x, m->scene.res_y);
+	printf("[RES] %d %d\n", m->scene.res_x, m->scene.res_y);
 }
 
 void		get_ambient_light(char *s, int p, t_minirt *m)
@@ -56,7 +56,7 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 	m->scene.l_b= ft_atod_loop(s, m, INT);
 	m->scene.l_g= ft_atod_loop(s, m, INT);
 	
-	printf("%0.1f, %d, %d, %d [A LIGHT]\n", m->scene.l_ratio, m->scene.l_r, m->scene.l_b, m->scene.l_g);
+	printf("[AMBIENT L] %0.1f, %d, %d, %d\n", m->scene.l_ratio, m->scene.l_r, m->scene.l_b, m->scene.l_g);
 }
 
 t_cam		*get_camera(char *s, int p, t_minirt *m)
@@ -75,8 +75,6 @@ t_cam		*get_camera(char *s, int p, t_minirt *m)
 	cam->norm_vec.y = ft_atod_loop(s, m, FLOAT);
 	cam->norm_vec.z = ft_atod_loop(s, m, FLOAT);
 	cam->fov = ft_atod_loop(s, m, INT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d ", cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
 	return(cam);
 }
 
@@ -95,8 +93,6 @@ t_light		*get_light(char *s, int p, t_minirt *m)
 	light->r = ft_atod_loop(s, m, INT);
 	light->g = ft_atod_loop(s, m, INT);
 	light->b = ft_atod_loop(s, m, INT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d ", light->light_point.x, light->light_point.y, light->light_point.z, light->light_b, light->r, light->g, light->b);
 	return(light);
 }
 
@@ -117,8 +113,6 @@ t_pla		*get_plane(char *s, int p, t_minirt *m)
 	plane->r = ft_atod_loop(s, m, INT);
 	plane->g = ft_atod_loop(s, m, INT);
 	plane->b = ft_atod_loop(s, m, INT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d ", plane->view_point.x, plane->view_point.y, plane->view_point.z, plane->norm_vec.x, plane->norm_vec.y, plane->norm_vec.z, plane->r, plane->g, plane->b);
 	return(plane);
 }
 
@@ -137,9 +131,6 @@ t_sph		*get_sphere(char *s, int p, t_minirt *m)
 	sphere->r = ft_atod_loop(s, m, INT);
 	sphere->g = ft_atod_loop(s, m, INT);
 	sphere->b = ft_atod_loop(s, m, INT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d ", sphere->sp_center.x, sphere->sp_center.y, sphere->sp_center.z, sphere->diameter, sphere->r, sphere->g, sphere->b);
-
 	return(sphere);
 }
 
@@ -163,9 +154,6 @@ t_squ		*get_square(char *s, int p, t_minirt *m)
 	square->r = ft_atod_loop(s, m, FLOAT);
 	square->g = ft_atod_loop(s, m, FLOAT);
 	square->b = ft_atod_loop(s, m, FLOAT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d ", square->sq_center.x, square->sq_center.y, square->sq_center.z, square->norm_vec.x, square->norm_vec.y, square->norm_vec.z, square->side, square->r, square->g, square->b);
-
 	return(square);
 }
 
@@ -189,9 +177,6 @@ t_cyl		*get_cylinder(char *s, int p, t_minirt *minirt)
 	cylinder->r = ft_atod_loop(s, minirt, INT);
 	cylinder->g = ft_atod_loop(s, minirt, INT);
 	cylinder->b = ft_atod_loop(s, minirt, INT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d ", cylinder->view_point.x, cylinder->view_point.y, cylinder->view_point.z, cylinder->norm_vec.x , cylinder->norm_vec.y, cylinder->norm_vec.z, cylinder->diameter, cylinder->height,  cylinder->r, cylinder->g, cylinder->b);
-
 	return(cylinder);
 }
 
@@ -216,9 +201,6 @@ t_tri		*get_triangle(char *s, int p, t_minirt *minirt)
 	triangle->r = ft_atod_loop(s, minirt, INT);
 	triangle->g = ft_atod_loop(s, minirt, INT);
 	triangle->b = ft_atod_loop(s, minirt, INT);
-
-	printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d ", triangle->p1.x, triangle->p1.y, triangle->p1.z, triangle->p2.x, triangle->p2.y, triangle->p2.z, triangle->p3.x, triangle->p3.y, triangle->p3.z, triangle->r, triangle->g, triangle->b); 
-
 	return(triangle);
 }
 	
@@ -248,24 +230,6 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 }
 
 
-void		traverse_list(t_object_list **head)
-{
-	t_object_list	*current;
-	t_cam 			*cam;
-
-	current = *head;
-	while (current)
-	{
-		if (current->object_type == CAM)
-		{
-			cam = current->scene_object;	
-			printf("%0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d \n",  cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
-		}
-		current = current->next;
-	}
-}
-
-
 void		check_map(char *map, t_minirt *minirt)
 {
 	int				index;
@@ -285,5 +249,5 @@ void		check_map(char *map, t_minirt *minirt)
 	}
 	if (minirt->scene.camera == 0 || minirt->scene.ambient_light == 0 || minirt->scene.res == 0)
 		ft_error(INVAL);
-	// traverse_list(&head);
+	traverse_list(&head);
 }

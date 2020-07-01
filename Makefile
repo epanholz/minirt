@@ -6,13 +6,13 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/06/30 16:03:34 by epanholz      ########   odam.nl          #
+#    Updated: 2020/07/01 13:09:16 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minirt
 
-SRC = test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c
+SRC = test_main.c read_file.c get_scene.c check_scene.c check_scene_utils.c object_list.c object_list_traverse.c
 
 INC = minirt.h
 

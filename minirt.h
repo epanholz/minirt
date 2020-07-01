@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/30 16:56:08 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/01 13:11:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,5 +189,13 @@ void		get_res(char *s, int p, t_minirt *m);
 void		get_ambient_light(char *s, int p, t_minirt *m);
 void		make_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
+void		retrieve_cam(void	*scene_object);
+void		retrieve_light(void	*scene_object);
+void		retrieve_plane(void	*scene_object);
+void		retrieve_sphere(void	*scene_object);
+void		retrieve_square(void	*scene_object);
+void		retrieve_cylinder(void	*scene_object);
+void		retrieve_triangle(void	*scene_object);
+void		traverse_list(t_object_list **head);
 
 #endif
