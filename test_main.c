@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/30 17:45:16 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/03 12:41:39 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,18 @@ int	main()
 	t_minirt	minirt;
 	int			fd;
 	char		*buff;
+	// t_vec3 		vec;
+	// t_vec3 		norm_vec;
 
 	minirt.scene.res = 0;
 	minirt.scene.ambient_light = 0;
 	minirt.scene.camera = 0;
+
+	// vec.x = 3;
+	// vec.y = -4;
+	// vec.z = 0;
+	// norm_vec = vec_normalize(&vec, sqrt(vectorDot(&vec, &vec)));
+	// printf("norm vec %0.1f %0.1f %0.1f\n", norm_vec.x, norm_vec.y, norm_vec.z);
 
 	buff = NULL;
 	fd = open("scene.rt", O_RDONLY);

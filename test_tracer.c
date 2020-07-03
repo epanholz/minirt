@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/06/30 14:54:20 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/30 18:02:56 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/03 12:17:50 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int main(void)
 	sphere.radius = 50;
 
 	/* Direction of the ray */
+	//oriental vector
 	ray.dir.x = 0;
 	ray.dir.y = 0;
 	ray.dir.z = 1;
