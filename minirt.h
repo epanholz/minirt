@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/03 12:37:38 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/03 12:53:11 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ typedef	struct		s_vec3
 	double			y;
 	double			z;
 }					t_vec3;
+
+typedef struct	s_ray{
+        t_vec3 start;
+        t_vec3 dir;
+}				t_ray;
 
 typedef struct  	s_var 
 {
