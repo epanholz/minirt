@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/01 13:14:26 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/15 20:57:26 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 	else if (arg[p] == 'A' && arg[p + 1] == ' ')
 		get_ambient_light(arg, p + 1, minirt);
 	else if (arg[p] == 'c' && arg[p + 1] == ' ')
-		add_object(head, CAM, get_camera(arg, p + 1, minirt));
+		return ;
 	else if (arg[p] == 'l' && arg[p + 1] == ' ')
 		add_object(head, LIGHT, get_light(arg, p + 1, minirt));
 	else if (arg[p] == 'p' && arg[p + 1] == 'l' && arg[p + 2] == ' ')
@@ -229,18 +229,27 @@ void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head)
 		ft_error(INVAL);
 }
 
+void		check_cam(char *arg, int p, t_minirt *minirt, t_camera_list **cam_head)
+{
+	if (arg[p] == 'c' && arg[p + 1] == ' ')
+		add_camera(cam_head, get_camera(arg, p + 1, minirt));
+}
 
 void		check_map(char *map, t_minirt *minirt)
 {
 	int				index;
 	t_object_list 	*head;
+	t_camera_list	*cam_head;
 
+	cam_head = NULL;
 	head = NULL;
 	index = 0;
 	make_head(&head);
+	make_cam_head(&cam_head);
 	while (map[index])
 	{
 		check_arg(map, index, minirt, &head);
+		check_cam(map, index, minirt, &cam_head);
 		while (map[index] && map[index] != '\n')
 			index++;
 		while (map[index] && map[index] == '\n')
@@ -250,4 +259,6 @@ void		check_map(char *map, t_minirt *minirt)
 	if (minirt->scene.camera == 0 || minirt->scene.ambient_light == 0 || minirt->scene.res == 0)
 		ft_error(INVAL);
 	traverse_list(&head);
+	traverse_cam_list(&cam_head);
+	make_scene(minirt);
 }

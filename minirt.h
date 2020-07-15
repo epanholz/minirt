@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/03 12:53:11 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/15 20:58:00 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,22 @@ typedef struct		s_object_list
 	int				object_type;
 	void			*scene_object;
 	void			*next;
-}					t_object_list;			
+}					t_object_list;
+
+typedef struct		s_img_list
+{
+	int				img_index;
+	void			*img;
+	char			*addr;
+	void			*next;
+}					t_img_list;	
+
+typedef struct		s_camera_list
+{
+	int				cam_index;
+	t_cam			*cam;
+	void			*next;
+}					t_camera_list;	
 
 void		ft_error(int mod);
 int			ft_strlen(char *s);
@@ -177,6 +192,7 @@ char 		*ft_strjoin(char *s1, char *s2);
 char		*read_file(int fd, char *temp);
 void		check_map(char *map, t_minirt *minirt);
 void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head);
+void		check_cam(char *arg, int p, t_minirt *minirt, t_camera_list **cam_head);
 double		ft_atod(char *s, t_minirt *m, int mod);
 double		ft_atod_loop(char *s, t_minirt *m, int mod);
 void		check_rgb(char *s, t_minirt *m);
@@ -206,6 +222,14 @@ t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 float		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3, float N);
-
+t_vec3  	vec3(int x, int y, int z);
+int			close_key(int keycode, t_minirt *minirt);
+int			close_button(void);
+void		make_cam_head(t_camera_list **head);
+void		add_camera(t_camera_list **head, t_cam *cam);
+void		traverse_cam_list(t_camera_list **head);
+void		make_scene(t_minirt *minirt);
+void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
+int			rgbt(int t, int r, int g, int b);
 
 #endif
