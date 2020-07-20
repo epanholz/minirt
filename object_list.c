@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/15 20:31:26 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 19:48:28 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,29 @@ void	add_object(t_object_list **head, int type, void *scene)
 			current = current->next;
 		current->next = newnode;
 	}
+}
+
+void	remove_object_node(t_object_list **head, int type)
+{
+	t_object_list *temp;
+	t_object_list *prev;
+
+	temp = *head;
+	if (temp != NULL && temp->object_type == type)
+	{
+		*head = temp->next;
+		free(temp);
+		return ;
+	}
+	while (temp != NULL && temp->object_type != type)
+	{
+		prev = temp;
+		temp = temp->next;
+	}
+	if (temp == NULL)
+		return ;
+	prev->next = temp->next;
+	free(temp);
 }
 
 void	make_cam_head(t_camera_list **head)

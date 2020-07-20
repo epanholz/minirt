@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/15 20:57:20 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 20:15:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	main()
 	minirt->scene.res = 0;
 	minirt->scene.ambient_light = 0;
 	minirt->scene.camera = 0;
-
+	minirt->var.c_head = NULL;
+	minirt->var.o_head = NULL;
 	buff = NULL;
 	fd = open("scene.rt", O_RDONLY);
 	buff = read_file(fd, buff);

@@ -6,11 +6,34 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/15 20:51:38 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 20:31:14 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int		intersect_sphere(t_ray *ray, t_minirt *minirt)
+{
+	t_sph		*sphere;
+	t_vec3		dist;
+	float		radius;	
+	float		B;
+	float		C;
+	float		discr;
+
+	sphere = return_sphere(minirt);
+	radius = sphere->diameter / 2;
+	float A = vectorDot(&ray->dir, &ray->dir); 
+	dist = vectorSub(&ray->start, &sphere->sp_center);
+	B = 2 * vectorDot(&ray->dir, &dist);
+	C = vectorDot(&dist, &dist) - (radius * radius);
+	discr = B * B - 4 * A * C;
+	if	(discr < 0)
+		return (-1);
+	else
+		return (discr);
+		//cast shadow ray
+}
 
 void	make_scene(t_minirt *minirt)
 {

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/15 20:58:00 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 20:32:45 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,6 @@ typedef struct	s_ray{
         t_vec3 start;
         t_vec3 dir;
 }				t_ray;
-
-typedef struct  	s_var 
-{
-    void			*mlx;
-    void			*win;
-	void			*img;
-	char			*addr;
-    int				bits_per_pixel;
-    int				line_length;
-    int				endian;
-}              		t_var;
 
 typedef struct  	s_utils 
 {
@@ -156,12 +145,7 @@ typedef	struct		s_tri
 	int				g;
 }					t_tri;
 
-typedef	struct		s_minirt 
-{
-	t_scene			scene;
-	t_var			var;
-	t_utils			utils;
-}					t_minirt;
+
 
 typedef struct		s_object_list
 {
@@ -185,14 +169,33 @@ typedef struct		s_camera_list
 	void			*next;
 }					t_camera_list;	
 
+typedef struct  	s_var 
+{
+    void			*mlx;
+    void			*win;
+	void			*img;
+	char			*addr;
+    int				bits_per_pixel;
+    int				line_length;
+    int				endian;
+	t_object_list	*o_head;
+	t_camera_list	*c_head;
+}              		t_var;
+
+typedef	struct		s_minirt 
+{
+	t_scene			scene;
+	t_var			var;
+	t_utils			utils;
+}					t_minirt;
+
 void		ft_error(int mod);
 int			ft_strlen(char *s);
 char 		*ft_memcpy(char *dst, const char *src, int len);
 char 		*ft_strjoin(char *s1, char *s2);
 char		*read_file(int fd, char *temp);
 void		check_map(char *map, t_minirt *minirt);
-void		check_arg(char *arg, int p, t_minirt *minirt, t_object_list **head);
-void		check_cam(char *arg, int p, t_minirt *minirt, t_camera_list **cam_head);
+void		check_arg(char *arg, int p, t_minirt *minirt);
 double		ft_atod(char *s, t_minirt *m, int mod);
 double		ft_atod_loop(char *s, t_minirt *m, int mod);
 void		check_rgb(char *s, t_minirt *m);
@@ -210,6 +213,7 @@ void		get_res(char *s, int p, t_minirt *m);
 void		get_ambient_light(char *s, int p, t_minirt *m);
 void		make_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
+void		remove_object_node(t_object_list **head, int type);
 void		retrieve_cam(void	*scene_object);
 void		retrieve_light(void	*scene_object);
 void		retrieve_plane(void	*scene_object);
@@ -217,6 +221,7 @@ void		retrieve_sphere(void *scene_object);
 void		retrieve_square(void *scene_object);
 void		retrieve_cylinder(void *scene_object);
 void		retrieve_triangle(void *scene_object);
+t_sph		*return_sphere(t_minirt *minirt);
 void		traverse_list(t_object_list **head);
 t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 float		vectorDot(t_vec3 *v1, t_vec3 *v2);
@@ -229,6 +234,7 @@ void		make_cam_head(t_camera_list **head);
 void		add_camera(t_camera_list **head, t_cam *cam);
 void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
+int			intersect_sphere(t_ray *ray, t_minirt *minirt);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
 

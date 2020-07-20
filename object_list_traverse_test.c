@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/15 17:46:24 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 20:34:27 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,18 @@ void		traverse_list(t_object_list **head)
 		if (current->object_type == TRI)
 			retrieve_triangle(current->scene_object);
 		current = current->next;
+	}
+}
+
+void		traverse_cam_list(t_camera_list **head)
+{
+	t_camera_list	*current;
+
+	current = *head;
+	while (current)
+	{
+	printf("[CAM %d] %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d\n",  current->cam_index, current->cam->view_point.x, current->cam->view_point.y, current->cam->view_point.z, current->cam->norm_vec.x, current->cam->norm_vec.y, current->cam->norm_vec.z, current->cam->fov);
+	current = current->next;
 	}
 }
 
