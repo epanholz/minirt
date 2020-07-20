@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 20:32:45 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 22:39:00 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,11 +222,13 @@ void		retrieve_square(void *scene_object);
 void		retrieve_cylinder(void *scene_object);
 void		retrieve_triangle(void *scene_object);
 t_sph		*return_sphere(t_minirt *minirt);
+t_cam		*return_cam(t_minirt *minirt, int index);
 void		traverse_list(t_object_list **head);
 t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 float		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
-t_vec3		vec_normalize(t_vec3 *vec3, float N);
+t_vec3		vec_normalize(t_vec3 *vec3);
+t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
 t_vec3  	vec3(int x, int y, int z);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
@@ -235,6 +237,7 @@ void		add_camera(t_camera_list **head, t_cam *cam);
 void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
 int			intersect_sphere(t_ray *ray, t_minirt *minirt);
+void		generate_ray(t_minirt *minirt);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
 

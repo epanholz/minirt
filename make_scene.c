@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 20:31:14 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/20 22:32:02 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,40 @@ int		intersect_sphere(t_ray *ray, t_minirt *minirt)
 		//cast shadow ray
 }
 
+void	generate_ray(t_minirt *minirt)
+{
+	t_cam		*cam;
+	t_vec3		origin;
+	float		aspect_ratio;
+	int			pixely;
+	int 		pixelx;
+	float		camy;
+	float		camx;
+
+	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;
+	pixelx = 0;
+	pixely = 0;
+	camy = 0;
+	camx = 0;
+	cam = return_cam(minirt, 1);
+	while (pixely <= minirt->scene.res_y)
+	{
+		//transform camy
+		camy = (1 - 2 * ((pixely + 0.5) / minirt->scene.res_y)) * tan(cam->fov / 2 * M_PI / 180);
+		while(pixelx <= minirt->scene.res_x)
+		{
+			//transform camx
+			camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
+			origin = vec3(camx, camy, -1);
+			pixelx++;
+		}
+		pixelx = 0;
+		pixely++;
+	}
+	
+
+}
+
 void	make_scene(t_minirt *minirt)
 {
 	minirt->var.mlx = mlx_init();
@@ -47,3 +81,21 @@ void	make_scene(t_minirt *minirt)
 	mlx_key_hook(minirt->var.win, close_key, minirt);
 	mlx_loop(minirt->var.mlx);
 }
+
+
+// while (y < resx)
+// {
+// 	transform y;
+// 	while (x < resx)
+// 	{
+// 		transform x;
+// 		make vec (x,y,-1);
+// 		normalize vec;
+// 		camtoworld(vec);
+// 		normalize vec again;
+				
+// 		x++;
+// 	}
+// 	y++;
+// 	x = 0;
+// }
