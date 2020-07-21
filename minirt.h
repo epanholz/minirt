@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 22:39:00 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/21 22:28:35 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,13 @@ typedef	struct		s_tri
 	int				g;
 }					t_tri;
 
+typedef	struct		s_matrix43
+{
+	t_vec3			row1;
+	t_vec3			row2;
+	t_vec3			row3;
+	t_vec3			row4;
+}					t_matrix43;
 
 
 typedef struct		s_object_list
@@ -238,6 +245,10 @@ void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
 int			intersect_sphere(t_ray *ray, t_minirt *minirt);
 void		generate_ray(t_minirt *minirt);
+void		generate_ray(t_minirt *minirt);
+int			intersect_sphere(t_ray *ray, t_minirt *minirt);
+t_vec3		setcam(t_vec3 from, t_cam *cam);
+t_matrix43	*make_matrix(t_cam *cam);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
 
