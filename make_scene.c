@@ -6,11 +6,42 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 22:32:02 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/21 21:02:59 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+// float		make_matrix(t_minirt *minirt, t_cam *cam)
+// {
+// 	float	cam2world[4][4];
+// 	t_vec3	forward;
+// 	t_vec3	right;
+// 	t_vec3	up;
+// 	t_vec3	temp;
+
+// 	temp = vec3(0,1,0);
+// 	forward = vectorSub(&cam->view_point, &cam->norm_vec);
+// 	forward = vec_normalize(&forward);
+// 	right = crossProduct(&temp, &forward);
+// 	up = crossProduct(&forward, &right);
+
+// 	cam2world[0][0] = right.x; 
+//     cam2world[0][1] = right.y; 
+//     cam2world[0][2] = right.z; 
+//     cam2world[1][0] = up.x; 
+//     cam2world[1][1] = up.y; 
+//     cam2world[1][2] = up.z; 
+//     cam2world[2][0] = forward.x; 
+//     cam2world[2][1] = forward.y; 
+//     cam2world[2][2] = forward.z; 
+ 
+//     cam2world[3][0] = cam->view_point.x; 
+//     cam2world[3][1] = cam->view_point.y; 
+//     cam2world[3][2] = cam->view_point.z; 
+
+// 	return(cam2world);
+// }
 
 int		intersect_sphere(t_ray *ray, t_minirt *minirt)
 {
