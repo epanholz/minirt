@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 20:19:40 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/22 00:40:22 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ void		get_res(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 		ft_error(INVAL);
-	m->scene.res_x = ft_atod(s, m, INT);
+	m->scene.res_x = ft_atod(s, m, FLOAT);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 		ft_error(INVAL);
-	m->scene.res_y = ft_atod(s, m, INT);
+	m->scene.res_y = ft_atod(s, m, FLOAT);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
 		ft_error(INVAL);
-	printf("[RES] %d %d\n", m->scene.res_x, m->scene.res_y);
+	printf("[RES] %0.1f %0.1f\n", m->scene.res_x, m->scene.res_y);
 }
 
 void		get_ambient_light(char *s, int p, t_minirt *m)

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/21 22:37:01 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/22 00:46:45 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ t_vec3	setcam(t_vec3 from, t_cam *cam)
 	return (new);
 }
 
-int		intersect_sphere(t_ray *ray, t_minirt *minirt)
+int		intersect_sphere(t_ray *ray, t_sph *sphere)
 {
-	t_sph		*sphere;
 	t_vec3		dist;
 	float		diameter;
 	float		radius;	
@@ -59,9 +58,7 @@ int		intersect_sphere(t_ray *ray, t_minirt *minirt)
 	float		C;
 	float		discr;
 
-	sphere = (t_sph*)malloc(sizeof(t_sph));
-	sphere = return_sphere(minirt);
-	printf("test %f \n", sphere->diameter);
+	//printf("test %f \n", sphere->diameter);
 	diameter = sphere->diameter;
 	radius = diameter / 2;
 	float A = vectorDot(&ray->dir, &ray->dir); 
@@ -72,12 +69,13 @@ int		intersect_sphere(t_ray *ray, t_minirt *minirt)
 	if	(discr < 0)
 		return (-1);
 	else
-		return (discr);
+		return (1);
 		//cast shadow ray
 }
 
 void	generate_ray(t_minirt *minirt)
 {
+	t_sph		*sphere;
 	t_cam		*cam;
 	t_vec3		dir;
 	t_ray		*ray;
@@ -87,6 +85,8 @@ void	generate_ray(t_minirt *minirt)
 	float		camy;
 	float		camx;
 
+	sphere = (t_sph*)malloc(sizeof(t_sph));
+	sphere = return_sphere(minirt);
 	ray = (t_ray*)malloc(sizeof(t_ray));
 	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;
 	pixelx = 0;
@@ -107,10 +107,10 @@ void	generate_ray(t_minirt *minirt)
 			dir = vec_normalize(&dir);
 			dir = setcam(dir, cam);
 			ray->dir = vec_normalize(&dir);
-			if (intersect_sphere(ray, minirt) > 0)
-				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
-			else
-				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
+			// if (intersect_sphere(ray, sphere) == 1)
+			// 	my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
+			// else
+			// 	my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
 			pixelx++;
 		}
 		pixelx = 0;
@@ -126,8 +126,8 @@ void	make_scene(t_minirt *minirt)
 	minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 	minirt->var.img = mlx_new_image(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y);
 	minirt->var.addr = mlx_get_data_addr(minirt->var.img, &minirt->var.bits_per_pixel, &minirt->var.line_length, &minirt->var.endian);
-	my_mlx_pixel_put(minirt, 500, 500, rgbt(0,255,182,193));
-	// generate_ray(minirt);
+	my_mlx_pixel_put(minirt, 200, 200, rgbt(0,255,182,193));
+	generate_ray(minirt);
 	mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, minirt->var.img, 0, 0);
 	mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
 	mlx_key_hook(minirt->var.win, close_key, minirt);

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 19:48:28 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/22 00:26:46 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	remove_object_node(t_object_list **head, int type)
 	if (temp != NULL && temp->object_type == type)
 	{
 		*head = temp->next;
-		free(temp);
+		//free(temp);
 		return ;
 	}
 	while (temp != NULL && temp->object_type != type)
@@ -74,7 +74,7 @@ void	remove_object_node(t_object_list **head, int type)
 	if (temp == NULL)
 		return ;
 	prev->next = temp->next;
-	free(temp);
+	//free(temp);
 }
 
 void	make_cam_head(t_camera_list **head)

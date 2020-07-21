@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/21 22:28:35 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/22 00:38:32 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ typedef struct 		s_scene
 	int				res;
 	int				ambient_light;
 	int				camera;
-	int				res_x;
-	int				res_y;
+	float			res_x;
+	float			res_y;
 	double			l_ratio;
 	int				l_r;
 	int				l_b;
@@ -243,10 +243,9 @@ void		make_cam_head(t_camera_list **head);
 void		add_camera(t_camera_list **head, t_cam *cam);
 void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
-int			intersect_sphere(t_ray *ray, t_minirt *minirt);
+int			intersect_sphere(t_ray *ray, t_sph *sphere);
 void		generate_ray(t_minirt *minirt);
 void		generate_ray(t_minirt *minirt);
-int			intersect_sphere(t_ray *ray, t_minirt *minirt);
 t_vec3		setcam(t_vec3 from, t_cam *cam);
 t_matrix43	*make_matrix(t_cam *cam);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);

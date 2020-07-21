@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 22:39:40 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/22 00:31:35 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ t_sph		*return_sphere(t_minirt *minirt)
 	t_sph			*sphere;
 	t_object_list	*current;
 
+	sphere = (t_sph*)malloc(sizeof(t_sph));
+	sphere = NULL;
 	current = minirt->var.o_head;
 	while (current)
 	{
 		if (current->object_type == SPH)
 		{
 			sphere = current->scene_object;
-			remove_object_node(&minirt->var.o_head, SPH);
+			//remove_object_node(&minirt->var.o_head, SPH);
 			return (sphere);
 		}
 		current = current->next;
