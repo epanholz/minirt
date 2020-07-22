@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/22 00:46:45 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/22 22:34:13 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,51 @@ t_vec3	setcam(t_vec3 from, t_cam *cam)
 	return (new);
 }
 
+// int		intersect_sphere(t_ray *ray, t_sph *sphere)
+// {
+// 	t_vec3		dist;
+// 	float		radius;	
+// 	float		B;
+// 	float		C;
+// 	float		discr;
+
+// 	radius = sphere->diameter / 2;
+// 	float A = vectorDot(&ray->dir, &ray->dir); 
+// 	dist = vectorSub(&sphere->sp_center, &ray->start);
+// 	B = 2 * vectorDot(&ray->dir, &dist);
+// 	C = vectorDot(&dist, &dist) - (radius * radius);
+// 	discr = B * B - 4 * A * C;
+// 	if	(discr < 0)
+// 		return (-1);
+// 	else
+// 		return (1);
+// 		//cast shadow ray
+// }
+
 int		intersect_sphere(t_ray *ray, t_sph *sphere)
 {
-	t_vec3		dist;
-	float		diameter;
-	float		radius;	
-	float		B;
-	float		C;
-	float		discr;
+	t_vec3		p;
+	t_vec3		temp1;
+	t_vec3		temp2;
+	t_vec3		temp3;
+	float		t;	
+	float		x;
+	float		y;
+	float		t1;
 
-	//printf("test %f \n", sphere->diameter);
-	diameter = sphere->diameter;
-	radius = diameter / 2;
-	float A = vectorDot(&ray->dir, &ray->dir); 
-	dist = vectorSub(&ray->start, &sphere->sp_center);
-	B = 2 * vectorDot(&ray->dir, &dist);
-	C = vectorDot(&dist, &dist) - (radius * radius);
-	discr = B * B - 4 * A * C;
-	if	(discr < 0)
+
+	//length of a vector -> sqrt of vectordot with the same vector
+	//multiply float with vector -> float * x, float * y, float *z
+	temp1 = vectorSub(&sphere->sp_center, &ray->start);
+	t = vectorDot(&temp1, &ray->dir);
+	temp2 = vecFloat(&ray->dir, t);
+	p = vectorPlus(&ray->start, &temp2);
+	temp3 = vectorSub(&sphere->sp_center, &p);
+	y = sqrt(vectorDot(&temp3, &temp3));
+	x = (sphere->diameter / 2) - y;
+
+	t1 = t - x;
+	if	(t1 < 0)
 		return (-1);
 	else
 		return (1);
@@ -87,6 +114,7 @@ void	generate_ray(t_minirt *minirt)
 
 	sphere = (t_sph*)malloc(sizeof(t_sph));
 	sphere = return_sphere(minirt);
+	// printf("[SPH in scene file] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", sphere->sp_center.x, sphere->sp_center.y, sphere->sp_center.z, sphere->diameter, sphere->r, sphere->g, sphere->b);
 	ray = (t_ray*)malloc(sizeof(t_ray));
 	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;
 	pixelx = 0;
@@ -95,11 +123,12 @@ void	generate_ray(t_minirt *minirt)
 	camx = 0;
 	cam = return_cam(minirt, 1);
 	ray->start = cam->view_point;
-	while (pixely <= minirt->scene.res_y)
+	//my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
+	while (pixely < minirt->scene.res_y)
 	{
 		//transform camy
 		camy = (1 - 2 * ((pixely + 0.5) / minirt->scene.res_y)) * tan(cam->fov / 2 * M_PI / 180);
-		while(pixelx <= minirt->scene.res_x)
+		while(pixelx < minirt->scene.res_x)
 		{
 			//transform camx
 			camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
@@ -107,10 +136,10 @@ void	generate_ray(t_minirt *minirt)
 			dir = vec_normalize(&dir);
 			dir = setcam(dir, cam);
 			ray->dir = vec_normalize(&dir);
-			// if (intersect_sphere(ray, sphere) == 1)
-			// 	my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
-			// else
-			// 	my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
+			if (intersect_sphere(ray, sphere) == 1)
+				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
+			else
+				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
 			pixelx++;
 		}
 		pixelx = 0;
@@ -126,6 +155,7 @@ void	make_scene(t_minirt *minirt)
 	minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 	minirt->var.img = mlx_new_image(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y);
 	minirt->var.addr = mlx_get_data_addr(minirt->var.img, &minirt->var.bits_per_pixel, &minirt->var.line_length, &minirt->var.endian);
+	printf("img addres make scene: %s \n", minirt->var.addr);
 	my_mlx_pixel_put(minirt, 200, 200, rgbt(0,255,182,193));
 	generate_ray(minirt);
 	mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, minirt->var.img, 0, 0);

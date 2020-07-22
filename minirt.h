@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/22 00:38:32 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/22 22:29:16 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,7 @@ t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 float		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
+t_vec3 	vecFloat(t_vec3 *v, float x);
 t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
 t_vec3  	vec3(int x, int y, int z);
 int			close_key(int keycode, t_minirt *minirt);
