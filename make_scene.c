@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/22 22:34:13 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/23 03:20:33 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_vec3	setcam(t_vec3 from, t_cam *cam)
 	return (new);
 }
 
-// int		intersect_sphere(t_ray *ray, t_sph *sphere)
+//int		intersect_sphere(t_ray *ray, t_sph *sphere)
 // {
 // 	t_vec3		dist;
 // 	float		radius;	
@@ -73,38 +73,44 @@ t_vec3	setcam(t_vec3 from, t_cam *cam)
 int		intersect_sphere(t_ray *ray, t_sph *sphere)
 {
 	t_vec3		p;
-	t_vec3		temp1;
+	t_vec3		dist;
 	t_vec3		temp2;
 	t_vec3		temp3;
 	float		t;	
-	float		x;
+	// float		x;
 	float		y;
-	float		t1;
+	// float		t1;
 
+
+	//printf("[SPH in intersect] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", sphere->sp_center.x, sphere->sp_center.y, sphere->sp_center.z, sphere->diameter, sphere->r, sphere->g, sphere->b);
 
 	//length of a vector -> sqrt of vectordot with the same vector
 	//multiply float with vector -> float * x, float * y, float *z
-	temp1 = vectorSub(&sphere->sp_center, &ray->start);
-	t = vectorDot(&temp1, &ray->dir);
+	dist = vectorSub(&sphere->sp_center, &ray->start);
+	t = vectorDot(&dist, &ray->dir);
+	if (t < 0)
+		return (-1);
 	temp2 = vecFloat(&ray->dir, t);
 	p = vectorPlus(&ray->start, &temp2);
 	temp3 = vectorSub(&sphere->sp_center, &p);
 	y = sqrt(vectorDot(&temp3, &temp3));
-	x = (sphere->diameter / 2) - y;
-
-	t1 = t - x;
-	if	(t1 < 0)
-		return (-1);
+	// y = vectorDot(&dist, &dist) - (t * t);
+	if (y < sphere->diameter / 2)
+		return(1);
 	else
-		return (1);
-		//cast shadow ray
+		return(-1);
+	
+	// x = (sphere->diameter / 2) - y;
+
+	// t1 = t - x;
+	// return (1);
+	//cast shadow ray
 }
 
 void	generate_ray(t_minirt *minirt)
 {
 	t_sph		*sphere;
 	t_cam		*cam;
-	t_vec3		dir;
 	t_ray		*ray;
 	float		aspect_ratio;
 	int			pixely;
@@ -123,6 +129,9 @@ void	generate_ray(t_minirt *minirt)
 	camx = 0;
 	cam = return_cam(minirt, 1);
 	ray->start = cam->view_point;
+	printf("[SPH in make scene] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", sphere->sp_center.x, sphere->sp_center.y, sphere->sp_center.z, sphere->diameter, sphere->r, sphere->g, sphere->b);
+	printf("[CAM in make scene] %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d\n", cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
+
 	//my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
 	while (pixely < minirt->scene.res_y)
 	{
@@ -132,10 +141,10 @@ void	generate_ray(t_minirt *minirt)
 		{
 			//transform camx
 			camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
-			dir = vec3(camx, camy, -1);
-			dir = vec_normalize(&dir);
-			dir = setcam(dir, cam);
-			ray->dir = vec_normalize(&dir);
+			ray->dir = vec3(camx, camy, -1);
+			ray->dir = vec_normalize(&ray->dir);
+			// ray->dir = setcam(ray->dir, cam);
+			// ray->dir = vec_normalize(&ray->dir);
 			if (intersect_sphere(ray, sphere) == 1)
 				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,255,182,193));
 			else
@@ -155,8 +164,7 @@ void	make_scene(t_minirt *minirt)
 	minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 	minirt->var.img = mlx_new_image(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y);
 	minirt->var.addr = mlx_get_data_addr(minirt->var.img, &minirt->var.bits_per_pixel, &minirt->var.line_length, &minirt->var.endian);
-	printf("img addres make scene: %s \n", minirt->var.addr);
-	my_mlx_pixel_put(minirt, 200, 200, rgbt(0,255,182,193));
+	//my_mlx_pixel_put(minirt, 200, 200, rgbt(0,255,182,193));
 	generate_ray(minirt);
 	mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, minirt->var.img, 0, 0);
 	mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
