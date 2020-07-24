@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/22 22:29:16 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/24 02:17:13 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef	struct		s_vec3
 }					t_vec3;
 
 typedef struct	s_ray{
-        t_vec3 start;
+        t_vec3 orig;
         t_vec3 dir;
 }				t_ray;
 
@@ -153,9 +153,9 @@ typedef	struct		s_matrix43
 	t_vec3			row4;
 }					t_matrix43;
 
-
 typedef struct		s_object_list
 {
+	int				index;
 	int				object_type;
 	void			*scene_object;
 	void			*next;
@@ -189,6 +189,15 @@ typedef struct  	s_var
 	t_camera_list	*c_head;
 }              		t_var;
 
+typedef struct		s_hit
+{
+	float			t1;
+	float			t2;
+	int				r;
+	int				g;
+	int				b;
+}					t_hit;
+
 typedef	struct		s_minirt 
 {
 	t_scene			scene;
@@ -197,6 +206,8 @@ typedef	struct		s_minirt
 }					t_minirt;
 
 void		ft_error(int mod);
+void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
+int			rgbt(int t, int r, int g, int b);
 int			ft_strlen(char *s);
 char 		*ft_memcpy(char *dst, const char *src, int len);
 char 		*ft_strjoin(char *s1, char *s2);
@@ -235,21 +246,19 @@ t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 float		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
-t_vec3 	vecFloat(t_vec3 *v, float x);
+t_vec3 		vecFloat(t_vec3 *v, float x);
 t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
-t_vec3  	vec3(int x, int y, int z);
+t_vec3  	vec3(float x, float y, float z);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);
 void		add_camera(t_camera_list **head, t_cam *cam);
 void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
-int			intersect_sphere(t_ray *ray, t_sph *sphere);
-void		generate_ray(t_minirt *minirt);
+float		intersect_sphere(t_ray *ray, t_sph *sphere, t_hit *hit, int color);
+t_hit		*find_hit(t_minirt *minirt, t_ray *ray);
 void		generate_ray(t_minirt *minirt);
 t_vec3		setcam(t_vec3 from, t_cam *cam);
 t_matrix43	*make_matrix(t_cam *cam);
-void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
-int			rgbt(int t, int r, int g, int b);
 
 #endif
