@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/22 00:26:46 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/24 18:19:02 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,42 @@ void	remove_object_node(t_object_list **head, int type)
 		return ;
 	prev->next = temp->next;
 	//free(temp);
+}
+
+void delete_object_list(t_object_list **head)
+{ 
+   /* deref head_ref to get the real head */
+   t_object_list* current = *head; 
+   t_object_list* next; 
+  
+   while (current != NULL)  
+   { 
+       next = current->next; 
+       free(current); 
+       current = next; 
+   } 
+    
+   /* deref head_ref to affect the real head back 
+      in the caller. */
+   *head = NULL; 
+}
+
+void delete_cam_list(t_camera_list **head)
+{ 
+   /* deref head_ref to get the real head */
+   t_camera_list* current = *head; 
+   t_camera_list* next; 
+  
+   while (current != NULL)  
+   { 
+       next = current->next; 
+       free(current); 
+       current = next; 
+   } 
+    
+   /* deref head_ref to affect the real head back 
+      in the caller. */
+   *head = NULL; 
 }
 
 void	make_cam_head(t_camera_list **head)

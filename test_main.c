@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/20 20:15:18 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/24 23:23:41 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	main()
 	fd = open("scene.rt", O_RDONLY);
 	buff = read_file(fd, buff);
 	check_map(buff, minirt);
+	free(minirt);
+	free(buff);
 
 	// minirt->var.mlx = mlx_init();
 	// minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
@@ -69,7 +71,7 @@ int	main()
 	// mlx_key_hook(minirt->var.win, close_key, minirt);
 	// mlx_loop(minirt->var.mlx);
 
- // gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c
+ 	// gcc -Wall -Wextra -Werror -I mlx -L mlx -lmlx -framework OpenGL -framework AppKit test_main.c read_file.c get_scene.c check_scene_utils.c object_list.c check_scene.c
 
 	return (0);
 }

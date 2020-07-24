@@ -6,13 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/03 12:21:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 02:17:45 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/24 21:56:04 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_vec3  vec3(float x, float y, float z)
+t_vec3  vec3(double x, double y, double z)
 {
     t_vec3  ret;
     ret.x = x;

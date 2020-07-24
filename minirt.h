@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 02:17:13 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/24 21:45:15 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,25 @@ typedef struct		s_camera_list
 	void			*next;
 }					t_camera_list;	
 
+typedef struct		s_hit
+{
+	int				hit;
+	float			t1;
+	float			t2;
+	int				r;
+	int				g;
+	int				b;
+}					t_hit;
+
+typedef	t_hit	(t_function)();
+
+typedef struct		s_lookup
+{
+	int				index;
+	t_function		*func;
+
+}					t_lookup;
+
 typedef struct  	s_var 
 {
     void			*mlx;
@@ -188,15 +207,6 @@ typedef struct  	s_var
 	t_object_list	*o_head;
 	t_camera_list	*c_head;
 }              		t_var;
-
-typedef struct		s_hit
-{
-	float			t1;
-	float			t2;
-	int				r;
-	int				g;
-	int				b;
-}					t_hit;
 
 typedef	struct		s_minirt 
 {
@@ -232,6 +242,8 @@ void		get_ambient_light(char *s, int p, t_minirt *m);
 void		make_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
 void		remove_object_node(t_object_list **head, int type);
+void 		delete_object_list(t_object_list **head);
+void 		delete_cam_list(t_camera_list **head);
 void		retrieve_cam(void	*scene_object);
 void		retrieve_light(void	*scene_object);
 void		retrieve_plane(void	*scene_object);
@@ -248,15 +260,16 @@ t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vecFloat(t_vec3 *v, float x);
 t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
-t_vec3  	vec3(float x, float y, float z);
+t_vec3  	vec3(double x, double y, double z);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);
 void		add_camera(t_camera_list **head, t_cam *cam);
 void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
-float		intersect_sphere(t_ray *ray, t_sph *sphere, t_hit *hit, int color);
-t_hit		*find_hit(t_minirt *minirt, t_ray *ray);
+t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
+t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
+t_hit		find_hit(t_minirt *minirt, t_ray *ray);
 void		generate_ray(t_minirt *minirt);
 t_vec3		setcam(t_vec3 from, t_cam *cam);
 t_matrix43	*make_matrix(t_cam *cam);
