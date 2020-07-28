@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/03 12:21:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 21:56:04 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/28 22:32:36 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ float vectorDot(t_vec3 *v1, t_vec3 *v2)
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
 
-t_vec3 vecFloat(t_vec3 *v, float x)
+t_vec3 	vec_x_d(t_vec3 *v, double x)
 {
 	t_vec3 result = {v->x * x, v->y * x, v->z * x};
 	return (result);

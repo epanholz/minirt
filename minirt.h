@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/28 18:52:29 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/28 22:32:24 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 float		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
-t_vec3 		vecFloat(t_vec3 *v, float x);
+t_vec3 		vec_x_d(t_vec3 *v, double x);
 t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
 t_vec3  	vec3(double x, double y, double z);
 int			close_key(int keycode, t_minirt *minirt);
@@ -271,9 +271,11 @@ t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
 t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
 t_hit		intersect_plane(t_ray *ray, t_pla *plane);
 t_hit		intersect_square(t_ray *ray, t_squ *square);
+t_vec3		setsquare(t_vec3 pos, t_vec3 norm_vec);
 t_hit		find_hit(t_minirt *minirt, t_ray *ray);
 void		generate_ray(t_minirt *minirt);
-t_vec3		setcam(t_vec3 from, t_cam *cam);
-t_matrix43	*make_matrix(t_cam *cam);
+t_vec3		apply_matrix(t_matrix43 matrix, t_vec3	vec3);
+t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
+t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to);
 
 #endif

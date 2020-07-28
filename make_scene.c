@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/28 18:52:19 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/28 22:50:45 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,58 +15,187 @@
 static const t_lookup		G_lookup_table[] = {
 	{SPH, &intersect_sphere},
 	{TRI, &intersect_triangle},
-	{PLA, &intersect_plane}
+	{PLA, &intersect_plane},
+	{SQU, &intersect_square}
 };
 
-t_matrix43	*make_matrix(t_cam *cam)
+t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to)
 {
-	t_matrix43	*cam2world;
+	t_matrix43	cam2world;
+	t_vec3		norm_vec;
 	t_vec3		forward;
 	t_vec3		right;
 	t_vec3		up;
 	t_vec3		temp;
 
-	cam2world = (t_matrix43*)malloc(sizeof(t_matrix43));
+	norm_vec = vectorSub(&to, &from);
+	norm_vec = vec_normalize(&norm_vec);
+	if (norm_vec.x == 0.0 && norm_vec.z == 0.0 && fabs(norm_vec.y) == 1.0)
+	{
+		cam2world.row1 = norm_vec.y == 1.0 ? vec3(1.0,0.0,0.0) : vec3(0.0,0.0,1.0);
+		cam2world.row2 = norm_vec.y == 1.0 ? vec3(0.0,0.0,1.0) : vec3(1.0,0.0,0.0);
+		cam2world.row3 = norm_vec.y == 1.0 ? vec3(0.0,1.0,0.0) : vec3(0.0,-1.0,0.0);
+		return(cam2world);
+	}
+
 	temp = vec3(0,1,0);
-	forward = vectorSub(&cam->view_point, &cam->norm_vec);
+	forward = vectorSub(&from, &to);
 	forward = vec_normalize(&forward);
 	right = crossProduct(&temp, &forward);
 	up = crossProduct(&forward, &right);
 
-	cam2world->row1 = right;
-	cam2world->row2 = up;
-	cam2world->row3 = forward;
-	cam2world->row4 =(t_vec3){0,0,0};
+	cam2world.row1 = right;
+	cam2world.row2 = up;
+	cam2world.row3 = forward;
+	cam2world.row4 =(t_vec3){0,0,0};
 
 	return(cam2world);
 }
 
-t_vec3	setcam(t_vec3 from, t_cam *cam)
+t_vec3	apply_matrix(t_matrix43 matrix, t_vec3	vec3)
 {
-	t_vec3 		new;
-	t_matrix43	*c2w;
+	t_vec3	new;
+	new.x = vec3.x * matrix.row1.x + vec3.y * matrix.row2.x + vec3.z * matrix.row3.x;
+	new.y = vec3.x * matrix.row1.y + vec3.y * matrix.row2.y + vec3.z * matrix.row3.y;
+	new.z = vec3.x * matrix.row1.z + vec3.y * matrix.row2.z + vec3.z * matrix.row3.z;
+	return	(new);
+}
 
-	if (cam->norm_vec.x == 0 && cam->norm_vec.y == 0 && cam->norm_vec.z == 0 )
+t_vec3	setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec)
+{
+	t_matrix43	c2w;
+
+	if (norm_vec.x == 0 && norm_vec.y == 0 && norm_vec.z == 0 )
 		return(from);
-	c2w = make_matrix(cam);
-	new.x = from.x * c2w->row1.x + from.y * c2w->row2.x + from.z * c2w->row3.x;
-	new.y = from.x * c2w->row1.y + from.y * c2w->row2.y + from.z * c2w->row3.y;
-	new.z = from.x * c2w->row1.z + from.y * c2w->row2.z + from.z * c2w->row3.z;
-	return (new);
+	c2w = lookat_matrix(to, vectorPlus(&to, &norm_vec));
+	return (apply_matrix(c2w, from));
+}
+
+t_vec3	setsquare(t_vec3 pos, t_vec3 norm_vec)
+{
+	t_matrix43	c2w;
+
+	c2w = lookat_matrix(pos, norm_vec);
+	return (apply_matrix(c2w, pos));
+}
+
+t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
+{
+	//ray->dir = (t_vec3){camx, camy, -1};
+	t_hit		hit;
+	t_vec3		A;
+	t_vec3		B;
+	t_vec3		N;
+	t_vec3		edge0;
+	t_vec3		edge1;
+	t_vec3		edge2;
+	t_vec3		C0;
+	t_vec3		C1;
+	t_vec3		C2;
+	t_vec3		temp;
+	t_vec3		p;
+	t_vec3		t0;
+	t_vec3		t1;
+	t_vec3		t2;
+	float		t;
+	float		D;
+
+	hit.hit = -1;
+	hit.t1 = INFINITY;
+	hit.t2 = 0;
+	hit.r = triangle->r;
+	hit.g = triangle->g;
+	hit.b = triangle->b;
+	A = vectorSub(&triangle->p2, &triangle->p1);
+	B = vectorSub(&triangle->p3, &triangle->p1);
+
+	N = crossProduct(&A, &B);
+	//N = vec_normalize(&N);
+	if (fabs(vectorDot(&N, &ray->dir)) == 0)
+		return(hit);
+	D = vectorDot(&N, &triangle->p1);
+	t = -((vectorDot(&N, &ray->orig) - D) / vectorDot(&N, &ray->dir));
+	if (t < 0)
+		return(hit);
+	temp = vec_x_d(&ray->dir, t);
+	p = vectorPlus(&ray->orig, &temp);
+	edge0 = vectorSub(&triangle->p2, &triangle->p1);
+	edge1 = vectorSub(&triangle->p3, &triangle->p2);
+	edge2 = vectorSub(&triangle->p1, &triangle->p3);
+	C0 = vectorSub(&p, &triangle->p1);
+	C1 = vectorSub(&p, &triangle->p2);
+	C2 = vectorSub(&p, &triangle->p3);
+	t0 = crossProduct(&edge0, &C0);
+	t1 = crossProduct(&edge1, &C1);
+	t2 = crossProduct(&edge2, &C2);
+	if (vectorDot(&N, &t0) < 0 || vectorDot(&N, &t1) < 0 || vectorDot(&N, &t2) < 0)
+		return(hit);
+	hit.t1 = t;
+	hit.hit = 1;
+	return(hit);
 }
 
 t_hit	intersect_square(t_ray *ray, t_squ *square)
 {
-	t_hit		hit;
+	t_hit		hit[2];
+	//t_vec3		new_pos;
+	t_vec3		v0;
+	t_vec3		v1;
+	t_vec3		v2;
+	t_vec3		v3;
+
+	t_vec3		temp[2];
+
+	t_tri		t1;
+	t_tri		t2;
 	
-	hit.hit = -1;
-	hit.t1 = INFINITY;
-	hit.t2 = 0;
-	hit.r = square->r;
-	hit.g = square->g;
-	hit.b = square->b;
+	double		r;
+	t_matrix43	c2w;
+
+	r = square->side / 2;
+	c2w = lookat_matrix(square->sq_center, vectorPlus(&square->sq_center, &square->norm_vec));
+	c2w = (t_matrix43){vec_x_d(&c2w.row1, r), vec_x_d(&c2w.row2, r), c2w.row3, c2w.row4};
+	temp[0] = vectorPlus(&square->sq_center, &c2w.row2);
+	temp[1] = vectorSub(&square->sq_center, &c2w.row2);
+
+	hit[0].hit = -1;
+	hit[0].t1 = INFINITY;
+	hit[0].t2 = 0;
+	hit[0].r = square->r;
+	hit[0].g = square->g;
+	hit[0].b = square->b;
+	//new_pos = apply_matrix(c2w, square->sq_center);
 	
-	return(hit);
+	v0 = (t_vec3){c2w.row1.x - r, c2w.row1.y + r, c2w.row1.z};
+	v1 = (t_vec3){c2w.row2.x - r, c2w.row2.y - r, c2w.row2.z};
+	v2 = (t_vec3){c2w.row3.x + r, c2w.row3.y - r, c2w.row3.z};
+	v3 = (t_vec3){c2w.row4.x + r, c2w.row4.y + r, c2w.row4.z};
+	// t1.p1 = v0;
+	// t1.p2 = v1;
+	// t1.p3 = v3;
+	// t1.r = square->r;
+	// t1.g = square->g;
+	// t1.b = square->b;
+	// t2.p1 = v1;
+	// t2.p2 = v2;
+	// t2.p3 = v3;
+	// t2.r = square->r;
+	// t2.g = square->g;
+	// t2.b = square->b;
+
+	t1 = (t_tri){vectorSub(&temp[0], &c2w.row1), vectorPlus(&temp[1], &c2w.row1), vectorSub(&temp[1], &c2w.row1), square->r, square->g, square->b};
+	t2 = (t_tri){vectorPlus(&temp[0],&c2w.row1), t1.p1, t1.p2, square->r, square->g, square->b};
+	hit[1] = intersect_triangle(ray, &t1);
+	if (hit[1].hit == 1  && hit[1].t1 < hit[0].t1)
+	{
+			hit[0] = hit[1];
+			return (hit[0]);
+	}
+	hit[1] = intersect_triangle(ray, &t2);
+	if (hit[1].hit == 1  && hit[1].t1 < hit[0].t1)
+			hit[0] = hit[1];
+
+	return(hit[0]);
 }
 
 t_hit	intersect_plane(t_ray *ray, t_pla *plane)
@@ -122,62 +251,6 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	return (hit);
 }
 
-t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
-{
-	//ray->dir = (t_vec3){camx, camy, -1};
-	t_hit		hit;
-	t_vec3		A;
-	t_vec3		B;
-	t_vec3		N;
-	t_vec3		edge0;
-	t_vec3		edge1;
-	t_vec3		edge2;
-	t_vec3		C0;
-	t_vec3		C1;
-	t_vec3		C2;
-	t_vec3		temp;
-	t_vec3		p;
-	t_vec3		t0;
-	t_vec3		t1;
-	t_vec3		t2;
-	float		t;
-	float		D;
-
-	hit.hit = -1;
-	hit.t1 = INFINITY;
-	hit.t2 = 0;
-	hit.r = triangle->r;
-	hit.g = triangle->g;
-	hit.b = triangle->b;
-	A = vectorSub(&triangle->p2, &triangle->p1);
-	B = vectorSub(&triangle->p3, &triangle->p1);
-
-	N = crossProduct(&A, &B);
-	//N = vec_normalize(&N);
-	if (fabs(vectorDot(&N, &ray->dir)) == 0)
-		return(hit);
-	D = vectorDot(&N, &triangle->p1);
-	t = -((vectorDot(&N, &ray->orig) - D) / vectorDot(&N, &ray->dir));
-	if (t < 0)
-		return(hit);
-	temp = vecFloat(&ray->dir, t);
-	p = vectorPlus(&ray->orig, &temp);
-	edge0 = vectorSub(&triangle->p2, &triangle->p1);
-	edge1 = vectorSub(&triangle->p3, &triangle->p2);
-	edge2 = vectorSub(&triangle->p1, &triangle->p3);
-	C0 = vectorSub(&p, &triangle->p1);
-	C1 = vectorSub(&p, &triangle->p2);
-	C2 = vectorSub(&p, &triangle->p3);
-	t0 = crossProduct(&edge0, &C0);
-	t1 = crossProduct(&edge1, &C1);
-	t2 = crossProduct(&edge2, &C2);
-	if (vectorDot(&N, &t0) < 0 || vectorDot(&N, &t1) < 0 || vectorDot(&N, &t2) < 0)
-		return(hit);
-	hit.t1 = t;
-	hit.hit = 1;
-	return(hit);
-}
-
 t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 {
 	t_hit		hit;
@@ -197,7 +270,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.b = sphere->b;
 	length1 = vectorSub(&sphere->sp_center, &ray->orig);
 	t = vectorDot(&length1, &ray->dir);
-	temp2 = vecFloat(&ray->dir, t);
+	temp2 = vec_x_d(&ray->dir, t);
 	p = vectorPlus(&ray->orig, &temp2);
 	temp3 = vectorSub(&sphere->sp_center, &p);
 	y = sqrt(vectorDot(&temp3, &temp3));
@@ -224,7 +297,7 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 	current = minirt->var.o_head;
 	while (current)
 	{
-		while (i < 3)
+		while (i < 4)
 		{
 			if (G_lookup_table[i].index == current->object_type)
 			{
@@ -275,7 +348,7 @@ void	generate_ray(t_minirt *minirt)
 			camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
 			ray->dir = (t_vec3){camx, camy, -1};
 			ray->dir = vec_normalize(&ray->dir);
-			ray->dir = setcam(ray->dir, cam);
+			ray->dir = setcam(ray->dir, cam->view_point, cam->norm_vec);
 			ray->dir = vec_normalize(&ray->dir);
 			hit = find_hit(minirt, ray);
 			if (hit.hit == 1)
