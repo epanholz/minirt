@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 23:19:36 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/28 18:52:19 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static const t_lookup		G_lookup_table[] = {
 	{SPH, &intersect_sphere},
-	{TRI, &intersect_triangle}
+	{TRI, &intersect_triangle},
+	{PLA, &intersect_plane}
 };
 
 t_matrix43	*make_matrix(t_cam *cam)
@@ -52,6 +53,73 @@ t_vec3	setcam(t_vec3 from, t_cam *cam)
 	new.y = from.x * c2w->row1.y + from.y * c2w->row2.y + from.z * c2w->row3.y;
 	new.z = from.x * c2w->row1.z + from.y * c2w->row2.z + from.z * c2w->row3.z;
 	return (new);
+}
+
+t_hit	intersect_square(t_ray *ray, t_squ *square)
+{
+	t_hit		hit;
+	
+	hit.hit = -1;
+	hit.t1 = INFINITY;
+	hit.t2 = 0;
+	hit.r = square->r;
+	hit.g = square->g;
+	hit.b = square->b;
+	
+	return(hit);
+}
+
+t_hit	intersect_plane(t_ray *ray, t_pla *plane)
+{
+	/*
+	You know a point (x1,y1,z1) and normal vector (a,b,c). Then equation of plane should be:
+	a(x-x1)+b(y-y1)+c(z-z1) = 0;	
+
+	if (abs(denom) > 0.0001f) // your favorite epsilon
+	{
+		float t = (center - ray.origin).dot(normal) / denom;
+		if (t >= 0) return true; // you might want to allow an epsilon here too
+	}
+
+	bool intersectPlane(const Vec3f &n, const Vec3f &p0, const Vec3f &l0, const Vec3f &l, float &t) 
+	{ 
+		// assuming vectors are all normalized
+		float denom = dotProduct(n, l); 
+		if (denom > 1e-6) { 
+			Vec3f p0l0 = p0 - l0; 
+			t = dotProduct(p0l0, n) / denom; 
+			return (t >= 0); 
+		} 
+	
+		return false; 
+	} 
+
+	*/
+	t_hit		hit;
+	t_vec3		length;
+	float		denom;
+	float		t;
+	
+	hit.hit = -1;
+	hit.t1 = INFINITY;
+	hit.t2 = 0;
+	hit.r = plane->r;
+	hit.g = plane->g;
+	hit.b = plane->b;
+	
+	denom = vectorDot(&plane->norm_vec, &ray->dir);
+	if (denom > 1e-6)
+	{
+		length = vectorSub(&plane->view_point, &ray->orig);
+		t = vectorDot(&length, &plane->norm_vec) / denom;
+		if (t >= 0)
+		{
+			hit.hit = 1;
+			hit.t1 = t;
+			return (hit);
+		}
+	}
+	return (hit);
 }
 
 t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
@@ -112,33 +180,6 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 
 t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 {
-	//printf("[SPH in intersect] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", sphere->sp_center.x, sphere->sp_center.y, sphere->sp_center.z, sphere->diameter, sphere->r, sphere->g, sphere->b);
-	//printf("[RAY in intersect] %0.1f, %0.1f, %0.1f\n", ray->dir.x, ray->dir.y, ray->dir.z);
-
-	// t_vec3		length;
-	// float		t;	
-	// float		x;
-	// float		y;
-	// float		t1;
-
-	// if (color == 1)
-	// {
-	// 	hit->r = sphere->r;
-	// 	hit->g = sphere->g;
-	// 	hit->b = sphere->b;
-	// }
-
-	// length = vectorSub(&sphere->sp_center, &ray->orig);
-	// t = vectorDot(&length, &ray->dir);
-	// if (t < 0)
-	// 	return (-1);
-	// y = vectorDot(&length, &length) - (t * t);
-	// if (y > (sphere->diameter * (sphere->diameter / 2)))
-	// 	return (-1);
-	// x = sqrt((sphere->diameter * (sphere->diameter* 0.25)) - y);
-	// t1 = t - x;
-	// return (t1);
-
 	t_hit		hit;
 	t_vec3		p;
 	t_vec3		length1;
@@ -148,15 +189,12 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	float		x;
 	float		y;
 
-
 	hit.hit = -1;
 	hit.t1 = INFINITY;
 	hit.t2 = 0;
 	hit.r = sphere->r;
 	hit.g = sphere->g;
 	hit.b = sphere->b;
-	//length of a vector -> sqrt of vectordot with the same vector
-	//multiply float with vector -> float * x, float * y, float *z
 	length1 = vectorSub(&sphere->sp_center, &ray->orig);
 	t = vectorDot(&length1, &ray->dir);
 	temp2 = vecFloat(&ray->dir, t);
@@ -186,7 +224,7 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 	current = minirt->var.o_head;
 	while (current)
 	{
-		while (i < 2)
+		while (i < 3)
 		{
 			if (G_lookup_table[i].index == current->object_type)
 			{
@@ -203,32 +241,6 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 	}
 	return(hit[0]);
 }
-
-// t_hit	*find_hit(t_minirt *minirt, t_ray *ray)
-// {
-// 	t_hit			*hit;
-// 	t_object_list	*current;
-// 	float			t_temp;
-
-// 	hit = (t_hit*)malloc(sizeof(t_hit));
-// 	hit->t1 = INFINITY;
-// 	hit->t2 = 0;
-// 	current = minirt->var.o_head;
-// 	while (current)
-// 	{
-// 		if (current->object_type == SPH)
-// 		{
-// 			t_temp = intersect_sphere(ray, current->scene_object, hit, 0);
-// 			if (t_temp < hit->t1 && t_temp != -1)
-// 			{
-// 				hit->t1 = intersect_sphere(ray, current->scene_object, hit, 1);
-// 				hit->t2 = 1;
-// 			}
-// 		}
-// 		current = current->next;
-// 	}
-// 	return(hit);
-// }
 
 void	generate_ray(t_minirt *minirt)
 {
@@ -295,18 +307,27 @@ void	make_scene(t_minirt *minirt)
 	mlx_loop(minirt->var.mlx);
 }
 
-// FULL SCENE 
-// R 700 500
-// A 0.2 255,182,193
+/* 
+FULL SCENE 
+R 700 500
+A 0.2 255,182,193
 
-// c 0,0,0 0,0,-1 90
-// sp 0,0,-20 2 255,0,0
+c 0,0,0 0,0,-1 90
+sp 0,0,-20 2 255,0,0
 
-// l -40,0,30 0.7 255,255,255
-// pl 0,0,0 0,1.0,0 255,0,225
-// sq 0,100,40 0,0,1.0 30 42,42,0
-// cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255
-// tr 10,20,10 10,10,20 20,10,10 0,0,255
+l -40,0,30 0.7 255,255,255
+pl 0,0,0 0,1.0,0 255,0,225
+sq 0,100,40 0,0,1.0 30 42,42,0
+cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255
+tr 10,20,10 10,10,20 20,10,10 0,0,255
+
+sp 0,2,-5 2 224,202,222
+sp 0,0,-20 6 202,202,224
+tr 2.,0.,-5. 2.,5.,-15. 0.,0.,-12. 109,129,140
+tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
+tr 10.0,20.0,10.0      10.0,10.0,20.0   20.0,10.0,10.0 255,182,193
+
+*/
 
 
 // while (y < resx)

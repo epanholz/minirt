@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 21:45:15 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/28 18:52:29 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,8 @@ void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
 t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
 t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
+t_hit		intersect_plane(t_ray *ray, t_pla *plane);
+t_hit		intersect_square(t_ray *ray, t_squ *square);
 t_hit		find_hit(t_minirt *minirt, t_ray *ray);
 void		generate_ray(t_minirt *minirt);
 t_vec3		setcam(t_vec3 from, t_cam *cam);
