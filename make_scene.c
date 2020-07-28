@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/28 22:50:45 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/29 01:14:03 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 
 	hit.hit = -1;
 	hit.t1 = INFINITY;
-	hit.t2 = 0;
+	hit.t2 = INFINITY;
 	hit.r = triangle->r;
 	hit.g = triangle->g;
 	hit.b = triangle->b;
@@ -186,15 +186,11 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	t1 = (t_tri){vectorSub(&temp[0], &c2w.row1), vectorPlus(&temp[1], &c2w.row1), vectorSub(&temp[1], &c2w.row1), square->r, square->g, square->b};
 	t2 = (t_tri){vectorPlus(&temp[0],&c2w.row1), t1.p1, t1.p2, square->r, square->g, square->b};
 	hit[1] = intersect_triangle(ray, &t1);
-	if (hit[1].hit == 1  && hit[1].t1 < hit[0].t1)
-	{
-			hit[0] = hit[1];
-			return (hit[0]);
-	}
+	if (hit[1].hit == 1)
+			return (hit[1]);
 	hit[1] = intersect_triangle(ray, &t2);
-	if (hit[1].hit == 1  && hit[1].t1 < hit[0].t1)
-			hit[0] = hit[1];
-
+	if (hit[1].hit == 1)
+		return(hit[1]);
 	return(hit[0]);
 }
 
