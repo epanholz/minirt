@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/03/04 17:45:39 by epanholz       #+#    #+#                */
-/*   Updated: 2020/03/05 19:24:29 by epanholz      ########   odam.nl         */
+/*   Created: 2020/03/04 17:45:39 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/07/29 21:33:02 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int     main(void)
     var.win = mlx_new_window(var.mlx, 640, 480, "Hey Panini!");
 	mlx_hook(var.win, 17, 0L, close_button, &var);
 	// mlx_hook(var.win, 2, 1L<<0, close_key, &var);
-	mlx_hook(var.win, 4, 1L<<2, print_mouse_klick, &var);
-	// mlx_hook(var.win, 2, 1L<<0, print_key, &var);
-	mlx_hook(var.win, 6, 0L, print_mouse_pos, &var);
+	//mlx_hook(var.win, 4, 1L<<2, print_mouse_klick, &var);
+	mlx_hook(var.win, 2, 1L<<0, print_key, &var);
+	//mlx_hook(var.win, 6, 0L, print_mouse_pos, &var);
     mlx_loop(var.mlx);
 }    	

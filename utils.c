@@ -6,28 +6,11 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 17:31:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/23 03:24:16 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/29 22:22:57 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-int		close_key(int keycode, t_minirt *minirt)
-{
-	if (keycode == 53)
-	{
-		mlx_destroy_image(minirt->var.mlx, minirt->var.img);
-    	mlx_destroy_window(minirt->var.mlx , minirt->var.win);
-		exit(0);
-	}
-	return (0);
-}
-
-int		close_button(void)
-{
-	exit(0);
-	return (0);
-}
 
 int		rgbt(int t, int r, int g, int b)
 {

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 16:51:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/24 16:55:16 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/29 20:56:38 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,11 +116,11 @@ void		check_xyz_point(char *s, t_minirt *m)
 	double check;
 
 	check = 0;
-	check = ft_atod(s, m, FLOAT);
+	check = ft_atod(s, m, DOUBLE);
 	s[m->utils.i] == ',' ? m->utils.i++ : ft_error(INVAL);
-	check = ft_atod(s, m, FLOAT);
+	check = ft_atod(s, m, DOUBLE);
 	s[m->utils.i] == ',' ? m->utils.i++ : ft_error(INVAL);
-	check = ft_atod(s, m, FLOAT);
+	check = ft_atod(s, m, DOUBLE);
 }
 
 void		check_norm_vec(char *s, t_minirt *m)
@@ -128,15 +128,15 @@ void		check_norm_vec(char *s, t_minirt *m)
 	double check;
 
 	check = 0;
-	check = ft_atod(s, m, FLOAT);
+	check = ft_atod(s, m, DOUBLE);
 	if (check > 1 || check < -1)
 		ft_error(INVAL);
 	s[m->utils.i] == ',' ? m->utils.i++ : ft_error(INVAL);
-	check = ft_atod(s, m, FLOAT);
+	check = ft_atod(s, m, DOUBLE);
 	if (check > 1 || check < -1)
 		ft_error(INVAL);
 	s[m->utils.i] == ',' ? m->utils.i++ : ft_error(INVAL);
-	check = ft_atod(s, m, FLOAT);
+	check = ft_atod(s, m, DOUBLE);
 	if (check > 1 || check < -1)
 		ft_error(INVAL);
 }

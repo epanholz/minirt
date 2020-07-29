@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/03 12:21:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/28 22:32:36 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/29 20:52:56 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_vec3	crossProduct(t_vec3 *v1, t_vec3 *v2)
 	return (new);
 }
 
-float vectorDot(t_vec3 *v1, t_vec3 *v2)
+double vectorDot(t_vec3 *v1, t_vec3 *v2)
 {
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }

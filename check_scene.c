@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 16:51:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/18 13:12:32 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/29 20:57:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void		check_light(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 		ft_error(INVAL);
-	brightness = ft_atod(s, m, FLOAT);
+	brightness = ft_atod(s, m, DOUBLE);
 	if (brightness > 1 || brightness < 0)
 		ft_error(INVAL);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
@@ -114,7 +114,7 @@ void		check_sphere(char *s, int p, t_minirt *m)
 	check_xyz_point(s, m);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
-	diameter = ft_atod(s, m, FLOAT);
+	diameter = ft_atod(s, m, DOUBLE);
 	if (diameter < 0)
 		ft_error(INVAL);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
@@ -140,7 +140,7 @@ void		check_square(char *s, int p, t_minirt *m)
 	check_norm_vec(s, m);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
-	side = ft_atod(s, m, FLOAT);
+	side = ft_atod(s, m, DOUBLE);
 	if (side < 0)
 		ft_error(INVAL);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
@@ -166,10 +166,10 @@ void		check_cylinder(char *s, int p, t_minirt *m)
 	check_norm_vec(s, m);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
-	diameter = ft_atod(s, m, FLOAT);
+	diameter = ft_atod(s, m, DOUBLE);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
-	height = ft_atod(s, m, FLOAT);
+	height = ft_atod(s, m, DOUBLE);
 	if (height < 0 || diameter < 0)
 		ft_error(INVAL);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')

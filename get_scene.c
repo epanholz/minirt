@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 23:23:38 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/29 21:21:05 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void		get_res(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 		ft_error(INVAL);
-	m->scene.res_x = ft_atod(s, m, FLOAT);
+	m->scene.res_x = ft_atod(s, m, DOUBLE);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 		ft_error(INVAL);
-	m->scene.res_y = ft_atod(s, m, FLOAT);
+	m->scene.res_y = ft_atod(s, m, DOUBLE);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
@@ -50,7 +50,7 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 {
 	check_alight(s, p, m);
 	m->utils.i = p;
-	m->scene.l_ratio = ft_atod_loop(s, m, FLOAT);
+	m->scene.l_ratio = ft_atod_loop(s, m, DOUBLE);
 	m->scene.l_r = ft_atod_loop(s, m, INT);
 	m->scene.l_b = ft_atod_loop(s, m, INT);
 	m->scene.l_g = ft_atod_loop(s, m, INT);
@@ -65,12 +65,12 @@ t_cam		*get_camera(char *s, int p, t_minirt *m)
 	check_camera(s, p, m);
 	m->scene.camera++;
 	m->utils.i = p;
-	cam->view_point.x = ft_atod_loop(s, m, FLOAT);
-	cam->view_point.y = ft_atod_loop(s, m, FLOAT);
-	cam->view_point.z = ft_atod_loop(s, m, FLOAT);
-	cam->norm_vec.x = ft_atod_loop(s, m, FLOAT);
-	cam->norm_vec.y = ft_atod_loop(s, m, FLOAT);
-	cam->norm_vec.z = ft_atod_loop(s, m, FLOAT);
+	cam->view_point.x = ft_atod_loop(s, m, DOUBLE);
+	cam->view_point.y = ft_atod_loop(s, m, DOUBLE);
+	cam->view_point.z = ft_atod_loop(s, m, DOUBLE);
+	cam->norm_vec.x = ft_atod_loop(s, m, DOUBLE);
+	cam->norm_vec.y = ft_atod_loop(s, m, DOUBLE);
+	cam->norm_vec.z = ft_atod_loop(s, m, DOUBLE);
 	cam->fov = ft_atod_loop(s, m, INT);
 	return (cam);
 }
@@ -82,10 +82,10 @@ t_light		*get_light(char *s, int p, t_minirt *m)
 	light = (t_light*)malloc(sizeof(t_light));
 	check_light(s, p, m);
 	m->utils.i = p;
-	light->light_point.x = ft_atod_loop(s, m, FLOAT);
-	light->light_point.y = ft_atod_loop(s, m, FLOAT);
-	light->light_point.z = ft_atod_loop(s, m, FLOAT);
-	light->light_b = ft_atod_loop(s, m, FLOAT);
+	light->light_point.x = ft_atod_loop(s, m, DOUBLE);
+	light->light_point.y = ft_atod_loop(s, m, DOUBLE);
+	light->light_point.z = ft_atod_loop(s, m, DOUBLE);
+	light->light_b = ft_atod_loop(s, m, DOUBLE);
 	light->r = ft_atod_loop(s, m, INT);
 	light->g = ft_atod_loop(s, m, INT);
 	light->b = ft_atod_loop(s, m, INT);
@@ -99,12 +99,12 @@ t_pla		*get_plane(char *s, int p, t_minirt *m)
 	plane = (t_pla*)malloc(sizeof(t_pla));
 	check_plane(s, p, m);
 	m->utils.i = p;
-	plane->view_point.x = ft_atod_loop(s, m, FLOAT);
-	plane->view_point.y = ft_atod_loop(s, m, FLOAT);
-	plane->view_point.z = ft_atod_loop(s, m, FLOAT);
-	plane->norm_vec.x = ft_atod_loop(s, m, FLOAT);
-	plane->norm_vec.y = ft_atod_loop(s, m, FLOAT);
-	plane->norm_vec.z = ft_atod_loop(s, m, FLOAT);
+	plane->view_point.x = ft_atod_loop(s, m, DOUBLE);
+	plane->view_point.y = ft_atod_loop(s, m, DOUBLE);
+	plane->view_point.z = ft_atod_loop(s, m, DOUBLE);
+	plane->norm_vec.x = ft_atod_loop(s, m, DOUBLE);
+	plane->norm_vec.y = ft_atod_loop(s, m, DOUBLE);
+	plane->norm_vec.z = ft_atod_loop(s, m, DOUBLE);
 	plane->r = ft_atod_loop(s, m, INT);
 	plane->g = ft_atod_loop(s, m, INT);
 	plane->b = ft_atod_loop(s, m, INT);
@@ -119,10 +119,10 @@ t_sph		*get_sphere(char *s, int p, t_minirt *m)
 	check_sphere(s, p, m);
 	m->utils.i = p;
 
-	sphere->sp_center.x = ft_atod_loop(s, m, FLOAT);
-	sphere->sp_center.y = ft_atod_loop(s, m, FLOAT);	
-	sphere->sp_center.z = ft_atod_loop(s, m, FLOAT);
-	sphere->diameter = ft_atod_loop(s, m, FLOAT);
+	sphere->sp_center.x = ft_atod_loop(s, m, DOUBLE);
+	sphere->sp_center.y = ft_atod_loop(s, m, DOUBLE);	
+	sphere->sp_center.z = ft_atod_loop(s, m, DOUBLE);
+	sphere->diameter = ft_atod_loop(s, m, DOUBLE);
 	sphere->r = ft_atod_loop(s, m, INT);
 	sphere->g = ft_atod_loop(s, m, INT);
 	sphere->b = ft_atod_loop(s, m, INT);
@@ -138,17 +138,17 @@ t_squ		*get_square(char *s, int p, t_minirt *m)
 	check_square(s, p, m);
 	m->utils.i = p;
 
-	// 7 floating points and rgb
-	square->sq_center.x = ft_atod_loop(s, m, FLOAT);
-	square->sq_center.y = ft_atod_loop(s, m, FLOAT);
-	square->sq_center.z = ft_atod_loop(s, m, FLOAT);
-	square->norm_vec.x = ft_atod_loop(s, m, FLOAT);
-	square->norm_vec.y = ft_atod_loop(s, m, FLOAT);
-	square->norm_vec.z = ft_atod_loop(s, m, FLOAT);
-	square->side = ft_atod_loop(s, m, FLOAT);
-	square->r = ft_atod_loop(s, m, FLOAT);
-	square->g = ft_atod_loop(s, m, FLOAT);
-	square->b = ft_atod_loop(s, m, FLOAT);
+	// 7 DOUBLEing points and rgb
+	square->sq_center.x = ft_atod_loop(s, m, DOUBLE);
+	square->sq_center.y = ft_atod_loop(s, m, DOUBLE);
+	square->sq_center.z = ft_atod_loop(s, m, DOUBLE);
+	square->norm_vec.x = ft_atod_loop(s, m, DOUBLE);
+	square->norm_vec.y = ft_atod_loop(s, m, DOUBLE);
+	square->norm_vec.z = ft_atod_loop(s, m, DOUBLE);
+	square->side = ft_atod_loop(s, m, DOUBLE);
+	square->r = ft_atod_loop(s, m, DOUBLE);
+	square->g = ft_atod_loop(s, m, DOUBLE);
+	square->b = ft_atod_loop(s, m, DOUBLE);
 	return(square);
 }
 
@@ -160,15 +160,15 @@ t_cyl		*get_cylinder(char *s, int p, t_minirt *minirt)
 	check_cylinder(s, p, minirt);
 	minirt->utils.i = p;
 
-	// 8 floating points and rgb
-	cylinder->view_point.x = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->view_point.y = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->view_point.z = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->norm_vec.x = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->norm_vec.y = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->norm_vec.z = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->diameter = ft_atod_loop(s, minirt, FLOAT);
-	cylinder->height = ft_atod_loop(s, minirt, FLOAT);
+	// 8 DOUBLEing points and rgb
+	cylinder->view_point.x = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->view_point.y = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->view_point.z = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->norm_vec.x = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->norm_vec.y = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->norm_vec.z = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->diameter = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->height = ft_atod_loop(s, minirt, DOUBLE);
 	cylinder->r = ft_atod_loop(s, minirt, INT);
 	cylinder->g = ft_atod_loop(s, minirt, INT);
 	cylinder->b = ft_atod_loop(s, minirt, INT);
@@ -183,16 +183,16 @@ t_tri		*get_triangle(char *s, int p, t_minirt *minirt)
 	check_triangle(s, p, minirt);
 	minirt->utils.i = p;
 
-	// 9 floating points and rgb
-	triangle->p1.x = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p1.y = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p1.z = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p2.x = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p2.y = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p2.z = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p3.x = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p3.y = ft_atod_loop(s, minirt, FLOAT);
-	triangle->p3.z = ft_atod_loop(s, minirt, FLOAT);
+	// 9 DOUBLEing points and rgb
+	triangle->p1.x = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p1.y = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p1.z = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p2.x = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p2.y = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p2.z = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p3.x = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p3.y = ft_atod_loop(s, minirt, DOUBLE);
+	triangle->p3.z = ft_atod_loop(s, minirt, DOUBLE);
 	triangle->r = ft_atod_loop(s, minirt, INT);
 	triangle->g = ft_atod_loop(s, minirt, INT);
 	triangle->b = ft_atod_loop(s, minirt, INT);
@@ -231,6 +231,7 @@ void		check_map(char *map, t_minirt *minirt)
 	index = 0;
 	make_head(&minirt->var.o_head);
 	make_cam_head(&minirt->var.c_head);
+	make_img_head(&minirt->var.i_head);
 	while (map[index])
 	{
 		check_arg(map, index, minirt);

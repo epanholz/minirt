@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/28 22:32:24 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/29 22:17:57 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ object_list.c
 
 typedef enum		e_type
 {
-	INT,FLOAT
+	INT,DOUBLE
 }					t_type;
 
 typedef enum		e_error
@@ -61,24 +61,7 @@ typedef struct	s_ray{
         t_vec3 dir;
 }				t_ray;
 
-typedef struct  	s_utils 
-{
-	int				i;
-	int				sign;
-}               	t_utils;
 
-typedef struct 		s_scene 
-{
-	int				res;
-	int				ambient_light;
-	int				camera;
-	float			res_x;
-	float			res_y;
-	double			l_ratio;
-	int				l_r;
-	int				l_b;
-	int				l_g;
-}					t_scene;
 
 typedef	struct		s_cam
 {
@@ -179,8 +162,8 @@ typedef struct		s_camera_list
 typedef struct		s_hit
 {
 	int				hit;
-	float			t1;
-	float			t2;
+	double			t1;
+	double			t2;
 	int				r;
 	int				g;
 	int				b;
@@ -195,6 +178,25 @@ typedef struct		s_lookup
 
 }					t_lookup;
 
+typedef struct  	s_utils 
+{
+	int				i;
+	int				sign;
+}               	t_utils;
+
+typedef struct 		s_scene 
+{
+	int				res;
+	int				ambient_light;
+	int				camera;
+	double			res_x;
+	double			res_y;
+	double			l_ratio;
+	int				l_r;
+	int				l_b;
+	int				l_g;
+}					t_scene;
+
 typedef struct  	s_var 
 {
     void			*mlx;
@@ -206,6 +208,7 @@ typedef struct  	s_var
     int				endian;
 	t_object_list	*o_head;
 	t_camera_list	*c_head;
+	t_img_list		*i_head;
 }              		t_var;
 
 typedef	struct		s_minirt 
@@ -255,7 +258,7 @@ t_sph		*return_sphere(t_minirt *minirt);
 t_cam		*return_cam(t_minirt *minirt, int index);
 void		traverse_list(t_object_list **head);
 t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
-float		vectorDot(t_vec3 *v1, t_vec3 *v2);
+double		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vec_x_d(t_vec3 *v, double x);
@@ -265,6 +268,8 @@ int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);
 void		add_camera(t_camera_list **head, t_cam *cam);
+void		make_img_head(t_img_list **head);
+void		add_img(t_img_list **head, void	*image, char *address);
 void		traverse_cam_list(t_camera_list **head);
 void		make_scene(t_minirt *minirt);
 t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
@@ -277,5 +282,8 @@ void		generate_ray(t_minirt *minirt);
 t_vec3		apply_matrix(t_matrix43 matrix, t_vec3	vec3);
 t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
 t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to);
+void		create_images(t_minirt *minirt);
+int			change_image(int keycode, t_minirt *minirt);
+void		traverse_img_list(t_img_list **head);
 
 #endif

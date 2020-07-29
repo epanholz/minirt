@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/07/24 18:14:27 by epanholz      ########   odam.nl          #
+#    Updated: 2020/07/29 22:23:30 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = minirt
 
 SRC = test_main.c read_file.c get_scene.c check_scene.c check_scene_utils.c object_list.c \
 	object_list_traverse.c object_list_traverse_test.c vector_library.c utils.c make_scene.c \
+	images.c hooks.c
 
 INC = minirt.h
 

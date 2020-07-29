@@ -6,11 +6,11 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 01:14:03 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/07/29 22:35:20 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+	#include "minirt.h"
 
 static const t_lookup		G_lookup_table[] = {
 	{SPH, &intersect_sphere},
@@ -97,8 +97,8 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	t_vec3		t0;
 	t_vec3		t1;
 	t_vec3		t2;
-	float		t;
-	float		D;
+	double		t;
+	double		D;
 
 	hit.hit = -1;
 	hit.t1 = INFINITY;
@@ -202,14 +202,14 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 
 	if (abs(denom) > 0.0001f) // your favorite epsilon
 	{
-		float t = (center - ray.origin).dot(normal) / denom;
+		double t = (center - ray.origin).dot(normal) / denom;
 		if (t >= 0) return true; // you might want to allow an epsilon here too
 	}
 
-	bool intersectPlane(const Vec3f &n, const Vec3f &p0, const Vec3f &l0, const Vec3f &l, float &t) 
+	bool intersectPlane(const Vec3f &n, const Vec3f &p0, const Vec3f &l0, const Vec3f &l, double &t) 
 	{ 
 		// assuming vectors are all normalized
-		float denom = dotProduct(n, l); 
+		double denom = dotProduct(n, l); 
 		if (denom > 1e-6) { 
 			Vec3f p0l0 = p0 - l0; 
 			t = dotProduct(p0l0, n) / denom; 
@@ -222,8 +222,8 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	*/
 	t_hit		hit;
 	t_vec3		length;
-	float		denom;
-	float		t;
+	double		denom;
+	double		t;
 	
 	hit.hit = -1;
 	hit.t1 = INFINITY;
@@ -254,9 +254,9 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	t_vec3		length1;
 	t_vec3		temp2;
 	t_vec3		temp3;
-	float		t;	
-	float		x;
-	float		y;
+	double		t;	
+	double		x;
+	double		y;
 
 	hit.hit = -1;
 	hit.t1 = INFINITY;
@@ -313,66 +313,72 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 
 void	generate_ray(t_minirt *minirt)
 {
-//	t_sph		*sphere;
-	t_cam		*cam;
-	t_ray		*ray;
-	t_hit		hit;
-	float		aspect_ratio;
-	int			pixely;
-	int 		pixelx;
-	float		camy;
-	float		camx;
+	t_cam			*cam;
+	t_ray			*ray;
+	t_hit			hit;
+	t_img_list		*current;
+	double			aspect_ratio;
+	int				pixely;
+	int 			pixelx;
+	double			camy;
+	double			camx;
 
-	//sphere = return_sphere(minirt);
+	current = minirt->var.i_head;
 	ray = (t_ray*)malloc(sizeof(t_ray));
-	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;
-	pixelx = 0;
-	pixely = 0;
-	camy = 0;
-	camx = 0;
-	cam = return_cam(minirt, 1);
-	//printf("\n[SPH in scene file] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", sphere->sp_center.x, sphere->sp_center.y, sphere->sp_center.z, sphere->diameter, sphere->r, sphere->g, sphere->b);
-	//printf("[CAM in scene file] %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d\n\n", cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
-	ray->orig = cam->view_point;
-	while (pixely < minirt->scene.res_y)
+	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;	
+	while (current)
 	{
-		//transform camy
-		camy = (1 - 2 * ((pixely + 0.5) / minirt->scene.res_y)) * tan(cam->fov / 2 * M_PI / 180);
-		while(pixelx < minirt->scene.res_x)
-		{
-			//transform camx
-			camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
-			ray->dir = (t_vec3){camx, camy, -1};
-			ray->dir = vec_normalize(&ray->dir);
-			ray->dir = setcam(ray->dir, cam->view_point, cam->norm_vec);
-			ray->dir = vec_normalize(&ray->dir);
-			hit = find_hit(minirt, ray);
-			if (hit.hit == 1)
-				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.r,hit.g,hit.b));
-			else
-				my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
-			pixelx++;
-		}
 		pixelx = 0;
-		pixely++;
+		pixely = 0;
+		camy = 0;
+		camx = 0;
+		cam = return_cam(minirt, current->img_index);
+		ray->orig = cam->view_point; 
+		minirt->var.img = current->img;
+		minirt->var.addr = current->addr;
+		while (pixely < minirt->scene.res_y)
+		{
+			camy = (1 - 2 * ((pixely + 0.5) / minirt->scene.res_y)) * tan(cam->fov / 2 * M_PI / 180);
+			while(pixelx < minirt->scene.res_x)
+			{
+				camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
+				ray->dir = (t_vec3){camx, camy, -1};
+				ray->dir = vec_normalize(&ray->dir);
+				ray->dir = setcam(ray->dir, cam->view_point, cam->norm_vec);
+				ray->dir = vec_normalize(&ray->dir);
+				hit = find_hit(minirt, ray);
+				if (hit.hit == 1)
+					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.r,hit.g,hit.b));
+				else
+					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
+				pixelx++;
+			}
+			pixelx = 0;
+			pixely++;
+		}
+		current = current->next;
 	}
-	
-
 }
 
 void	make_scene(t_minirt *minirt)
 {
+	t_img_list	*current;
+
 	minirt->var.mlx = mlx_init();
 	minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
-	minirt->var.img = mlx_new_image(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y);
-	minirt->var.addr = mlx_get_data_addr(minirt->var.img, &minirt->var.bits_per_pixel, &minirt->var.line_length, &minirt->var.endian);
+	// minirt->var.img = mlx_new_image(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y);
+	// minirt->var.addr = mlx_get_data_addr(minirt->var.img, &minirt->var.bits_per_pixel, &minirt->var.line_length, &minirt->var.endian);
 	//my_mlx_pixel_put(minirt, 200, 200, rgbt(0,255,182,193));
+	create_images(minirt);
+	traverse_img_list(&minirt->var.i_head);
 	generate_ray(minirt);
-	mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, minirt->var.img, 0, 0);
+	current = minirt->var.i_head;
+	mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, current->img, 0, 0);
 	// delete_object_list(&minirt->var.o_head);
 	// delete_cam_list(&minirt->var.c_head);
 	mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
-	mlx_key_hook(minirt->var.win, close_key, minirt);
+	//mlx_key_hook(minirt->var.win, close_key, minirt);
+	mlx_key_hook(minirt->var.win, change_image, minirt);
 	mlx_loop(minirt->var.mlx);
 }
 
