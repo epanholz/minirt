@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 22:17:50 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/31 20:45:48 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,20 @@ void		traverse_cam_list(t_camera_list **head)
 	while (current)
 	{
 	printf("[CAM %d] %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d\n",  current->cam_index, current->cam->view_point.x, current->cam->view_point.y, current->cam->view_point.z, current->cam->norm_vec.x, current->cam->norm_vec.y, current->cam->norm_vec.z, current->cam->fov);
+	current = current->next;
+	}
+}
+
+//printf("[LIGHT] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", light->light_point.x, light->light_point.y, light->light_point.z, light->light_b, light->r, light->g, light->b);
+
+void		traverse_light_list(t_light_list **head)
+{
+	t_light_list	*current;
+
+	current = *head;
+	while (current)
+	{
+	printf("[LIGHT %d] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", current->light_index, current->light->light_point.x, current->light->light_point.y, current->light->light_point.z, current->light->light_b, current->light->r, current->light->g, current->light->b);
 	current = current->next;
 	}
 }

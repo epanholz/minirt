@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/24 18:19:02 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/31 20:39:45 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,43 @@ void	add_img(t_img_list **head, void	*image, char *address)
 	newnode->next = NULL;
 	current = *head;
 	if (current->img == NULL)
+		*head = newnode;
+	else
+	{
+		while (current->next != NULL)
+			current = current->next;
+		current->next = newnode;
+	}
+}
+
+void	make_light_head(t_light_list **head)
+{
+	t_light_list *new_head;
+
+	new_head = (t_light_list*)malloc(sizeof(t_light_list));
+	if (new_head == NULL)
+		ft_error(MALLOC);
+	new_head->light_index = 0;
+	new_head->light = NULL;
+	new_head->next = NULL;
+	*head = new_head;
+}
+
+void	add_light(t_light_list **head, t_light *light)
+{
+	static int		index;
+	t_light_list	*newnode;
+	t_light_list	*current;
+
+	index++;
+	newnode = (t_light_list*)malloc(sizeof(t_light_list));
+	if (newnode == NULL)
+		ft_error(MALLOC);
+	newnode->light_index = index;
+	newnode->light = light;
+	newnode->next = NULL;
+	current = *head;
+	if (current->light == NULL)
 		*head = newnode;
 	else
 	{

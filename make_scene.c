@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 22:35:20 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/01 00:17:17 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	hit.hit = -1;
 	hit.t1 = INFINITY;
 	hit.t2 = INFINITY;
+	hit.surface_norm = (t_vec3){0,0,0};
+	hit.hit_p = (t_vec3){0,0,0};
 	hit.r = triangle->r;
 	hit.g = triangle->g;
 	hit.b = triangle->b;
@@ -161,6 +163,8 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	hit[0].hit = -1;
 	hit[0].t1 = INFINITY;
 	hit[0].t2 = 0;
+	hit[0].surface_norm = (t_vec3){0,0,0};
+	hit[0].hit_p = (t_vec3){0,0,0};
 	hit[0].r = square->r;
 	hit[0].g = square->g;
 	hit[0].b = square->b;
@@ -228,6 +232,8 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	hit.hit = -1;
 	hit.t1 = INFINITY;
 	hit.t2 = 0;
+	hit.surface_norm = (t_vec3){0,0,0};
+	hit.hit_p= (t_vec3){0,0,0};
 	hit.r = plane->r;
 	hit.g = plane->g;
 	hit.b = plane->b;
@@ -259,6 +265,8 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	double		y;
 
 	hit.hit = -1;
+	hit.surface_norm = (t_vec3){0,0,0};
+	hit.hit_p = (t_vec3){0,0,0};
 	hit.t1 = INFINITY;
 	hit.t2 = 0;
 	hit.r = sphere->r;
@@ -276,6 +284,9 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
+	hit.surface_norm = vectorSub(&p, &sphere->sp_center);
+	hit.surface_norm = vec_normalize(&hit.surface_norm);
+	hit.hit_p = p;
 	return (hit);
 	//cast shadow ray
 }
@@ -289,6 +300,8 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 
 	hit[0].t1 = INFINITY;
 	hit[0].t2 = 0;
+	hit[0].hit_p = (t_vec3){0,0,0};
+	hit[0].surface_norm = (t_vec3){0,0,0};
 	i = 0;
 	current = minirt->var.o_head;
 	while (current)
@@ -311,12 +324,43 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 	return(hit[0]);
 }
 
+void	calc_color(t_minirt *minirt, t_hit *hit, t_light *light)
+{
+	double	shade;
+	double	diffuse;
+	t_vec3	l_dir;
+
+	diffuse = 1 - minirt->scene.l_ratio;
+	shade = vectorDot(&light->light_point, &hit->surface_norm);
+	if (shade < 0)
+		shade = 0;
+	l_dir = vectorSub(&light->light_point, &hit->hit_p);
+	l_dir = vec_normalize(&l_dir);
+	//hit->r = minirt->scene.l_ratio/minirt->scene.l_r + (light->light_b/light->r * (diffuse * vectorDot(&hit->surface_norm, &hit->hit_p)));
+	hit->r = 1000 * hit->r * (light->light_b + (diffuse * shade));
+	if (hit->r > 255)
+		hit->r = 255;
+	if (hit->r < 0)
+		hit->r = 0;
+	hit->g = hit->g * (light->light_b + (diffuse * shade));
+	if (hit->g > 255)
+		hit->g = 255;
+	if (hit->g < 0)
+		hit->g = 0;
+	hit->b = hit->b * (light->light_b+ (diffuse * shade));
+	if (hit->b > 255)
+		hit->b = 255;
+	if (hit->b < 0)
+		hit->b = 0;	
+}
+
 void	generate_ray(t_minirt *minirt)
 {
 	t_cam			*cam;
 	t_ray			*ray;
 	t_hit			hit;
 	t_img_list		*current;
+	t_light			*light;
 	double			aspect_ratio;
 	int				pixely;
 	int 			pixelx;
@@ -324,6 +368,7 @@ void	generate_ray(t_minirt *minirt)
 	double			camx;
 
 	current = minirt->var.i_head;
+	light = return_light(minirt, 1);;
 	ray = (t_ray*)malloc(sizeof(t_ray));
 	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;	
 	while (current)
@@ -348,7 +393,10 @@ void	generate_ray(t_minirt *minirt)
 				ray->dir = vec_normalize(&ray->dir);
 				hit = find_hit(minirt, ray);
 				if (hit.hit == 1)
+				{
+					calc_color(minirt, &hit, light);
 					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.r,hit.g,hit.b));
+				}
 				else
 					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
 				pixelx++;
@@ -387,20 +435,19 @@ FULL SCENE
 R 700 500
 A 0.2 255,182,193
 
+l 50.0,50.0,0.0 0.6 10,0,255
+l 40.0,50.0,0.0 0.6 10,0,255
+l 30.0,50.0,0.0 0.6 10,0,255
+
 c 0,0,0 0,0,-1 90
-sp 0,0,-20 2 255,0,0
+c 1,1,1 0,0,-1 90
 
-l -40,0,30 0.7 255,255,255
-pl 0,0,0 0,1.0,0 255,0,225
-sq 0,100,40 0,0,1.0 30 42,42,0
-cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255
-tr 10,20,10 10,10,20 20,10,10 0,0,255
-
+pl -2,-5,-20 0,0,-1 97,68,110
 sp 0,2,-5 2 224,202,222
 sp 0,0,-20 6 202,202,224
-tr 2.,0.,-5. 2.,5.,-15. 0.,0.,-12. 109,129,140
+tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
 tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
-tr 10.0,20.0,10.0      10.0,10.0,20.0   20.0,10.0,10.0 255,182,193
+sq -2,-2,-7 0,0,1 3 159,227,177
 
 */
 

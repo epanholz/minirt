@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/22 21:10:48 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/31 21:37:27 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,24 @@ t_cam		*return_cam(t_minirt *minirt, int index)
 		{
 			cam = current->cam;
 			return (cam);
+		}
+		current = current->next;
+	}
+	return (NULL);
+}
+
+t_light		*return_light(t_minirt *minirt, int index)
+{
+	t_light			*light;
+	t_light_list	*current;
+
+	current = minirt->var.l_head;
+	while (current)
+	{
+		if (current->light_index == index)
+		{
+			light = current->light;
+			return (light);
 		}
 		current = current->next;
 	}

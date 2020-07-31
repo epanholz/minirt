@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 21:21:05 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/07/31 20:46:10 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ void		check_arg(char *arg, int p, t_minirt *minirt)
 	else if (arg[p] == 'c' && arg[p + 1] == ' ')
 		add_camera(&minirt->var.c_head, get_camera(arg, p + 1, minirt));
 	else if (arg[p] == 'l' && arg[p + 1] == ' ')
-		add_object(&minirt->var.o_head, LIGHT, get_light(arg, p + 1, minirt));
+		add_light(&minirt->var.l_head, get_light(arg, p + 1, minirt));
 	else if (arg[p] == 'p' && arg[p + 1] == 'l' && arg[p + 2] == ' ')
 		add_object(&minirt->var.o_head, PLA, get_plane(arg, p + 2, minirt));
 	else if (arg[p] == 's' && arg[p + 1] == 'p' && arg[p + 2] == ' ')
@@ -232,6 +232,7 @@ void		check_map(char *map, t_minirt *minirt)
 	make_head(&minirt->var.o_head);
 	make_cam_head(&minirt->var.c_head);
 	make_img_head(&minirt->var.i_head);
+	make_light_head(&minirt->var.l_head);
 	while (map[index])
 	{
 		check_arg(map, index, minirt);
@@ -245,5 +246,6 @@ void		check_map(char *map, t_minirt *minirt)
 		ft_error(INVAL);
 	traverse_list(&minirt->var.o_head);
 	traverse_cam_list(&minirt->var.c_head);
+	traverse_light_list(&minirt->var.l_head);
 	make_scene(minirt);
 }
