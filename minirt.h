@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/31 23:08:19 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/01 22:16:26 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,17 @@ typedef	struct		s_vec3
 	double			z;
 }					t_vec3;
 
-typedef struct	s_ray{
+typedef struct		s_ray{
         t_vec3 orig;
         t_vec3 dir;
-}				t_ray;
+}					t_ray;
 
-
+typedef struct		s_color
+{
+	int			r;
+	int			g;
+	int			b;
+}					t_color;
 
 typedef	struct		s_cam
 {
@@ -74,9 +79,7 @@ typedef	struct		s_light
 {
 	t_vec3			light_point;
 	double			light_b;
-	int				r;
-	int				b;
-	int				g;
+	t_color			color;
 }					t_light;
 
 typedef	struct		s_pla
@@ -173,9 +176,7 @@ typedef struct		s_hit
 	t_vec3			hit_p;
 	double			t1;
 	double			t2;
-	int				r;
-	int				g;
-	int				b;
+	t_color			color;
 }					t_hit;
 
 typedef	t_hit	(t_function)();
@@ -200,10 +201,8 @@ typedef struct 		s_scene
 	int				camera;
 	double			res_x;
 	double			res_y;
-	double			l_ratio;
-	int				l_r;
-	int				l_b;
-	int				l_g;
+	double			a_light_ratio;
+	t_color			a_color;
 }					t_scene;
 
 typedef struct  	s_var 
@@ -275,6 +274,8 @@ t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vec_x_d(t_vec3 *v, double x);
 t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
 t_vec3  	vec3(double x, double y, double z);
+double		vec_distance(t_vec3 *v1, t_vec3 *v2);
+double		vec3_pow(t_vec3 *v);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);
@@ -294,11 +295,13 @@ t_hit		intersect_square(t_ray *ray, t_squ *square);
 t_vec3		setsquare(t_vec3 pos, t_vec3 norm_vec);
 t_hit		find_hit(t_minirt *minirt, t_ray *ray);
 void		calc_color(t_minirt *minirt, t_hit *hit, t_light *light);
+t_color		apply_color(t_color c1, t_color c2, double	ratio);
 void		generate_ray(t_minirt *minirt);
 t_vec3		apply_matrix(t_matrix43 matrix, t_vec3	vec3);
 t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
 t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to);
 void		create_images(t_minirt *minirt);
 int			change_image(int keycode, t_minirt *minirt);
+
 
 #endif

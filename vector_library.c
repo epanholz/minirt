@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/03 12:21:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 20:52:56 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/01 22:15:52 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,14 @@ t_vec3 	vec_x_d(t_vec3 *v, double x)
 {
 	t_vec3 result = {v->x * x, v->y * x, v->z * x};
 	return (result);
+}
+
+double	vec_distance(t_vec3 *v1, t_vec3 *v2)
+{
+	return (sqrt((v1->x - v2->x)+(v1->y - v2->y)+(v1->z - v2->z)));	
+}
+
+double	vec3_pow(t_vec3 *v)
+{
+	return (pow(v->x, 2) + pow(v->y, 2) + pow(v->z, 2));
 }

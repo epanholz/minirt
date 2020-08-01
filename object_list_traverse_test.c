@@ -6,28 +6,11 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/31 20:45:48 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/01 21:12:42 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"	
-
-void		retrieve_cam(void	*scene_object)
-{
-	t_cam 			*cam;
-
-	cam = scene_object;	
-	printf("[CAM] %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %0.1f, %d\n",  cam->view_point.x, cam->view_point.y, cam->view_point.z, cam->norm_vec.x, cam->norm_vec.y, cam->norm_vec.z, cam->fov);
-	
-}
-
-void		retrieve_light(void	*scene_object)
-{
-	t_light 			*light;
-
-	light = scene_object;	
-	printf("[LIGHT] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", light->light_point.x, light->light_point.y, light->light_point.z, light->light_b, light->r, light->g, light->b);
-}
 
 void		retrieve_plane(void	*scene_object)
 {
@@ -76,10 +59,6 @@ void		traverse_list(t_object_list **head)
 	current = *head;
 	while (current)
 	{
-		if (current->object_type == CAM)
-			retrieve_cam(current->scene_object);
-		if (current->object_type == LIGHT)
-			retrieve_light(current->scene_object);
 		if (current->object_type == PLA)
 			retrieve_plane(current->scene_object);
 		if (current->object_type == SPH)
@@ -115,7 +94,7 @@ void		traverse_light_list(t_light_list **head)
 	current = *head;
 	while (current)
 	{
-	printf("[LIGHT %d] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", current->light_index, current->light->light_point.x, current->light->light_point.y, current->light->light_point.z, current->light->light_b, current->light->r, current->light->g, current->light->b);
+	printf("[LIGHT %d] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", current->light_index, current->light->light_point.x, current->light->light_point.y, current->light->light_point.z, current->light->light_b, current->light->color.r, current->light->color.g, current->light->color.b);
 	current = current->next;
 	}
 }

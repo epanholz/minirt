@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/31 20:46:10 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/01 21:22:08 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 {
 	check_alight(s, p, m);
 	m->utils.i = p;
-	m->scene.l_ratio = ft_atod_loop(s, m, DOUBLE);
-	m->scene.l_r = ft_atod_loop(s, m, INT);
-	m->scene.l_b = ft_atod_loop(s, m, INT);
-	m->scene.l_g = ft_atod_loop(s, m, INT);
-	printf("[AMBIENT L] %0.1f, %d, %d, %d\n", m->scene.l_ratio, m->scene.l_r, m->scene.l_b, m->scene.l_g);
+	m->scene.a_light_ratio = ft_atod_loop(s, m, DOUBLE);
+	m->scene.a_color = (t_color){ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT)};
+	// m->scene.l_b = ft_atod_loop(s, m, INT);
+	// m->scene.l_g = ft_atod_loop(s, m, INT);
+	printf("[AMBIENT L] %0.1f, %d, %d, %d\n", m->scene.a_light_ratio, m->scene.a_color.r, m->scene.a_color.b, m->scene.a_color.g);
 }
 
 t_cam		*get_camera(char *s, int p, t_minirt *m)
@@ -86,9 +86,9 @@ t_light		*get_light(char *s, int p, t_minirt *m)
 	light->light_point.y = ft_atod_loop(s, m, DOUBLE);
 	light->light_point.z = ft_atod_loop(s, m, DOUBLE);
 	light->light_b = ft_atod_loop(s, m, DOUBLE);
-	light->r = ft_atod_loop(s, m, INT);
-	light->g = ft_atod_loop(s, m, INT);
-	light->b = ft_atod_loop(s, m, INT);
+	light->color = (t_color){ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT)};
+	// light->g = ft_atod_loop(s, m, INT);
+	// light->b = ft_atod_loop(s, m, INT);
 	return (light);
 }
 

@@ -6,11 +6,11 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/01 00:17:17 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/01 22:30:11 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-	#include "minirt.h"
+#include "minirt.h"
 
 static const t_lookup		G_lookup_table[] = {
 	{SPH, &intersect_sphere},
@@ -105,9 +105,7 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	hit.t2 = INFINITY;
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
-	hit.r = triangle->r;
-	hit.g = triangle->g;
-	hit.b = triangle->b;
+	hit.color = (t_color){triangle->r, triangle->g, triangle->b};
 	A = vectorSub(&triangle->p2, &triangle->p1);
 	B = vectorSub(&triangle->p3, &triangle->p1);
 
@@ -134,6 +132,8 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 		return(hit);
 	hit.t1 = t;
 	hit.hit = 1;
+	hit.surface_norm = N;
+	hit.hit_p = p;
 	return(hit);
 }
 
@@ -165,9 +165,7 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	hit[0].t2 = 0;
 	hit[0].surface_norm = (t_vec3){0,0,0};
 	hit[0].hit_p = (t_vec3){0,0,0};
-	hit[0].r = square->r;
-	hit[0].g = square->g;
-	hit[0].b = square->b;
+	hit[0].color = (t_color){square->r, square->g, square->b};
 	//new_pos = apply_matrix(c2w, square->sq_center);
 	
 	v0 = (t_vec3){c2w.row1.x - r, c2w.row1.y + r, c2w.row1.z};
@@ -233,10 +231,8 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	hit.t1 = INFINITY;
 	hit.t2 = 0;
 	hit.surface_norm = (t_vec3){0,0,0};
-	hit.hit_p= (t_vec3){0,0,0};
-	hit.r = plane->r;
-	hit.g = plane->g;
-	hit.b = plane->b;
+	hit.hit_p = (t_vec3){0,0,0};
+	hit.color = (t_color){plane->r, plane->g, plane->b};
 	
 	denom = vectorDot(&plane->norm_vec, &ray->dir);
 	if (denom > 1e-6)
@@ -269,9 +265,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.hit_p = (t_vec3){0,0,0};
 	hit.t1 = INFINITY;
 	hit.t2 = 0;
-	hit.r = sphere->r;
-	hit.g = sphere->g;
-	hit.b = sphere->b;
+	hit.color = (t_color){sphere->r, sphere->g, sphere->b};
 	length1 = vectorSub(&sphere->sp_center, &ray->orig);
 	t = vectorDot(&length1, &ray->dir);
 	temp2 = vec_x_d(&ray->dir, t);
@@ -285,7 +279,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.t2 = t + x;
 	hit.hit = 1;
 	hit.surface_norm = vectorSub(&p, &sphere->sp_center);
-	hit.surface_norm = vec_normalize(&hit.surface_norm);
+	//hit.surface_norm = vec_normalize(&hit.surface_norm);
 	hit.hit_p = p;
 	return (hit);
 	//cast shadow ray
@@ -322,36 +316,6 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 		current = current->next;
 	}
 	return(hit[0]);
-}
-
-void	calc_color(t_minirt *minirt, t_hit *hit, t_light *light)
-{
-	double	shade;
-	double	diffuse;
-	t_vec3	l_dir;
-
-	diffuse = 1 - minirt->scene.l_ratio;
-	shade = vectorDot(&light->light_point, &hit->surface_norm);
-	if (shade < 0)
-		shade = 0;
-	l_dir = vectorSub(&light->light_point, &hit->hit_p);
-	l_dir = vec_normalize(&l_dir);
-	//hit->r = minirt->scene.l_ratio/minirt->scene.l_r + (light->light_b/light->r * (diffuse * vectorDot(&hit->surface_norm, &hit->hit_p)));
-	hit->r = 1000 * hit->r * (light->light_b + (diffuse * shade));
-	if (hit->r > 255)
-		hit->r = 255;
-	if (hit->r < 0)
-		hit->r = 0;
-	hit->g = hit->g * (light->light_b + (diffuse * shade));
-	if (hit->g > 255)
-		hit->g = 255;
-	if (hit->g < 0)
-		hit->g = 0;
-	hit->b = hit->b * (light->light_b+ (diffuse * shade));
-	if (hit->b > 255)
-		hit->b = 255;
-	if (hit->b < 0)
-		hit->b = 0;	
 }
 
 void	generate_ray(t_minirt *minirt)
@@ -395,7 +359,7 @@ void	generate_ray(t_minirt *minirt)
 				if (hit.hit == 1)
 				{
 					calc_color(minirt, &hit, light);
-					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.r,hit.g,hit.b));
+					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.color.r,hit.color.g,hit.color.b));
 				}
 				else
 					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
