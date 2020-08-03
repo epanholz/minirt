@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/01 22:16:26 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/02 20:07:32 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ typedef struct		s_light_list
 
 typedef struct		s_hit
 {
+	int				object;
 	int				hit;
 	t_vec3			surface_norm;
 	t_vec3			hit_p;
@@ -294,7 +295,7 @@ t_hit		intersect_plane(t_ray *ray, t_pla *plane);
 t_hit		intersect_square(t_ray *ray, t_squ *square);
 t_vec3		setsquare(t_vec3 pos, t_vec3 norm_vec);
 t_hit		find_hit(t_minirt *minirt, t_ray *ray);
-void		calc_color(t_minirt *minirt, t_hit *hit, t_light *light);
+void		calc_color(t_minirt *minirt, t_hit *hit);
 t_color		apply_color(t_color c1, t_color c2, double	ratio);
 void		generate_ray(t_minirt *minirt);
 t_vec3		apply_matrix(t_matrix43 matrix, t_vec3	vec3);

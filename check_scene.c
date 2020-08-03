@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 16:51:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 20:57:18 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/02 19:05:12 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void		check_camera(char *s, int p, t_minirt *m)
 
 void		check_alight(char *s, int p, t_minirt *m)
 {
+	double	brightness;
+
 	if (m->scene.ambient_light == 1)
 		ft_error(INVAL);
 	m->scene.ambient_light = 1;
@@ -47,10 +49,8 @@ void		check_alight(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
 			ft_error(INVAL);
-	if ((s[m->utils.i] == '0' || s[m->utils.i] == '1') && s[m->utils.i + 1] == '.' && 
-		s[m->utils.i + 2] >='0' && s[m->utils.i + 2] <= '9')
-		m->utils.i = m->utils.i + 3;
-	else
+	brightness = ft_atod(s, m, DOUBLE);
+	if (brightness > 1 || brightness < 0)
 		ft_error(INVAL);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;

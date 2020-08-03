@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/01 22:30:11 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/02 21:17:04 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,19 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	double		t;
 	double		D;
 
+	hit.object = 0;
 	hit.hit = -1;
 	hit.t1 = INFINITY;
 	hit.t2 = INFINITY;
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
 	hit.color = (t_color){triangle->r, triangle->g, triangle->b};
+
 	A = vectorSub(&triangle->p2, &triangle->p1);
 	B = vectorSub(&triangle->p3, &triangle->p1);
-
 	N = crossProduct(&A, &B);
-	//N = vec_normalize(&N);
-	if (fabs(vectorDot(&N, &ray->dir)) == 0)
+	N = vec_normalize(&N);
+	if (fabs(vectorDot(&N, &ray->dir)) < 0.000001)
 		return(hit);
 	D = vectorDot(&N, &triangle->p1);
 	t = -((vectorDot(&N, &ray->orig) - D) / vectorDot(&N, &ray->dir));
@@ -130,6 +131,7 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	t2 = crossProduct(&edge2, &C2);
 	if (vectorDot(&N, &t0) < 0 || vectorDot(&N, &t1) < 0 || vectorDot(&N, &t2) < 0)
 		return(hit);
+	hit.object = TRI;
 	hit.t1 = t;
 	hit.hit = 1;
 	hit.surface_norm = N;
@@ -160,6 +162,7 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	temp[0] = vectorPlus(&square->sq_center, &c2w.row2);
 	temp[1] = vectorSub(&square->sq_center, &c2w.row2);
 
+	hit[0].object = 0;
 	hit[0].hit = -1;
 	hit[0].t1 = INFINITY;
 	hit[0].t2 = 0;
@@ -227,6 +230,7 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	double		denom;
 	double		t;
 	
+	hit.object = 0;
 	hit.hit = -1;
 	hit.t1 = INFINITY;
 	hit.t2 = 0;
@@ -241,6 +245,10 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 		t = vectorDot(&length, &plane->norm_vec) / denom;
 		if (t >= 0)
 		{
+			hit.object = PLA;
+			hit.surface_norm = plane->norm_vec;
+			hit.hit_p = vec_x_d(&ray->dir, t);
+			hit.hit_p = vectorPlus(&hit.hit_p, &ray->orig);
 			hit.hit = 1;
 			hit.t1 = t;
 			return (hit);
@@ -260,6 +268,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	double		x;
 	double		y;
 
+	hit.object = 0;
 	hit.hit = -1;
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
@@ -268,6 +277,8 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.color = (t_color){sphere->r, sphere->g, sphere->b};
 	length1 = vectorSub(&sphere->sp_center, &ray->orig);
 	t = vectorDot(&length1, &ray->dir);
+	if (t < 0)
+		return(hit);
 	temp2 = vec_x_d(&ray->dir, t);
 	p = vectorPlus(&ray->orig, &temp2);
 	temp3 = vectorSub(&sphere->sp_center, &p);
@@ -275,6 +286,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	if (y > (sphere->diameter / 2))
 		return(hit);
 	x = (sphere->diameter / 2) - y;
+	hit.object = SPH;
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
@@ -324,7 +336,6 @@ void	generate_ray(t_minirt *minirt)
 	t_ray			*ray;
 	t_hit			hit;
 	t_img_list		*current;
-	t_light			*light;
 	double			aspect_ratio;
 	int				pixely;
 	int 			pixelx;
@@ -332,7 +343,6 @@ void	generate_ray(t_minirt *minirt)
 	double			camx;
 
 	current = minirt->var.i_head;
-	light = return_light(minirt, 1);;
 	ray = (t_ray*)malloc(sizeof(t_ray));
 	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;	
 	while (current)
@@ -358,7 +368,7 @@ void	generate_ray(t_minirt *minirt)
 				hit = find_hit(minirt, ray);
 				if (hit.hit == 1)
 				{
-					calc_color(minirt, &hit, light);
+					calc_color(minirt, &hit);
 					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.color.r,hit.color.g,hit.color.b));
 				}
 				else
@@ -395,6 +405,26 @@ void	make_scene(t_minirt *minirt)
 }
 
 /* 
+
+R 700 700
+A 0.3 224,202,222
+
+l 0,0,-3 1 137,214,224
+l 0,1,-5 0.2 255,0,0
+
+c 0,0,0 0,0,-1 90
+c 1,1,1 0,0,-1 90
+
+sp 0,2,-5 2 224,202,222
+sp 0,0,-20 6 202,202,224
+
+pl -2,-5,-20 0,-1,0 97,68,110
+
+tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
+tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
+
+sq -2,-2,-7 0,0,1 3 159,227,177
+
 FULL SCENE 
 R 700 500
 A 0.2 255,182,193
