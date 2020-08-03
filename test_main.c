@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/02 21:06:16 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/04 00:13:16 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main()
 	minirt->var.l_head = NULL;
 	buff = NULL;
 	fd = open("scene.rt", O_RDONLY);
+	//fd = open("7-wolfie.rt", O_RDONLY);
 	buff = read_file(fd, buff);
 	check_map(buff, minirt);
 	free(minirt);

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/03 18:48:04 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/03 23:46:44 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,36 +68,29 @@ t_color	apply_light(t_hit *hit, t_light *light)
 	t_color	light_color;
 	t_vec3	dist;
 	t_vec3	dist_norm;
-	double	dotnormal;
 	double	shade;
-	double	l_intensity;
-	double	r2;
 	double	diffuse;
+	double	dotnormal;
 
 	temp = hit->color;
 	light_color = light->color;
-	diffuse = 1 - (1 - light->light_b);
+	diffuse = (light->light_b == 1) ? 1 : 1 - (1 - light->light_b);
 	dist = vectorSub(&light->light_point, &hit->hit_p);
 	dist_norm = vec_normalize(&dist);
 	dotnormal = vectorDot(&hit->surface_norm, &dist_norm);
-	if (dotnormal <= 1e-6 && hit->object == TRI)
-		dotnormal = fabs(dotnormal);
-	if (dotnormal <= 1e-6 && hit->object != TRI)
-		dotnormal = 0;	
 	shade = vectorDot(&hit->surface_norm, &light->light_point);
-	shade = vectorDot(&hit->surface_norm, &light->light_point);
-	if (shade <= 1e-6 && hit->object == TRI)
+	if ((shade <= 1e-6 && hit->object == TRI) || (shade <= 1e-6 && hit->object == PLA))
 		shade = fabs(shade);	
-	if (shade <= 1e-6 && hit->object != TRI)
+	if (shade <= 1e-6)
 		shade = 0;
-	r2 = vec3_pow(&dist);
-	l_intensity = (light->light_b * dotnormal * 1000) / (4.0 * M_PI * r2);
+	if ((dotnormal <= 1e-6 && hit->object == TRI) || (dotnormal <= 1e-6 && hit->object == PLA))
+		dotnormal = fabs(dotnormal);
 
-	temp.r = light_color.r * light->light_b * diffuse * fmin(1.0, fmax(0, vectorDot(&hit->surface_norm, &light->light_point)));
+	temp.r = light->color.r * diffuse * light->light_b * shade * fmax(0, dotnormal);
 	temp.r = fmin(temp.r, 255);
-	temp.g = light_color.g * light->light_b * diffuse * fmin(1.0, fmax(0, vectorDot(&hit->surface_norm, &light->light_point)));
+	temp.g = light->color.g * diffuse * light->light_b * shade * fmax(0, dotnormal);
 	temp.g = fmin(temp.g, 255);
-	temp.b = light_color.b * light->light_b * diffuse * fmin(1.0, fmax(0, vectorDot(&hit->surface_norm, &light->light_point)));
+	temp.b = light->color.b * diffuse * light->light_b * shade * fmax(0, dotnormal);
 	temp.b = fmin(temp.b, 255);
 	return (temp);
 }
@@ -107,11 +100,17 @@ void	calc_color(t_minirt *minirt, t_hit *hit)
 	t_light_list	*current;
 	t_color			ambient;
 
-	current = minirt->var.l_head;
 	ambient = apply_color(hit->color, minirt->scene.a_color, minirt->scene.a_light_ratio);
+	current = minirt->var.l_head;
+	if (current->light_index == 0)
+	{
+		hit->color = color_add(ambient, hit->color);
+		return ;
+	}
 	while (current)
 	{
-		hit->color = color_add(ambient, apply_light_tri(hit, current->light));
+		//hit->color = color_add(ambient, apply_light_tri(hit, current->light));
+		hit->color = color_add(ambient, apply_light(hit, current->light));
 		// if (hit->object == TRI || hit->object == PLA)
 		// 	hit->color = color_add(ambient, apply_light_tri(hit, current->light));
 		// else
