@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/02 21:17:04 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/03 19:10:48 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	t_vec3		length1;
 	t_vec3		temp2;
 	t_vec3		temp3;
+	t_vec3		norm_temp;
 	double		t;	
 	double		x;
 	double		y;
@@ -290,7 +291,10 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
+	norm_temp = vec_x_d(&ray->dir, hit.t1);
+	p = vectorPlus(&ray->orig, &norm_temp);
 	hit.surface_norm = vectorSub(&p, &sphere->sp_center);
+	//hit.surface_norm = vec_x_d(&hit.surface_norm, -1);
 	//hit.surface_norm = vec_normalize(&hit.surface_norm);
 	hit.hit_p = p;
 	return (hit);
@@ -405,6 +409,18 @@ void	make_scene(t_minirt *minirt)
 }
 
 /* 
+
+l 0,0,-1 0.5 137,214,224
+l 0,0,-3 1 137,214,224
+c 0,0,0 0,0,-1 90
+c 1,1,1 0,0,-1 90
+sp 0,2,-5 2 224,202,222
+sp 0,0,-20 6 202,202,224
+pl -2,-5,-20 0,-1,0 97,68,110
+tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
+tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
+sq -2,-2,-7 0,0,1 3 159,227,177
+
 
 R 700 700
 A 0.3 224,202,222
