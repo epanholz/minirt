@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/03 23:46:44 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/04 20:42:28 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,20 @@ t_color		apply_color(t_color c1, t_color c2, double	ratio)
 	return (c1);
 }
 
+// t_vec3		get_hit_point(t_ray *ray)
+// {
+// 	t_vec3		hit_p;
+	
+// 	//hit_p = get_hit_point(ray);
+// 	// dist = vector_sub(&current->light.light_p, &hit_p);
+// 	// (*ray)->norm_dir = vec_normalize(&dist);
+// 	// (*ray)->orig = hit_p;
+// 	//dist_norm = vec_normalize(&dist);
+
+// 	ray->dir = dist_norm;
+// 	ray->orig =  vector_x_d(hit->surface_norm, hit->t1 - 10 * 1e-6);
+// 	return (hit_p);
+// }
 
 t_color	apply_light_tri(t_hit *hit, t_light *light)
 {
@@ -98,9 +112,14 @@ t_color	apply_light(t_hit *hit, t_light *light)
 void	calc_color(t_minirt *minirt, t_hit *hit)
 {
 	t_light_list	*current;
+	//t_hit			hit1;
 	t_color			ambient;
+	t_ray			ray;
+	t_vec3			dir;
+	t_light			*light;
 
 	ambient = apply_color(hit->color, minirt->scene.a_color, minirt->scene.a_light_ratio);
+	hit->color = apply_color(hit->color, minirt->scene.a_color, minirt->scene.a_light_ratio);
 	current = minirt->var.l_head;
 	if (current->light_index == 0)
 	{
@@ -109,15 +128,29 @@ void	calc_color(t_minirt *minirt, t_hit *hit)
 	}
 	while (current)
 	{
+		light = current->light;
+		dir = vectorSub(&light->light_point, &hit->hit_p_new);
+		ray.dir = vec_normalize(&dir);
+		ray.orig = hit->hit_p_new;
+		//hit->hit_p = vec_x_d(&hit->hit_p, hit->t1 - 10 * 1e-6);
+		find_hit_light(minirt, &ray, sqrt(vectorDot(&dir, &dir) - 10 * 1e-6), hit);
+		//find_hit_light2(minirt, &ray, hit);
+		if (hit->hit == 0)
+			hit->color = color_add(hit->color, apply_light(hit, current->light));
+		// else
+		// 	hit->color = color_add(ambient, (t_color){0,0,0});		
+		
 		//hit->color = color_add(ambient, apply_light_tri(hit, current->light));
-		hit->color = color_add(ambient, apply_light(hit, current->light));
+		
+		//hit->color = color_add(hit->color, apply_light(hit, current->light));
+		
 		// if (hit->object == TRI || hit->object == PLA)
 		// 	hit->color = color_add(ambient, apply_light_tri(hit, current->light));
 		// else
 		// 	hit->color = color_add(ambient, apply_light(hit, current->light));
-		hit->color = (t_color){fmin(hit->color.r, 255), fmin(hit->color.g, 255),fmin(hit->color.b, 255)};
 		current = current->next;
 	}
+	hit->color = (t_color){fmin(hit->color.r, 255), fmin(hit->color.g, 255),fmin(hit->color.b, 255)};
 }
 
 // void	calc_color(t_minirt *minirt, t_hit *hit, t_light *light)

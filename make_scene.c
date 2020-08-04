@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/04 00:16:17 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/04 20:50:06 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 {
 	//ray->dir = (t_vec3){camx, camy, -1};
 	t_hit		hit;
+	t_vec3		norm_temp;
 	t_vec3		A;
 	t_vec3		B;
 	t_vec3		N;
@@ -136,6 +137,8 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	hit.hit = 1;
 	hit.surface_norm = N;
 	hit.hit_p = p;
+	norm_temp = vec_x_d(&ray->dir, t - 10 * 1e-6);
+	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);	
 	return(hit);
 }
 
@@ -229,6 +232,8 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	t_vec3		length;
 	double		denom;
 	double		t;
+	t_vec3		norm_temp;
+	t_vec3		temp;
 	
 	hit.object = 0;
 	hit.hit = -1;
@@ -247,8 +252,10 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 		{
 			hit.object = PLA;
 			hit.surface_norm = plane->norm_vec;
-			hit.hit_p = vec_x_d(&ray->dir, t);
-			hit.hit_p = vectorPlus(&hit.hit_p, &ray->orig);
+			temp = vec_x_d(&ray->dir, t);
+			hit.hit_p = vectorPlus(&ray->orig, &temp);
+			norm_temp = vec_x_d(&ray->dir, t - 10 * 1e-6);
+			hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);	
 			hit.hit = 1;
 			hit.t1 = t;
 			return (hit);
@@ -291,14 +298,87 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
-	norm_temp = vec_x_d(&ray->dir, hit.t1);
-	p = vectorPlus(&ray->orig, &norm_temp);
+	norm_temp = vec_x_d(&ray->dir, hit.t1 - 10 * 1e-6);
+	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);
 	hit.surface_norm = vectorSub(&p, &sphere->sp_center);
 	//hit.surface_norm = vec_x_d(&hit.surface_norm, -1);
 	//hit.surface_norm = vec_normalize(&hit.surface_norm);
 	hit.hit_p = p;
 	return (hit);
 	//cast shadow ray
+}
+
+void	find_hit_light2(t_minirt *minirt, t_ray *ray, t_hit *hit_p)
+{
+	t_hit			hit;
+	t_object_list	*current;
+	int 			i;
+	t_function		*func;
+
+	hit.hit = 0;
+	hit.t1 = INFINITY;
+	hit.t2 = 0;
+	hit.hit_p = (t_vec3){0,0,0};
+	hit.surface_norm = (t_vec3){0,0,0};
+	i = 0;
+	current = minirt->var.o_head;
+	while (current)
+	{
+		while (i < 4)
+		{
+			if (G_lookup_table[i].index == current->object_type)
+			{
+				func = G_lookup_table[i].func;
+				hit= (*func)(ray, current->scene_object);
+				if (hit.hit == 1)
+				{
+					hit_p->hit = 1;
+					return ;
+				}
+			}
+			i++;
+		}
+		i = 0;
+		current = current->next;
+	}
+	hit_p->hit = 0;
+}
+
+
+void	find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
+{
+	t_hit			hit[2];
+	t_object_list	*current;
+	int 			i;
+	t_function		*func;
+
+	hit[0].hit = 0;
+	hit[0].t1 = INFINITY;
+	hit[0].t2 = 0;
+	hit[0].hit_p = (t_vec3){0,0,0};
+	hit[0].surface_norm = (t_vec3){0,0,0};
+	i = 0;
+	current = minirt->var.o_head;
+	while (current)
+	{
+		while (i < 4)
+		{
+			if (G_lookup_table[i].index == current->object_type)
+			{
+				func = G_lookup_table[i].func;
+				hit[1] = (*func)(ray, current->scene_object);
+				if (hit[1].hit == 1  && (hit[1].t1 < l && hit[1].t1 > 0))
+				{
+					hit_p->hit = 1;
+					return ;
+				}
+			}
+			i++;
+		}
+		i = 0;
+		current = current->next;
+	}
+	hit_p->hit = 0;
 }
 
 t_hit	find_hit(t_minirt *minirt, t_ray *ray)
@@ -308,6 +388,7 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 	int 			i;
 	t_function		*func;
 
+	hit[0].hit = 0;
 	hit[0].t1 = INFINITY;
 	hit[0].t2 = 0;
 	hit[0].hit_p = (t_vec3){0,0,0};
@@ -425,8 +506,8 @@ sq -2,-2,-7 0,0,1 3 159,227,177
 R 700 700
 A 0.3 224,202,222
 
-l 0,0,-3 1 137,214,224
-l 0,1,-5 0.2 255,0,0
+l 2,3.5,3 0.5 137,214,224
+l -2,3.5,3 0.5 255,0,0
 
 c 0,0,0 0,0,-1 90
 c 1,1,1 0,0,-1 90
@@ -441,24 +522,18 @@ tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
 
 sq -2,-2,-7 0,0,1 3 159,227,177
 
-FULL SCENE 
-R 700 500
-A 0.2 255,182,193
+FUN SCENE 
 
-l 50.0,50.0,0.0 0.6 10,0,255
-l 40.0,50.0,0.0 0.6 10,0,255
-l 30.0,50.0,0.0 0.6 10,0,255
-
+l 2,3.5,3 0.5 137,214,224
+l 0,0,-1 0.5 137,214,224
 c 0,0,0 0,0,-1 90
 c 1,1,1 0,0,-1 90
-
-pl -2,-5,-20 0,0,-1 97,68,110
 sp 0,2,-5 2 224,202,222
 sp 0,0,-20 6 202,202,224
+pl -2,-5,-20 0,-1,0 97,68,110
 tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
 tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
 sq -2,-2,-7 0,0,1 3 159,227,177
-
 */
 
 

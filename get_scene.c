@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/03 22:25:14 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/04 20:40:26 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,6 @@ void		check_map(char *map, t_minirt *minirt)
 		ft_error(INVAL);
 	//traverse_list(&minirt->var.o_head);
 	//traverse_cam_list(&minirt->var.c_head);
-	//traverse_light_list(&minirt->var.l_head);
+	traverse_light_list(&minirt->var.l_head);
 	make_scene(minirt);
 }
