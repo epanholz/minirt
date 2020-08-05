@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 02:25:17 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/05 20:12:10 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -472,12 +472,16 @@ void	generate_ray(t_minirt *minirt)
 void	make_scene(t_minirt *minirt)
 {
 	t_img_list	*current;
+	int			x;
+	int			y;
 
+	x = minirt->scene.res_x;
+	y = minirt->scene.res_y;
 	minirt->var.mlx = mlx_init();
+	mlx_get_screen_size(minirt->var.mlx, &x, &y);
+	minirt->scene.res_x = (minirt->scene.res_x > x) ? x : minirt->scene.res_x;
+	minirt->scene.res_y = (minirt->scene.res_y > y) ? y : minirt->scene.res_y;
 	minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
-	// minirt->var.img = mlx_new_image(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y);
-	// minirt->var.addr = mlx_get_data_addr(minirt->var.img, &minirt->var.bits_per_pixel, &minirt->var.line_length, &minirt->var.endian);
-	//my_mlx_pixel_put(minirt, 200, 200, rgbt(0,255,182,193));
 	create_images(minirt);
 	traverse_img_list(&minirt->var.i_head);
 	generate_ray(minirt);
