@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/04 20:40:26 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/05 01:54:13 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 	m->scene.a_color = (t_color){ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT)};
 	// m->scene.l_b = ft_atod_loop(s, m, INT);
 	// m->scene.l_g = ft_atod_loop(s, m, INT);
-	printf("[AMBIENT L] %0.1f, %d, %d, %d\n", m->scene.a_light_ratio, m->scene.a_color.r, m->scene.a_color.b, m->scene.a_color.g);
+	//printf("[AMBIENT L] %0.1f, %d, %d, %d\n", m->scene.a_light_ratio, m->scene.a_color.r, m->scene.a_color.b, m->scene.a_color.g);
 }
 
 t_cam		*get_camera(char *s, int p, t_minirt *m)

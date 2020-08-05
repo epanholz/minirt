@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/04 20:42:28 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/05 03:55:40 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,9 @@ t_color	apply_light_tri(t_hit *hit, t_light *light)
 	double	dotnormal;
 	double	l_intensity;
 	double	r2;
-	double	diffuse;
 
 	temp = hit->color;
-	diffuse = 1 - light->light_b;
-	dist = vectorSub(&light->light_point, &hit->hit_p);
+	dist = vectorSub(&light->light_point, &hit->hit_p_new);
 	dist_norm = vec_normalize(&dist);
 	dotnormal = vectorDot(&hit->surface_norm, &dist_norm);
 	if ((dotnormal <= 1e-6 && hit->object == TRI) || (dotnormal <= 1e-6 && hit->object == PLA))
@@ -76,20 +74,22 @@ t_color	apply_light_tri(t_hit *hit, t_light *light)
 	return (temp);
 }
 
-t_color	apply_light(t_hit *hit, t_light *light)
+t_color	apply_light(t_hit *hit, t_light *light, double diffuse)
 {
 	t_color	temp;
 	t_color	light_color;
 	t_vec3	dist;
 	t_vec3	dist_norm;
 	double	shade;
-	double	diffuse;
+	//double	diffuse;
 	double	dotnormal;
+	double	l_intensity;
+	double	r2;
 
 	temp = hit->color;
 	light_color = light->color;
-	diffuse = (light->light_b == 1) ? 1 : 1 - (1 - light->light_b);
-	dist = vectorSub(&light->light_point, &hit->hit_p);
+	//diffuse = 1 - (1 - light->light_b);
+	dist = vectorSub(&light->light_point, &hit->hit_p_new);
 	dist_norm = vec_normalize(&dist);
 	dotnormal = vectorDot(&hit->surface_norm, &dist_norm);
 	shade = vectorDot(&hit->surface_norm, &light->light_point);
@@ -99,13 +99,24 @@ t_color	apply_light(t_hit *hit, t_light *light)
 		shade = 0;
 	if ((dotnormal <= 1e-6 && hit->object == TRI) || (dotnormal <= 1e-6 && hit->object == PLA))
 		dotnormal = fabs(dotnormal);
+	if (dotnormal <= 1e-6)
+		return ((t_color){0,0,0});
+	r2 = vec3_pow(&dist);
+	l_intensity = (light->light_b * dotnormal * 1000) / (4.0 * M_PI * r2);
 
-	temp.r = light->color.r * diffuse * light->light_b * shade * fmax(0, dotnormal);
+	temp.r = light->color.r * diffuse * light->light_b * fmax(0, dotnormal);
 	temp.r = fmin(temp.r, 255);
-	temp.g = light->color.g * diffuse * light->light_b * shade * fmax(0, dotnormal);
+	temp.g = light->color.g * diffuse * light->light_b * fmax(0, dotnormal);
 	temp.g = fmin(temp.g, 255);
-	temp.b = light->color.b * diffuse * light->light_b * shade * fmax(0, dotnormal);
+	temp.b = light->color.b * diffuse * light->light_b * fmax(0, dotnormal);
 	temp.b = fmin(temp.b, 255);
+	
+	// temp.r = light->color.r * diffuse * l_intensity;
+	// temp.r = fmin(temp.r, 255);
+	// temp.g = light->color.g * diffuse * l_intensity;
+	// temp.g = fmin(temp.g, 255);
+	// temp.b = light->color.b * diffuse * l_intensity;
+	// temp.b = fmin(temp.b, 255);
 	return (temp);
 }
 
@@ -118,8 +129,9 @@ void	calc_color(t_minirt *minirt, t_hit *hit)
 	t_vec3			dir;
 	t_light			*light;
 
+
 	ambient = apply_color(hit->color, minirt->scene.a_color, minirt->scene.a_light_ratio);
-	hit->color = apply_color(hit->color, minirt->scene.a_color, minirt->scene.a_light_ratio);
+	//hit->color = apply_color(hit->color, minirt->scene.a_color, minirt->scene.a_light_ratio);
 	current = minirt->var.l_head;
 	if (current->light_index == 0)
 	{
@@ -136,7 +148,10 @@ void	calc_color(t_minirt *minirt, t_hit *hit)
 		find_hit_light(minirt, &ray, sqrt(vectorDot(&dir, &dir) - 10 * 1e-6), hit);
 		//find_hit_light2(minirt, &ray, hit);
 		if (hit->hit == 0)
-			hit->color = color_add(hit->color, apply_light(hit, current->light));
+		{
+			ambient = color_add(ambient, apply_light(hit, current->light, 1 - minirt->scene.a_light_ratio));
+			//printf("%f\n", current->light->light_b);
+		}
 		// else
 		// 	hit->color = color_add(ambient, (t_color){0,0,0});		
 		
@@ -150,7 +165,7 @@ void	calc_color(t_minirt *minirt, t_hit *hit)
 		// 	hit->color = color_add(ambient, apply_light(hit, current->light));
 		current = current->next;
 	}
-	hit->color = (t_color){fmin(hit->color.r, 255), fmin(hit->color.g, 255),fmin(hit->color.b, 255)};
+	hit->color = (t_color){fmin(ambient.r, 255), fmin(ambient.g, 255),fmin(ambient.b, 255)};
 }
 
 // void	calc_color(t_minirt *minirt, t_hit *hit, t_light *light)

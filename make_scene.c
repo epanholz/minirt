@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/04 20:50:06 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/05 02:25:17 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,6 +272,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	t_vec3		temp2;
 	t_vec3		temp3;
 	t_vec3		norm_temp;
+	t_vec3		fuck[2];
 	double		t;	
 	double		x;
 	double		y;
@@ -281,7 +282,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
 	hit.t1 = INFINITY;
-	hit.t2 = 0;
+	hit.t2 = INFINITY;
 	hit.color = (t_color){sphere->r, sphere->g, sphere->b};
 	length1 = vectorSub(&sphere->sp_center, &ray->orig);
 	t = vectorDot(&length1, &ray->dir);
@@ -290,20 +291,21 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	temp2 = vec_x_d(&ray->dir, t);
 	p = vectorPlus(&ray->orig, &temp2);
 	temp3 = vectorSub(&sphere->sp_center, &p);
-	y = sqrt(vectorDot(&temp3, &temp3));
-	if (y > (sphere->diameter / 2))
+	y = vectorDot(&length1, &length1) - t * t;
+	if (y > (sphere->diameter / 2) * (sphere->diameter / 2))
 		return(hit);
 	x = (sphere->diameter / 2) - y;
 	hit.object = SPH;
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
+	hit.t1 = hit.t1 < hit.t2 ? hit.t1 : hit.t2;
 	norm_temp = vec_x_d(&ray->dir, hit.t1 - 10 * 1e-6);
 	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);
-	hit.surface_norm = vectorSub(&p, &sphere->sp_center);
-	//hit.surface_norm = vec_x_d(&hit.surface_norm, -1);
-	//hit.surface_norm = vec_normalize(&hit.surface_norm);
-	hit.hit_p = p;
+	fuck[0] = vec_x_d(&ray->dir, hit.t1);
+	fuck[1] = vectorPlus(&ray->orig, &fuck[0]);
+	hit.surface_norm = vectorSub(&fuck[1], &sphere->sp_center);
+	hit.hit_p = hit.hit_p_new;
 	return (hit);
 	//cast shadow ray
 }

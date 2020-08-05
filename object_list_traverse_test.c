@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/01 21:12:42 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/05 01:53:37 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void		traverse_light_list(t_light_list **head)
 	current = *head;
 	while (current)
 	{
-	printf("[LIGHT %d] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", current->light_index, current->light->light_point.x, current->light->light_point.y, current->light->light_point.z, current->light->light_b, current->light->color.r, current->light->color.g, current->light->color.b);
+	// printf("[LIGHT %d] %0.1f, %0.1f, %0.1f, %0.1f, %d, %d, %d\n", current->light_index, current->light->light_point.x, current->light->light_point.y, current->light->light_point.z, current->light->light_b, current->light->color.r, current->light->color.g, current->light->color.b);
 	current = current->next;
 	}
 }
