@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 03:55:40 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/05 16:59:12 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_color	apply_light(t_hit *hit, t_light *light, double diffuse)
 	if (dotnormal <= 1e-6)
 		return ((t_color){0,0,0});
 	r2 = vec3_pow(&dist);
-	l_intensity = (light->light_b * dotnormal * 1000) / (4.0 * M_PI * r2);
+	l_intensity = (light->light_b * fmax(0, dotnormal) * 1000) / (4.0 * M_PI * r2);
 
 	temp.r = light->color.r * diffuse * light->light_b * fmax(0, dotnormal);
 	temp.r = fmin(temp.r, 255);

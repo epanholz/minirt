@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 03:59:44 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/05 17:24:00 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		check_save(char *str)
 //     *(unsigned int*)dst = color;
 // }
 
-int	main()
+int	main(int ac, char **av)
 {
 	t_minirt	*minirt;
 	int			fd;
@@ -57,12 +57,25 @@ int	main()
 	minirt->var.i_head = NULL;
 	minirt->var.l_head = NULL;
 	buff = NULL;
-	fd = open("scene.rt", O_RDONLY);
-	//fd = open("7-wolfie.rt", O_RDONLY);
-	buff = read_file(fd, buff);
-	check_map(buff, minirt);
-	free(minirt);
-	free(buff);
+	
+	if (ac == 3)
+	{
+		if (check_save(av[2]) == 0)
+			printf("\nsaving ..\n\n");
+		else
+			printf("Error\nWrong second argument!\n");
+		return(0);
+	}
+	else if (ac == 2)
+	{
+		fd = open(av[1], O_RDONLY);
+		buff = read_file(fd, buff);
+		check_map(buff, minirt);
+		free(minirt);
+		free(buff);
+	}
+	else if (ac == 1)
+		printf("\nError\nPlease enter a valid map file!\n\n");
 
 	// minirt->var.mlx = mlx_init();
 	// minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
