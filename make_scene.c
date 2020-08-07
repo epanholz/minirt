@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 20:12:10 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/07 22:29:39 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,24 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	return (hit);
 }
 
+static void		check_sph_inter(t_hit *hit)
+{
+	double	tempp;
+
+	if (hit->t1 > hit->t2)
+	{
+		tempp = hit->t1;
+		hit->t1 = hit->t2;
+		hit->t2 = tempp;
+	}
+	if (hit->t1 < 0)
+	{
+		hit->t1 = hit->t2;
+		if (hit->t1 < hit->t2)
+			hit->hit = 0;
+	}
+}
+
 t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 {
 	t_hit		hit;
@@ -294,58 +312,22 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	y = vectorDot(&length1, &length1) - t * t;
 	if (y > (sphere->diameter / 2) * (sphere->diameter / 2))
 		return(hit);
-	x = (sphere->diameter / 2) - y;
+	x = sqrt(((sphere->diameter / 2) * (sphere->diameter / 2)) - y);
 	hit.object = SPH;
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
-	hit.t1 = hit.t1 < hit.t2 ? hit.t1 : hit.t2;
+	//hit.t1 = hit.t1 < hit.t2 ? hit.t1 : hit.t2;
 	norm_temp = vec_x_d(&ray->dir, hit.t1 - 10 * 1e-6);
 	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);
 	fuck[0] = vec_x_d(&ray->dir, hit.t1);
 	fuck[1] = vectorPlus(&ray->orig, &fuck[0]);
 	hit.surface_norm = vectorSub(&fuck[1], &sphere->sp_center);
 	hit.hit_p = hit.hit_p_new;
+	check_sph_inter(&hit);
 	return (hit);
 	//cast shadow ray
 }
-
-void	find_hit_light2(t_minirt *minirt, t_ray *ray, t_hit *hit_p)
-{
-	t_hit			hit;
-	t_object_list	*current;
-	int 			i;
-	t_function		*func;
-
-	hit.hit = 0;
-	hit.t1 = INFINITY;
-	hit.t2 = 0;
-	hit.hit_p = (t_vec3){0,0,0};
-	hit.surface_norm = (t_vec3){0,0,0};
-	i = 0;
-	current = minirt->var.o_head;
-	while (current)
-	{
-		while (i < 4)
-		{
-			if (G_lookup_table[i].index == current->object_type)
-			{
-				func = G_lookup_table[i].func;
-				hit= (*func)(ray, current->scene_object);
-				if (hit.hit == 1)
-				{
-					hit_p->hit = 1;
-					return ;
-				}
-			}
-			i++;
-		}
-		i = 0;
-		current = current->next;
-	}
-	hit_p->hit = 0;
-}
-
 
 void	find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
 {
@@ -474,6 +456,7 @@ void	make_scene(t_minirt *minirt)
 	t_img_list	*current;
 	int			x;
 	int			y;
+	t_bitmap	*bitmap;
 
 	x = minirt->scene.res_x;
 	y = minirt->scene.res_y;
@@ -481,18 +464,28 @@ void	make_scene(t_minirt *minirt)
 	mlx_get_screen_size(minirt->var.mlx, &x, &y);
 	minirt->scene.res_x = (minirt->scene.res_x > x) ? x : minirt->scene.res_x;
 	minirt->scene.res_y = (minirt->scene.res_y > y) ? y : minirt->scene.res_y;
-	minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 	create_images(minirt);
-	traverse_img_list(&minirt->var.i_head);
+	//traverse_img_list(&minirt->var.i_head);
 	generate_ray(minirt);
 	current = minirt->var.i_head;
-	mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, current->img, 0, 0);
-	// delete_object_list(&minirt->var.o_head);
-	// delete_cam_list(&minirt->var.c_head);
-	mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
-	//mlx_key_hook(minirt->var.win, close_key, minirt);
-	mlx_key_hook(minirt->var.win, change_image, minirt);
-	mlx_loop(minirt->var.mlx);
+	if (minirt->scene.save == 1)
+	{
+		bitmap = initialize_bitmap(minirt->scene.res_x, minirt->scene.res_y);
+		frame_to_bitmap(bitmap, minirt->var.line_length, current->addr);
+		write_bitmap_to_file(bitmap);
+		printf("\n[Insert save bitmap function here]\n\n");
+	}
+	else 
+	{
+		minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
+		mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, current->img, 0, 0);
+		// delete_object_list(&minirt->var.o_head);
+		// delete_cam_list(&minirt->var.c_head);
+		mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
+		//mlx_key_hook(minirt->var.win, close_key, minirt);
+		mlx_key_hook(minirt->var.win, change_image, minirt);
+		mlx_loop(minirt->var.mlx);
+	}
 }
 
 /* 

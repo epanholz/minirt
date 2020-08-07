@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:48:19 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/06/10 20:04:53 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/07 19:49:47 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,23 @@ int		ft_strlen(char *s)
 	return (i);
 }
 
-char 	*ft_memcpy(char *dst, const char *src, int len)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	int i = 0;
+	size_t		i;
+	char		*d;
+	const char	*s;
 
-	while (i < len)
+	if (!dst && !src)
+		return (dst);
+	d = dst;
+	s = src;
+	i = 0;
+	while (i < n)
 	{
-		dst[i] = src[i];
+		d[i] = s[i];
 		i++;
 	}
-	return (dst);
+	return ((void *)dst);
 }
 
 char 	*ft_strjoin(char *s1, char *s2)

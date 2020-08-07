@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 17:43:51 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/07 21:35:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,36 @@ typedef enum		e_objects
 	SQU, CYL, TRI
 }					t_objects;
 
+typedef struct	s_bmp_file_header 
+{
+    unsigned char	bitmap_type;     // 2 bytes
+    int             file_size;          // 4 bytes
+    short           reserved1;          // 2 bytes
+    short           reserved2;          // 2 bytes
+    unsigned int    offset_bits;        // 4 bytes
+}				t_bmp_file_header;
+
+typedef	struct	s_bmp_info_header
+{
+    unsigned int    size_header;        // 4 bytes
+    unsigned int    width;              // 4 bytes
+    unsigned int    height;             // 4 bytes
+    short int       planes;             // 2 bytes
+    short int       bit_count;          // 2 bytes
+    unsigned int    compression;        // 4 bytes
+    unsigned int    image_size;         // 4 bytes
+    unsigned int    ppm_x;              // 4 bytes
+    unsigned int    ppm_y;              // 4 bytes
+    unsigned int    clr_used;           // 4 bytes
+    unsigned int    clr_important;      // 4 bytes
+}				t_bmp_info_header;
+
+typedef struct	s_bitmap
+{
+	t_bmp_file_header	file;
+	t_bmp_info_header	info;
+	void				*buff;
+}				t_bitmap;
 
 typedef	struct		s_vec3
 {
@@ -201,6 +231,7 @@ typedef struct 		s_scene
 	int				res;
 	int				ambient_light;
 	int				camera;
+	int				save;
 	double			res_x;
 	double			res_y;
 	double			a_light_ratio;
@@ -233,7 +264,7 @@ void		ft_error(int mod);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
 int			ft_strlen(char *s);
-char 		*ft_memcpy(char *dst, const char *src, int len);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 char 		*ft_strjoin(char *s1, char *s2);
 char		*read_file(int fd, char *temp);
 void		check_map(char *map, t_minirt *minirt);
@@ -306,6 +337,11 @@ t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
 t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to);
 void		create_images(t_minirt *minirt);
 int			change_image(int keycode, t_minirt *minirt);
-
+void		*ft_memset(void *b, int c, size_t len);
+void		ft_bzero(void *s, size_t n);
+void		*ft_calloc(size_t count, size_t size);
+t_bitmap	*initialize_bitmap(int width, int heigth);
+int			frame_to_bitmap(t_bitmap *bmp, int line_length, char *img_addr);
+int			write_bitmap_to_file(t_bitmap *bmp);
 
 #endif

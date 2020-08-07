@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 17:24:00 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/07 19:23:08 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	main(int ac, char **av)
 
 	minirt = (t_minirt*)malloc(sizeof(t_minirt));
 	minirt->scene.res = 0;
+	minirt->scene.save = 0;
 	minirt->scene.ambient_light = 0;
 	minirt->scene.camera = 0;
 	minirt->var.c_head = NULL;
@@ -58,24 +59,26 @@ int	main(int ac, char **av)
 	minirt->var.l_head = NULL;
 	buff = NULL;
 	
-	if (ac == 3)
+	if (ac == 3 || ac == 2)
 	{
-		if (check_save(av[2]) == 0)
+		if (ac == 3)
+		{
+			if (check_save(av[2]) == 1)
+			{
+				printf("Error\nWrong second argument!\n");
+				return (0);
+			}
+			minirt->scene.save = 1;
 			printf("\nsaving ..\n\n");
-		else
-			printf("Error\nWrong second argument!\n");
-		return(0);
-	}
-	else if (ac == 2)
-	{
+		}
 		fd = open(av[1], O_RDONLY);
 		buff = read_file(fd, buff);
 		check_map(buff, minirt);
 		free(minirt);
 		free(buff);
 	}
-	else if (ac == 1)
-		printf("\nError\nPlease enter a valid map file!\n\n");
+	else 
+		printf("\nError\nWrong input duh ..\n\n");
 
 	// minirt->var.mlx = mlx_init();
 	// minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");

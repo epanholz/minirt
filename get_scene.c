@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/05 01:54:13 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/07 19:22:16 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void		get_res(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
 		ft_error(INVAL);
-	printf("[RES] %0.1f %0.1f\n", m->scene.res_x, m->scene.res_y);
+	//printf("[RES] %0.1f %0.1f\n", m->scene.res_x, m->scene.res_y);
 }
 
 void		get_ambient_light(char *s, int p, t_minirt *m)
