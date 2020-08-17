@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/17 18:53:55 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/08/17 23:34:35 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct	s_bitmap
 	t_bmp_info_header	info;
 	void				*buff;
 }				t_bitmap;
+
 
 typedef	struct		s_vec3
 {
@@ -346,5 +347,6 @@ void		*ft_calloc(size_t count, size_t size);
 t_bitmap	*initialize_bitmap(int width, int heigth);
 int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
 int			write_bitmap_to_file(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
+
 
 #endif
