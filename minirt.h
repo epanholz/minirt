@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/07 21:35:18 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/17 18:53:55 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,9 @@ typedef	struct		s_minirt
 void		ft_error(int mod);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
+int			get_r(int trgb);
+int			get_g(int trgb);
+int			get_(int trgb);
 int			ft_strlen(char *s);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 char 		*ft_strjoin(char *s1, char *s2);
@@ -341,7 +344,7 @@ void		*ft_memset(void *b, int c, size_t len);
 void		ft_bzero(void *s, size_t n);
 void		*ft_calloc(size_t count, size_t size);
 t_bitmap	*initialize_bitmap(int width, int heigth);
-int			frame_to_bitmap(t_bitmap *bmp, int line_length, char *img_addr);
-int			write_bitmap_to_file(t_bitmap *bmp);
+int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
+int			write_bitmap_to_file(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
 
 #endif

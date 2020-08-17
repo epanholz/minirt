@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 17:31:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/07 19:04:31 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/08 16:27:44 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,22 @@ int		rgbt(int t, int r, int g, int b)
 {
 	return(t << 24 | r << 16 | g << 8 | b);
 }
+
+int			get_r(int trgb)
+{
+	return ((trgb >> 16) & 255);
+}
+
+int			get_g(int trgb)
+{
+	return ((trgb >> 8) & 255);
+}
+
+int			get_b(int trgb)
+{
+	return (trgb & 255);
+}
+
 
 void            my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
 {

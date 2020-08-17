@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/07 22:29:39 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/08/17 20:34:34 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,9 +471,9 @@ void	make_scene(t_minirt *minirt)
 	if (minirt->scene.save == 1)
 	{
 		bitmap = initialize_bitmap(minirt->scene.res_x, minirt->scene.res_y);
-		frame_to_bitmap(bitmap, minirt->var.line_length, current->addr);
-		write_bitmap_to_file(bitmap);
-		printf("\n[Insert save bitmap function here]\n\n");
+		//fill_bmp_buff(bitmap, minirt, current->addr);
+		write_bitmap_to_file(bitmap, minirt, current->addr);
+		//printf("\n[Insert save bitmap function here]\n\n");
 	}
 	else 
 	{
