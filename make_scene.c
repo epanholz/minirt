@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/17 23:35:56 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/02 20:06:29 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	hit.t2 = INFINITY;
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
-	hit.color = (t_color){triangle->r, triangle->g, triangle->b};
+	hit.col = (t_color){triangle->r, triangle->g, triangle->b};
 
 	A = vectorSub(&triangle->p2, &triangle->p1);
 	B = vectorSub(&triangle->p3, &triangle->p1);
@@ -171,7 +171,7 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	hit[0].t2 = 0;
 	hit[0].surface_norm = (t_vec3){0,0,0};
 	hit[0].hit_p = (t_vec3){0,0,0};
-	hit[0].color = (t_color){square->r, square->g, square->b};
+	hit[0].col = (t_color){square->r, square->g, square->b};
 	//new_pos = apply_matrix(c2w, square->sq_center);
 	
 	v0 = (t_vec3){c2w.row1.x - r, c2w.row1.y + r, c2w.row1.z};
@@ -241,7 +241,7 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	hit.t2 = 0;
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
-	hit.color = (t_color){plane->r, plane->g, plane->b};
+	hit.col = (t_color){plane->r, plane->g, plane->b};
 	
 	denom = vectorDot(&plane->norm_vec, &ray->dir);
 	if (denom > 1e-6)
@@ -301,7 +301,7 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.hit_p = (t_vec3){0,0,0};
 	hit.t1 = INFINITY;
 	hit.t2 = INFINITY;
-	hit.color = (t_color){sphere->r, sphere->g, sphere->b};
+	hit.col = (t_color){sphere->r, sphere->g, sphere->b};
 	length1 = vectorSub(&sphere->sp_center, &ray->orig);
 	t = vectorDot(&length1, &ray->dir);
 	if (t < 0)
@@ -438,7 +438,7 @@ void	generate_ray(t_minirt *minirt)
 				if (hit.hit == 1)
 				{
 					calc_color(minirt, &hit);
-					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.color.r,hit.color.g,hit.color.b));
+					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.col.r,hit.col.g,hit.col.b));
 				}
 				else
 					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
@@ -472,7 +472,7 @@ void	make_scene(t_minirt *minirt)
 	{
 		bitmap = initialize_bitmap(minirt->scene.res_x, minirt->scene.res_y);
 		fill_bmp_buff(bitmap, minirt, current->addr);
-		write_bitmap_to_file(bitmap, minirt, current->addr);
+		write_bitmap_to_file(bitmap);
 	}
 	else 
 	{

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/17 23:34:35 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/02 20:04:13 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ typedef struct		s_hit
 	t_vec3			hit_p_new;
 	double			t1;
 	double			t2;
-	t_color			color;
+	t_color			col;
 }					t_hit;
 
 typedef	t_hit	(t_function)();
@@ -235,7 +235,7 @@ typedef struct 		s_scene
 	int				save;
 	double			res_x;
 	double			res_y;
-	double			a_light_ratio;
+	double			alight_r;
 	t_color			a_color;
 }					t_scene;
 
@@ -346,7 +346,7 @@ void		ft_bzero(void *s, size_t n);
 void		*ft_calloc(size_t count, size_t size);
 t_bitmap	*initialize_bitmap(int width, int heigth);
 int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
-int			write_bitmap_to_file(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
+int			write_bitmap_to_file(t_bitmap *bmp);
 
 
 #endif

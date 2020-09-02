@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/07 19:22:16 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/09/02 19:37:08 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 {
 	check_alight(s, p, m);
 	m->utils.i = p;
-	m->scene.a_light_ratio = ft_atod_loop(s, m, DOUBLE);
+	m->scene.alight_r = ft_atod_loop(s, m, DOUBLE);
 	m->scene.a_color = (t_color){ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT)};
 	// m->scene.l_b = ft_atod_loop(s, m, INT);
 	// m->scene.l_g = ft_atod_loop(s, m, INT);
