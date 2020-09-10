@@ -6,20 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/31 20:39:45 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 11:47:11 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// Need to keep track of where your list starts. 
-// HEAD 
-// check if there is a node, else iterate through it, until you find an empty -> next
-// Then keep adding nodes to list. 
-// add objects to your list, and make sure to specify them.
-// dont use the head when iterate through the list
-
-void	make_head(t_object_list **head)
+void	make_obj_head(t_object_list **head)
 {
 	t_object_list *new_head;
 
@@ -63,7 +56,7 @@ void	remove_object_node(t_object_list **head, int type)
 	if (temp != NULL && temp->object_type == type)
 	{
 		*head = temp->next;
-		//free(temp);
+		free(temp);
 		return ;
 	}
 	while (temp != NULL && temp->object_type != type)
@@ -74,12 +67,11 @@ void	remove_object_node(t_object_list **head, int type)
 	if (temp == NULL)
 		return ;
 	prev->next = temp->next;
-	//free(temp);
+	free(temp);
 }
 
 void delete_object_list(t_object_list **head)
 { 
-   /* deref head_ref to get the real head */
    t_object_list* current = *head; 
    t_object_list* next; 
   
@@ -89,15 +81,11 @@ void delete_object_list(t_object_list **head)
        free(current); 
        current = next; 
    } 
-    
-   /* deref head_ref to affect the real head back 
-      in the caller. */
    *head = NULL; 
 }
 
 void delete_cam_list(t_camera_list **head)
 { 
-   /* deref head_ref to get the real head */
    t_camera_list* current = *head; 
    t_camera_list* next; 
   
@@ -107,9 +95,6 @@ void delete_cam_list(t_camera_list **head)
        free(current); 
        current = next; 
    } 
-    
-   /* deref head_ref to affect the real head back 
-      in the caller. */
    *head = NULL; 
 }
 

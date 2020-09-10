@@ -6,28 +6,11 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/29 21:09:16 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/07/29 22:22:52 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/09/10 11:37:24 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-/* 
-
-typedef struct		s_img_list
-{
-	int				img_index;
-	void			*img;
-	char			*addr;
-	void			*next;
-}					t_img_list;	
-
-LEFT AND RIGHT KEY HOOK
-KEY: 123
-KEY: 124
-
-mlx_key_hook(minirt->var.win, close_key, minirt);
-
-*/
 
 void		create_images(t_minirt *minirt)
 {

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 16:51:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/02 19:05:12 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 11:09:01 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void		check_camera(char *s, int p, t_minirt *m)
 {
 	int fov;
+
 	fov = 0;
-	
 	m->utils.i = p;
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
@@ -34,7 +34,7 @@ void		check_camera(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
 
 void		check_alight(char *s, int p, t_minirt *m)
@@ -48,7 +48,7 @@ void		check_alight(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
-			ft_error(INVAL);
+		ft_error(INVAL);
 	brightness = ft_atod(s, m, DOUBLE);
 	if (brightness > 1 || brightness < 0)
 		ft_error(INVAL);
@@ -58,7 +58,7 @@ void		check_alight(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
 
 void		check_light(char *s, int p, t_minirt *m)
@@ -83,7 +83,7 @@ void		check_light(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
 
 void		check_plane(char *s, int p, t_minirt *m)
@@ -101,7 +101,7 @@ void		check_plane(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
 
 void		check_sphere(char *s, int p, t_minirt *m)
@@ -123,9 +123,8 @@ void		check_sphere(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
-
 
 void		check_square(char *s, int p, t_minirt *m)
 {
@@ -149,7 +148,7 @@ void		check_square(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
 
 void		check_cylinder(char *s, int p, t_minirt *m)
@@ -178,7 +177,7 @@ void		check_cylinder(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }
 
 void		check_triangle(char *s, int p, t_minirt *m)
@@ -199,5 +198,5 @@ void		check_triangle(char *s, int p, t_minirt *m)
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
-			ft_error(INVAL);
+		ft_error(INVAL);
 }

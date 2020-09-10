@@ -6,20 +6,20 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/02 20:06:29 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 11:41:41 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static const t_lookup		G_lookup_table[] = {
+static const t_lookup	G_lookup_table[] = {
 	{SPH, &intersect_sphere},
 	{TRI, &intersect_triangle},
 	{PLA, &intersect_plane},
 	{SQU, &intersect_square}
 };
 
-t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to)
+t_matrix43				lookat_matrix(t_vec3 from, t_vec3 to)
 {
 	t_matrix43	cam2world;
 	t_vec3		norm_vec;
@@ -52,7 +52,7 @@ t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to)
 	return(cam2world);
 }
 
-t_vec3	apply_matrix(t_matrix43 matrix, t_vec3	vec3)
+t_vec3					apply_matrix(t_matrix43 matrix, t_vec3	vec3)
 {
 	t_vec3	new;
 	new.x = vec3.x * matrix.row1.x + vec3.y * matrix.row2.x + vec3.z * matrix.row3.x;
@@ -61,7 +61,7 @@ t_vec3	apply_matrix(t_matrix43 matrix, t_vec3	vec3)
 	return	(new);
 }
 
-t_vec3	setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec)
+t_vec3					setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec)
 {
 	t_matrix43	c2w;
 
@@ -71,7 +71,7 @@ t_vec3	setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec)
 	return (apply_matrix(c2w, from));
 }
 
-t_vec3	setsquare(t_vec3 pos, t_vec3 norm_vec)
+t_vec3					setsquare(t_vec3 pos, t_vec3 norm_vec)
 {
 	t_matrix43	c2w;
 
@@ -79,9 +79,8 @@ t_vec3	setsquare(t_vec3 pos, t_vec3 norm_vec)
 	return (apply_matrix(c2w, pos));
 }
 
-t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
+t_hit					intersect_triangle(t_ray *ray, t_tri *triangle)
 {
-	//ray->dir = (t_vec3){camx, camy, -1};
 	t_hit		hit;
 	t_vec3		norm_temp;
 	t_vec3		A;
@@ -142,20 +141,16 @@ t_hit	intersect_triangle(t_ray *ray, t_tri *triangle)
 	return(hit);
 }
 
-t_hit	intersect_square(t_ray *ray, t_squ *square)
+t_hit					intersect_square(t_ray *ray, t_squ *square)
 {
 	t_hit		hit[2];
-	//t_vec3		new_pos;
 	t_vec3		v0;
 	t_vec3		v1;
 	t_vec3		v2;
 	t_vec3		v3;
-
 	t_vec3		temp[2];
-
 	t_tri		t1;
 	t_tri		t2;
-	
 	double		r;
 	t_matrix43	c2w;
 
@@ -164,7 +159,6 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	c2w = (t_matrix43){vec_x_d(&c2w.row1, r), vec_x_d(&c2w.row2, r), c2w.row3, c2w.row4};
 	temp[0] = vectorPlus(&square->sq_center, &c2w.row2);
 	temp[1] = vectorSub(&square->sq_center, &c2w.row2);
-
 	hit[0].object = 0;
 	hit[0].hit = -1;
 	hit[0].t1 = INFINITY;
@@ -172,25 +166,10 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	hit[0].surface_norm = (t_vec3){0,0,0};
 	hit[0].hit_p = (t_vec3){0,0,0};
 	hit[0].col = (t_color){square->r, square->g, square->b};
-	//new_pos = apply_matrix(c2w, square->sq_center);
-	
 	v0 = (t_vec3){c2w.row1.x - r, c2w.row1.y + r, c2w.row1.z};
 	v1 = (t_vec3){c2w.row2.x - r, c2w.row2.y - r, c2w.row2.z};
 	v2 = (t_vec3){c2w.row3.x + r, c2w.row3.y - r, c2w.row3.z};
 	v3 = (t_vec3){c2w.row4.x + r, c2w.row4.y + r, c2w.row4.z};
-	// t1.p1 = v0;
-	// t1.p2 = v1;
-	// t1.p3 = v3;
-	// t1.r = square->r;
-	// t1.g = square->g;
-	// t1.b = square->b;
-	// t2.p1 = v1;
-	// t2.p2 = v2;
-	// t2.p3 = v3;
-	// t2.r = square->r;
-	// t2.g = square->g;
-	// t2.b = square->b;
-
 	t1 = (t_tri){vectorSub(&temp[0], &c2w.row1), vectorPlus(&temp[1], &c2w.row1), vectorSub(&temp[1], &c2w.row1), square->r, square->g, square->b};
 	t2 = (t_tri){vectorPlus(&temp[0],&c2w.row1), t1.p1, t1.p2, square->r, square->g, square->b};
 	hit[1] = intersect_triangle(ray, &t1);
@@ -202,32 +181,8 @@ t_hit	intersect_square(t_ray *ray, t_squ *square)
 	return(hit[0]);
 }
 
-t_hit	intersect_plane(t_ray *ray, t_pla *plane)
+t_hit				intersect_plane(t_ray *ray, t_pla *plane)
 {
-	/*
-	You know a point (x1,y1,z1) and normal vector (a,b,c). Then equation of plane should be:
-	a(x-x1)+b(y-y1)+c(z-z1) = 0;	
-
-	if (abs(denom) > 0.0001f) // your favorite epsilon
-	{
-		double t = (center - ray.origin).dot(normal) / denom;
-		if (t >= 0) return true; // you might want to allow an epsilon here too
-	}
-
-	bool intersectPlane(const Vec3f &n, const Vec3f &p0, const Vec3f &l0, const Vec3f &l, double &t) 
-	{ 
-		// assuming vectors are all normalized
-		double denom = dotProduct(n, l); 
-		if (denom > 1e-6) { 
-			Vec3f p0l0 = p0 - l0; 
-			t = dotProduct(p0l0, n) / denom; 
-			return (t >= 0); 
-		} 
-	
-		return false; 
-	} 
-
-	*/
 	t_hit		hit;
 	t_vec3		length;
 	double		denom;
@@ -242,7 +197,6 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	hit.surface_norm = (t_vec3){0,0,0};
 	hit.hit_p = (t_vec3){0,0,0};
 	hit.col = (t_color){plane->r, plane->g, plane->b};
-	
 	denom = vectorDot(&plane->norm_vec, &ray->dir);
 	if (denom > 1e-6)
 	{
@@ -264,7 +218,7 @@ t_hit	intersect_plane(t_ray *ray, t_pla *plane)
 	return (hit);
 }
 
-static void		check_sph_inter(t_hit *hit)
+static void			check_sph_inter(t_hit *hit)
 {
 	double	tempp;
 
@@ -282,7 +236,7 @@ static void		check_sph_inter(t_hit *hit)
 	}
 }
 
-t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
+t_hit				intersect_sphere(t_ray *ray, t_sph *sphere)
 {
 	t_hit		hit;
 	t_vec3		p;
@@ -317,7 +271,6 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
-	//hit.t1 = hit.t1 < hit.t2 ? hit.t1 : hit.t2;
 	norm_temp = vec_x_d(&ray->dir, hit.t1 - 10 * 1e-6);
 	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);
 	fuck[0] = vec_x_d(&ray->dir, hit.t1);
@@ -326,10 +279,9 @@ t_hit	intersect_sphere(t_ray *ray, t_sph *sphere)
 	hit.hit_p = hit.hit_p_new;
 	check_sph_inter(&hit);
 	return (hit);
-	//cast shadow ray
 }
 
-void	find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
+void				find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
 {
 	t_hit			hit[2];
 	t_object_list	*current;
@@ -365,7 +317,7 @@ void	find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
 	hit_p->hit = 0;
 }
 
-t_hit	find_hit(t_minirt *minirt, t_ray *ray)
+t_hit				find_hit(t_minirt *minirt, t_ray *ray)
 {
 	t_hit			hit[2];
 	t_object_list	*current;
@@ -399,7 +351,7 @@ t_hit	find_hit(t_minirt *minirt, t_ray *ray)
 	return(hit[0]);
 }
 
-void	generate_ray(t_minirt *minirt)
+void				generate_ray(t_minirt *minirt)
 {
 	t_cam			*cam;
 	t_ray			*ray;
@@ -451,7 +403,7 @@ void	generate_ray(t_minirt *minirt)
 	}
 }
 
-void	make_scene(t_minirt *minirt)
+void				make_scene(t_minirt *minirt)
 {
 	t_bitmap	*bitmap;
 	t_img_list	*current;
@@ -465,7 +417,6 @@ void	make_scene(t_minirt *minirt)
 	minirt->scene.res_x = (minirt->scene.res_x > x) ? x : minirt->scene.res_x;
 	minirt->scene.res_y = (minirt->scene.res_y > y) ? y : minirt->scene.res_y;
 	create_images(minirt);
-	//traverse_img_list(&minirt->var.i_head);
 	generate_ray(minirt);
 	current = minirt->var.i_head;
 	if (minirt->scene.save == 1)
@@ -481,73 +432,7 @@ void	make_scene(t_minirt *minirt)
 		// delete_object_list(&minirt->var.o_head);
 		// delete_cam_list(&minirt->var.c_head);
 		mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
-		//mlx_key_hook(minirt->var.win, close_key, minirt);
 		mlx_key_hook(minirt->var.win, change_image, minirt);
 		mlx_loop(minirt->var.mlx);
 	}
 }
-
-/* 
-
-l 0,0,-1 0.5 137,214,224
-l 0,0,-3 1 137,214,224
-c 0,0,0 0,0,-1 90
-c 1,1,1 0,0,-1 90
-sp 0,2,-5 2 224,202,222
-sp 0,0,-20 6 202,202,224
-pl -2,-5,-20 0,-1,0 97,68,110
-tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
-tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
-sq -2,-2,-7 0,0,1 3 159,227,177
-
-
-R 700 700
-A 0.3 224,202,222
-
-l 2,3.5,3 0.5 137,214,224
-l -2,3.5,3 0.5 255,0,0
-
-c 0,0,0 0,0,-1 90
-c 1,1,1 0,0,-1 90
-
-sp 0,2,-5 2 224,202,222
-sp 0,0,-20 6 202,202,224
-
-pl -2,-5,-20 0,-1,0 97,68,110
-
-tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
-tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
-
-sq -2,-2,-7 0,0,1 3 159,227,177
-
-FUN SCENE 
-
-l 2,3.5,3 0.5 137,214,224
-l 0,0,-1 0.5 137,214,224
-c 0,0,0 0,0,-1 90
-c 1,1,1 0,0,-1 90
-sp 0,2,-5 2 224,202,222
-sp 0,0,-20 6 202,202,224
-pl -2,-5,-20 0,-1,0 97,68,110
-tr 2.,0.,-5. 2.,2.,-5. 0.,0.,-5. 109,129,140
-tr 10.0,20.0,-10.0      10.0,10.0,-20.0   20.0,10.0,-10.0 88,162,191
-sq -2,-2,-7 0,0,1 3 159,227,177
-*/
-
-
-// while (y < resx)
-// {
-// 	transform y;
-// 	while (x < resx)
-// 	{
-// 		transform x;
-// 		make vec (x,y,-1);
-// 		normalize vec;
-// 		camtoworld(vec);
-// 		normalize vec again;
-				
-// 		x++;
-// 	}
-// 	y++;
-// 	x = 0;
-// }

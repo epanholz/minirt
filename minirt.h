@@ -6,13 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/02 20:04:13 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 11:46:23 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* 
 MY FILES
-test_main.c 
+main.c 
 read_file.c 
 get_scene.c 
 check_scene.c
@@ -288,22 +288,14 @@ void		check_cylinder(char *s, int p, t_minirt *m);
 void		check_triangle(char *s, int p, t_minirt *m);
 void		get_res(char *s, int p, t_minirt *m);
 void		get_ambient_light(char *s, int p, t_minirt *m);
-void		make_head(t_object_list **head);
+void		make_obj_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
 void		remove_object_node(t_object_list **head, int type);
 void 		delete_object_list(t_object_list **head);
 void 		delete_cam_list(t_camera_list **head);
-void		retrieve_cam(void	*scene_object);
-void		retrieve_light(void	*scene_object);
-void		retrieve_plane(void	*scene_object);
-void		retrieve_sphere(void *scene_object);
-void		retrieve_square(void *scene_object);
-void		retrieve_cylinder(void *scene_object);
-void		retrieve_triangle(void *scene_object);
 t_sph		*return_sphere(t_minirt *minirt);
 t_cam		*return_cam(t_minirt *minirt, int index);
 t_light		*return_light(t_minirt *minirt, int index);
-void		traverse_list(t_object_list **head);
 t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
 double		vectorDot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:58:22 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/02 19:37:08 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 11:46:36 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void		get_res(char *s, int p, t_minirt *m)
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')
 		ft_error(INVAL);
-	//printf("[RES] %0.1f %0.1f\n", m->scene.res_x, m->scene.res_y);
 }
 
 void		get_ambient_light(char *s, int p, t_minirt *m)
@@ -52,9 +51,6 @@ void		get_ambient_light(char *s, int p, t_minirt *m)
 	m->utils.i = p;
 	m->scene.alight_r = ft_atod_loop(s, m, DOUBLE);
 	m->scene.a_color = (t_color){ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT)};
-	// m->scene.l_b = ft_atod_loop(s, m, INT);
-	// m->scene.l_g = ft_atod_loop(s, m, INT);
-	//printf("[AMBIENT L] %0.1f, %d, %d, %d\n", m->scene.a_light_ratio, m->scene.a_color.r, m->scene.a_color.b, m->scene.a_color.g);
 }
 
 t_cam		*get_camera(char *s, int p, t_minirt *m)
@@ -87,8 +83,6 @@ t_light		*get_light(char *s, int p, t_minirt *m)
 	light->light_point.z = ft_atod_loop(s, m, DOUBLE);
 	light->light_b = ft_atod_loop(s, m, DOUBLE);
 	light->color = (t_color){ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT), ft_atod_loop(s, m, INT)};
-	// light->g = ft_atod_loop(s, m, INT);
-	// light->b = ft_atod_loop(s, m, INT);
 	return (light);
 }
 
@@ -118,7 +112,6 @@ t_sph		*get_sphere(char *s, int p, t_minirt *m)
 	sphere = (t_sph*)malloc(sizeof(t_sph));
 	check_sphere(s, p, m);
 	m->utils.i = p;
-
 	sphere->sp_center.x = ft_atod_loop(s, m, DOUBLE);
 	sphere->sp_center.y = ft_atod_loop(s, m, DOUBLE);	
 	sphere->sp_center.z = ft_atod_loop(s, m, DOUBLE);
@@ -137,8 +130,6 @@ t_squ		*get_square(char *s, int p, t_minirt *m)
 	square = (t_squ*)malloc(sizeof(t_squ));
 	check_square(s, p, m);
 	m->utils.i = p;
-
-	// 7 DOUBLEing points and rgb
 	square->sq_center.x = ft_atod_loop(s, m, DOUBLE);
 	square->sq_center.y = ft_atod_loop(s, m, DOUBLE);
 	square->sq_center.z = ft_atod_loop(s, m, DOUBLE);
@@ -159,8 +150,6 @@ t_cyl		*get_cylinder(char *s, int p, t_minirt *minirt)
 	cylinder = (t_cyl*)malloc(sizeof(t_cyl));
 	check_cylinder(s, p, minirt);
 	minirt->utils.i = p;
-
-	// 8 DOUBLEing points and rgb
 	cylinder->view_point.x = ft_atod_loop(s, minirt, DOUBLE);
 	cylinder->view_point.y = ft_atod_loop(s, minirt, DOUBLE);
 	cylinder->view_point.z = ft_atod_loop(s, minirt, DOUBLE);
@@ -182,8 +171,6 @@ t_tri		*get_triangle(char *s, int p, t_minirt *minirt)
 	triangle = (t_tri*)malloc(sizeof(t_tri));
 	check_triangle(s, p, minirt);
 	minirt->utils.i = p;
-
-	// 9 DOUBLEing points and rgb
 	triangle->p1.x = ft_atod_loop(s, minirt, DOUBLE);
 	triangle->p1.y = ft_atod_loop(s, minirt, DOUBLE);
 	triangle->p1.z = ft_atod_loop(s, minirt, DOUBLE);
@@ -229,7 +216,7 @@ void		check_map(char *map, t_minirt *minirt)
 	int				index;
 
 	index = 0;
-	make_head(&minirt->var.o_head);
+	make_obj_head(&minirt->var.o_head);
 	make_cam_head(&minirt->var.c_head);
 	make_img_head(&minirt->var.i_head);
 	make_light_head(&minirt->var.l_head);
@@ -244,8 +231,5 @@ void		check_map(char *map, t_minirt *minirt)
 	}
 	if (minirt->scene.camera == 0 || minirt->scene.ambient_light == 0 || minirt->scene.res == 0)
 		ft_error(INVAL);
-	//traverse_list(&minirt->var.o_head);
-	//traverse_cam_list(&minirt->var.c_head);
-	traverse_light_list(&minirt->var.l_head);
 	make_scene(minirt);
 }
