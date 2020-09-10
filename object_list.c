@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 11:47:11 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 15:24:02 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,32 +70,34 @@ void	remove_object_node(t_object_list **head, int type)
 	free(temp);
 }
 
-void delete_object_list(t_object_list **head)
-{ 
-   t_object_list* current = *head; 
-   t_object_list* next; 
-  
-   while (current != NULL)  
-   { 
-       next = current->next; 
-       free(current); 
-       current = next; 
-   } 
-   *head = NULL; 
+void	delete_object_list(t_object_list **head)
+{
+	t_object_list *current;
+	t_object_list *next;
+
+	current = *head;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*head = NULL;
 }
 
-void delete_cam_list(t_camera_list **head)
-{ 
-   t_camera_list* current = *head; 
-   t_camera_list* next; 
-  
-   while (current != NULL)  
-   { 
-       next = current->next; 
-       free(current); 
-       current = next; 
-   } 
-   *head = NULL; 
+void	delete_cam_list(t_camera_list **head)
+{
+	t_camera_list *current;
+	t_camera_list *next;
+
+	current = *head;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*head = NULL;
 }
 
 void	make_cam_head(t_camera_list **head)
@@ -149,7 +151,7 @@ void	make_img_head(t_img_list **head)
 	*head = new_head;
 }
 
-void	add_img(t_img_list **head, void	*image, char *address)
+void	add_img(t_img_list **head, void *image, char *address)
 {
 	static int		index;
 	t_img_list		*newnode;

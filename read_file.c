@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:48:19 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 11:47:25 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 12:35:15 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 int		ft_strlen(char *s)
 {
-	int i = 0;
+	int i;
 
+	i = 0;
 	if (!s)
-		return(0);
+		return (0);
 	while (s[i])
 		i++;
 	return (i);
@@ -42,12 +43,14 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return ((void *)dst);
 }
 
-char 	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	int len1 = ft_strlen(s1);
-	int len2 = ft_strlen(s2);
-	char *new;
+	int		len1;
+	int		len2;
+	char	*new;
 
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
 	if (!s1)
 	{
 		new = (char*)malloc((len2 + 1) * sizeof(char));
@@ -65,10 +68,10 @@ char 	*ft_strjoin(char *s1, char *s2)
 	return (new);
 }
 
-char		*read_file(int fd, char *temp)
+char	*read_file(int fd, char *temp)
 {
-	char buff[1024 + 1];
-	int bytes_read;
+	char	buff[1024 + 1];
+	int		bytes_read;
 
 	bytes_read = 1;
 	while (bytes_read > 0)

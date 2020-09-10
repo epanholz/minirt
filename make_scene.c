@@ -6,77 +6,91 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 11:41:41 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 15:12:32 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static const t_lookup	G_lookup_table[] = {
+static const t_lookup	g_lookup_table[] = {
 	{SPH, &intersect_sphere},
 	{TRI, &intersect_triangle},
 	{PLA, &intersect_plane},
 	{SQU, &intersect_square}
 };
 
-t_matrix43				lookat_matrix(t_vec3 from, t_vec3 to)
+t_matrix				lookat_matrix(t_vec3 from, t_vec3 to)
 {
-	t_matrix43	cam2world;
+	t_matrix	cam2world;
 	t_vec3		norm_vec;
 	t_vec3		forward;
 	t_vec3		right;
 	t_vec3		up;
-	t_vec3		temp;
 
-	norm_vec = vectorSub(&to, &from);
+	norm_vec = vec_sub(&to, &from);
 	norm_vec = vec_normalize(&norm_vec);
 	if (norm_vec.x == 0.0 && norm_vec.z == 0.0 && fabs(norm_vec.y) == 1.0)
 	{
-		cam2world.row1 = norm_vec.y == 1.0 ? vec3(1.0,0.0,0.0) : vec3(0.0,0.0,1.0);
-		cam2world.row2 = norm_vec.y == 1.0 ? vec3(0.0,0.0,1.0) : vec3(1.0,0.0,0.0);
-		cam2world.row3 = norm_vec.y == 1.0 ? vec3(0.0,1.0,0.0) : vec3(0.0,-1.0,0.0);
-		return(cam2world);
+		cam2world.row1 = norm_vec.y == 1.0 ? (t_vec3){1.0, 0.0, 0.0} :
+			(t_vec3){0.0, 0.0, 1.0};
+		cam2world.row2 = norm_vec.y == 1.0 ? (t_vec3){0.0, 0.0, 1.0} :
+			(t_vec3){1.0, 0.0, 0.0};
+		cam2world.row3 = norm_vec.y == 1.0 ? (t_vec3){0.0, 1.0, 0.0} :
+			(t_vec3){0.0, -1.0, 0.0};
+		return (cam2world);
 	}
-
-	temp = vec3(0,1,0);
-	forward = vectorSub(&from, &to);
+	forward = vec_sub(&from, &to);
 	forward = vec_normalize(&forward);
-	right = crossProduct(&temp, &forward);
-	up = crossProduct(&forward, &right);
-
-	cam2world.row1 = right;
-	cam2world.row2 = up;
-	cam2world.row3 = forward;
-	cam2world.row4 =(t_vec3){0,0,0};
-
-	return(cam2world);
+	right = cross_prod(&(t_vec3){0, 1, 0}, &forward);
+	up = cross_prod(&forward, &right);
+	cam2world = (t_matrix){right, up, forward, (t_vec3){0, 0, 0}};
+	return (cam2world);
 }
 
-t_vec3					apply_matrix(t_matrix43 matrix, t_vec3	vec3)
+t_vec3					apply_matrix(t_matrix matrix, t_vec3 vec3)
 {
 	t_vec3	new;
-	new.x = vec3.x * matrix.row1.x + vec3.y * matrix.row2.x + vec3.z * matrix.row3.x;
-	new.y = vec3.x * matrix.row1.y + vec3.y * matrix.row2.y + vec3.z * matrix.row3.y;
-	new.z = vec3.x * matrix.row1.z + vec3.y * matrix.row2.z + vec3.z * matrix.row3.z;
-	return	(new);
+
+	new.x = vec3.x * matrix.row1.x + vec3.y * matrix.row2.x
+		+ vec3.z * matrix.row3.x;
+	new.y = vec3.x * matrix.row1.y + vec3.y * matrix.row2.y
+		+ vec3.z * matrix.row3.y;
+	new.z = vec3.x * matrix.row1.z + vec3.y * matrix.row2.z
+		+ vec3.z * matrix.row3.z;
+	return (new);
 }
 
 t_vec3					setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec)
 {
-	t_matrix43	c2w;
+	t_matrix	c2w;
 
-	if (norm_vec.x == 0 && norm_vec.y == 0 && norm_vec.z == 0 )
-		return(from);
-	c2w = lookat_matrix(to, vectorPlus(&to, &norm_vec));
+	if (norm_vec.x == 0 && norm_vec.y == 0 && norm_vec.z == 0)
+		return (from);
+	c2w = lookat_matrix(to, vec_plus(&to, &norm_vec));
 	return (apply_matrix(c2w, from));
 }
 
 t_vec3					setsquare(t_vec3 pos, t_vec3 norm_vec)
 {
-	t_matrix43	c2w;
+	t_matrix	c2w;
 
 	c2w = lookat_matrix(pos, norm_vec);
 	return (apply_matrix(c2w, pos));
+}
+
+t_hit					init_hit(void)
+{
+	t_hit	hit;
+
+	hit.object = 0;
+	hit.hit = -1;
+	hit.t1 = INFINITY;
+	hit.t2 = INFINITY;
+	hit.surface_norm = (t_vec3){0, 0, 0};
+	hit.hit_p = (t_vec3){0, 0, 0};
+	hit.hit_p_new = (t_vec3){0, 0, 0};
+	hit.col = (t_color){0, 0, 0};
+	return (hit);
 }
 
 t_hit					intersect_triangle(t_ray *ray, t_tri *triangle)
@@ -100,45 +114,39 @@ t_hit					intersect_triangle(t_ray *ray, t_tri *triangle)
 	double		t;
 	double		D;
 
-	hit.object = 0;
-	hit.hit = -1;
-	hit.t1 = INFINITY;
-	hit.t2 = INFINITY;
-	hit.surface_norm = (t_vec3){0,0,0};
-	hit.hit_p = (t_vec3){0,0,0};
+	hit = init_hit();
 	hit.col = (t_color){triangle->r, triangle->g, triangle->b};
-
-	A = vectorSub(&triangle->p2, &triangle->p1);
-	B = vectorSub(&triangle->p3, &triangle->p1);
-	N = crossProduct(&A, &B);
+	A = vec_sub(&triangle->p2, &triangle->p1);
+	B = vec_sub(&triangle->p3, &triangle->p1);
+	N = cross_prod(&A, &B);
 	N = vec_normalize(&N);
-	if (fabs(vectorDot(&N, &ray->dir)) < 0.000001)
-		return(hit);
-	D = vectorDot(&N, &triangle->p1);
-	t = -((vectorDot(&N, &ray->orig) - D) / vectorDot(&N, &ray->dir));
+	if (fabs(vec_dot(&N, &ray->dir)) < 0.000001)
+		return (hit);
+	D = vec_dot(&N, &triangle->p1);
+	t = -((vec_dot(&N, &ray->orig) - D) / vec_dot(&N, &ray->dir));
 	if (t < 0)
-		return(hit);
+		return (hit);
 	temp = vec_x_d(&ray->dir, t);
-	p = vectorPlus(&ray->orig, &temp);
-	edge0 = vectorSub(&triangle->p2, &triangle->p1);
-	edge1 = vectorSub(&triangle->p3, &triangle->p2);
-	edge2 = vectorSub(&triangle->p1, &triangle->p3);
-	C0 = vectorSub(&p, &triangle->p1);
-	C1 = vectorSub(&p, &triangle->p2);
-	C2 = vectorSub(&p, &triangle->p3);
-	t0 = crossProduct(&edge0, &C0);
-	t1 = crossProduct(&edge1, &C1);
-	t2 = crossProduct(&edge2, &C2);
-	if (vectorDot(&N, &t0) < 0 || vectorDot(&N, &t1) < 0 || vectorDot(&N, &t2) < 0)
-		return(hit);
+	p = vec_plus(&ray->orig, &temp);
+	edge0 = vec_sub(&triangle->p2, &triangle->p1);
+	edge1 = vec_sub(&triangle->p3, &triangle->p2);
+	edge2 = vec_sub(&triangle->p1, &triangle->p3);
+	C0 = vec_sub(&p, &triangle->p1);
+	C1 = vec_sub(&p, &triangle->p2);
+	C2 = vec_sub(&p, &triangle->p3);
+	t0 = cross_prod(&edge0, &C0);
+	t1 = cross_prod(&edge1, &C1);
+	t2 = cross_prod(&edge2, &C2);
+	if (vec_dot(&N, &t0) < 0 || vec_dot(&N, &t1) < 0 || vec_dot(&N, &t2) < 0)
+		return (hit);
 	hit.object = TRI;
 	hit.t1 = t;
 	hit.hit = 1;
 	hit.surface_norm = N;
 	hit.hit_p = p;
 	norm_temp = vec_x_d(&ray->dir, t - 10 * 1e-6);
-	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);	
-	return(hit);
+	hit.hit_p_new = vec_plus(&ray->orig, &norm_temp);
+	return (hit);
 }
 
 t_hit					intersect_square(t_ray *ray, t_squ *square)
@@ -152,33 +160,29 @@ t_hit					intersect_square(t_ray *ray, t_squ *square)
 	t_tri		t1;
 	t_tri		t2;
 	double		r;
-	t_matrix43	c2w;
+	t_matrix	c2w;
 
-	r = square->side / 2;
-	c2w = lookat_matrix(square->sq_center, vectorPlus(&square->sq_center, &square->norm_vec));
-	c2w = (t_matrix43){vec_x_d(&c2w.row1, r), vec_x_d(&c2w.row2, r), c2w.row3, c2w.row4};
-	temp[0] = vectorPlus(&square->sq_center, &c2w.row2);
-	temp[1] = vectorSub(&square->sq_center, &c2w.row2);
-	hit[0].object = 0;
-	hit[0].hit = -1;
-	hit[0].t1 = INFINITY;
-	hit[0].t2 = 0;
-	hit[0].surface_norm = (t_vec3){0,0,0};
-	hit[0].hit_p = (t_vec3){0,0,0};
+	hit[0] = init_hit();
 	hit[0].col = (t_color){square->r, square->g, square->b};
+	r = square->side / 2;
+	c2w = lookat_matrix(square->sq_center, vec_plus(&square->sq_center, &square->norm_vec));
+	c2w = (t_matrix){vec_x_d(&c2w.row1, r), vec_x_d(&c2w.row2, r), c2w.row3, c2w.row4};
+	temp[0] = vec_plus(&square->sq_center, &c2w.row2);
+	temp[1] = vec_sub(&square->sq_center, &c2w.row2);
+	hit[0].object = 0;
 	v0 = (t_vec3){c2w.row1.x - r, c2w.row1.y + r, c2w.row1.z};
 	v1 = (t_vec3){c2w.row2.x - r, c2w.row2.y - r, c2w.row2.z};
 	v2 = (t_vec3){c2w.row3.x + r, c2w.row3.y - r, c2w.row3.z};
 	v3 = (t_vec3){c2w.row4.x + r, c2w.row4.y + r, c2w.row4.z};
-	t1 = (t_tri){vectorSub(&temp[0], &c2w.row1), vectorPlus(&temp[1], &c2w.row1), vectorSub(&temp[1], &c2w.row1), square->r, square->g, square->b};
-	t2 = (t_tri){vectorPlus(&temp[0],&c2w.row1), t1.p1, t1.p2, square->r, square->g, square->b};
+	t1 = (t_tri){vec_sub(&temp[0], &c2w.row1), vec_plus(&temp[1], &c2w.row1), vec_sub(&temp[1], &c2w.row1), square->r, square->g, square->b};
+	t2 = (t_tri){vec_plus(&temp[0], &c2w.row1), t1.p1, t1.p2, square->r, square->g, square->b};
 	hit[1] = intersect_triangle(ray, &t1);
 	if (hit[1].hit == 1)
-			return (hit[1]);
+		return (hit[1]);
 	hit[1] = intersect_triangle(ray, &t2);
 	if (hit[1].hit == 1)
-		return(hit[1]);
-	return(hit[0]);
+		return (hit[1]);
+	return (hit[0]);
 }
 
 t_hit				intersect_plane(t_ray *ray, t_pla *plane)
@@ -189,27 +193,22 @@ t_hit				intersect_plane(t_ray *ray, t_pla *plane)
 	double		t;
 	t_vec3		norm_temp;
 	t_vec3		temp;
-	
-	hit.object = 0;
-	hit.hit = -1;
-	hit.t1 = INFINITY;
-	hit.t2 = 0;
-	hit.surface_norm = (t_vec3){0,0,0};
-	hit.hit_p = (t_vec3){0,0,0};
+
+	hit = init_hit();
 	hit.col = (t_color){plane->r, plane->g, plane->b};
-	denom = vectorDot(&plane->norm_vec, &ray->dir);
+	denom = vec_dot(&plane->norm_vec, &ray->dir);
 	if (denom > 1e-6)
 	{
-		length = vectorSub(&plane->view_point, &ray->orig);
-		t = vectorDot(&length, &plane->norm_vec) / denom;
+		length = vec_sub(&plane->view_point, &ray->orig);
+		t = vec_dot(&length, &plane->norm_vec) / denom;
 		if (t >= 0)
 		{
 			hit.object = PLA;
 			hit.surface_norm = plane->norm_vec;
 			temp = vec_x_d(&ray->dir, t);
-			hit.hit_p = vectorPlus(&ray->orig, &temp);
+			hit.hit_p = vec_plus(&ray->orig, &temp);
 			norm_temp = vec_x_d(&ray->dir, t - 10 * 1e-6);
-			hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);	
+			hit.hit_p_new = vec_plus(&ray->orig, &norm_temp);
 			hit.hit = 1;
 			hit.t1 = t;
 			return (hit);
@@ -245,37 +244,32 @@ t_hit				intersect_sphere(t_ray *ray, t_sph *sphere)
 	t_vec3		temp3;
 	t_vec3		norm_temp;
 	t_vec3		fuck[2];
-	double		t;	
+	double		t;
 	double		x;
 	double		y;
 
-	hit.object = 0;
-	hit.hit = -1;
-	hit.surface_norm = (t_vec3){0,0,0};
-	hit.hit_p = (t_vec3){0,0,0};
-	hit.t1 = INFINITY;
-	hit.t2 = INFINITY;
+	hit = init_hit();
 	hit.col = (t_color){sphere->r, sphere->g, sphere->b};
-	length1 = vectorSub(&sphere->sp_center, &ray->orig);
-	t = vectorDot(&length1, &ray->dir);
+	length1 = vec_sub(&sphere->sp_center, &ray->orig);
+	t = vec_dot(&length1, &ray->dir);
 	if (t < 0)
-		return(hit);
+		return (hit);
 	temp2 = vec_x_d(&ray->dir, t);
-	p = vectorPlus(&ray->orig, &temp2);
-	temp3 = vectorSub(&sphere->sp_center, &p);
-	y = vectorDot(&length1, &length1) - t * t;
+	p = vec_plus(&ray->orig, &temp2);
+	temp3 = vec_sub(&sphere->sp_center, &p);
+	y = vec_dot(&length1, &length1) - t * t;
 	if (y > (sphere->diameter / 2) * (sphere->diameter / 2))
-		return(hit);
+		return (hit);
 	x = sqrt(((sphere->diameter / 2) * (sphere->diameter / 2)) - y);
 	hit.object = SPH;
 	hit.t1 = t - x;
 	hit.t2 = t + x;
 	hit.hit = 1;
 	norm_temp = vec_x_d(&ray->dir, hit.t1 - 10 * 1e-6);
-	hit.hit_p_new = vectorPlus(&ray->orig, &norm_temp);
+	hit.hit_p_new = vec_plus(&ray->orig, &norm_temp);
 	fuck[0] = vec_x_d(&ray->dir, hit.t1);
-	fuck[1] = vectorPlus(&ray->orig, &fuck[0]);
-	hit.surface_norm = vectorSub(&fuck[1], &sphere->sp_center);
+	fuck[1] = vec_plus(&ray->orig, &fuck[0]);
+	hit.surface_norm = vec_sub(&fuck[1], &sphere->sp_center);
 	hit.hit_p = hit.hit_p_new;
 	check_sph_inter(&hit);
 	return (hit);
@@ -285,25 +279,21 @@ void				find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
 {
 	t_hit			hit[2];
 	t_object_list	*current;
-	int 			i;
+	int				i;
 	t_function		*func;
 
-	hit[0].hit = 0;
-	hit[0].t1 = INFINITY;
-	hit[0].t2 = 0;
-	hit[0].hit_p = (t_vec3){0,0,0};
-	hit[0].surface_norm = (t_vec3){0,0,0};
+	hit[0] = init_hit();
 	i = 0;
 	current = minirt->var.o_head;
 	while (current)
 	{
 		while (i < 4)
 		{
-			if (G_lookup_table[i].index == current->object_type)
+			if (g_lookup_table[i].index == current->object_type)
 			{
-				func = G_lookup_table[i].func;
+				func = g_lookup_table[i].func;
 				hit[1] = (*func)(ray, current->scene_object);
-				if (hit[1].hit == 1  && (hit[1].t1 < l && hit[1].t1 > 0))
+				if (hit[1].hit == 1 && (hit[1].t1 < l && hit[1].t1 > 0))
 				{
 					hit_p->hit = 1;
 					return ;
@@ -321,34 +311,29 @@ t_hit				find_hit(t_minirt *minirt, t_ray *ray)
 {
 	t_hit			hit[2];
 	t_object_list	*current;
-	int 			i;
+	int				i;
 	t_function		*func;
 
-	hit[0].hit = 0;
-	hit[0].t1 = INFINITY;
-	hit[0].t2 = 0;
-	hit[0].hit_p = (t_vec3){0,0,0};
-	hit[0].surface_norm = (t_vec3){0,0,0};
+	hit[0] = init_hit();
 	i = 0;
 	current = minirt->var.o_head;
 	while (current)
 	{
 		while (i < 4)
 		{
-			if (G_lookup_table[i].index == current->object_type)
+			if (g_lookup_table[i].index == current->object_type)
 			{
-				func = G_lookup_table[i].func;
+				func = g_lookup_table[i].func;
 				hit[1] = (*func)(ray, current->scene_object);
-				if (hit[1].hit == 1  && hit[1].t1 < hit[0].t1)
+				if (hit[1].hit == 1 && hit[1].t1 < hit[0].t1)
 					hit[0] = hit[1];
-
 			}
 			i++;
 		}
 		i = 0;
 		current = current->next;
 	}
-	return(hit[0]);
+	return (hit[0]);
 }
 
 void				generate_ray(t_minirt *minirt)
@@ -359,13 +344,13 @@ void				generate_ray(t_minirt *minirt)
 	t_img_list		*current;
 	double			aspect_ratio;
 	int				pixely;
-	int 			pixelx;
+	int				pixelx;
 	double			camy;
 	double			camx;
 
 	current = minirt->var.i_head;
 	ray = (t_ray*)malloc(sizeof(t_ray));
-	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;	
+	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;
 	while (current)
 	{
 		pixelx = 0;
@@ -373,13 +358,13 @@ void				generate_ray(t_minirt *minirt)
 		camy = 0;
 		camx = 0;
 		cam = return_cam(minirt, current->img_index);
-		ray->orig = cam->view_point; 
+		ray->orig = cam->view_point;
 		minirt->var.img = current->img;
 		minirt->var.addr = current->addr;
 		while (pixely < minirt->scene.res_y)
 		{
 			camy = (1 - 2 * ((pixely + 0.5) / minirt->scene.res_y)) * tan(cam->fov / 2 * M_PI / 180);
-			while(pixelx < minirt->scene.res_x)
+			while (pixelx < minirt->scene.res_x)
 			{
 				camx = (2 * ((pixelx + 0.5) / minirt->scene.res_x) - 1) * tan(cam->fov / 2 * M_PI / 180) * aspect_ratio;
 				ray->dir = (t_vec3){camx, camy, -1};
@@ -390,10 +375,10 @@ void				generate_ray(t_minirt *minirt)
 				if (hit.hit == 1)
 				{
 					calc_color(minirt, &hit);
-					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,hit.col.r,hit.col.g,hit.col.b));
+					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0, hit.col.r, hit.col.g, hit.col.b));
 				}
 				else
-					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0,0,0,0));
+					my_mlx_pixel_put(minirt, pixelx, pixely, rgbt(0, 0, 0, 0));
 				pixelx++;
 			}
 			pixelx = 0;
@@ -425,7 +410,7 @@ void				make_scene(t_minirt *minirt)
 		fill_bmp_buff(bitmap, minirt, current->addr);
 		write_bitmap_to_file(bitmap);
 	}
-	else 
+	else
 	{
 		minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 		mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, current->img, 0, 0);

@@ -6,11 +6,11 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/01 12:43:17 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 11:43:56 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 12:20:01 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"	
+#include "minirt.h"
 
 t_sph		*return_sphere(t_minirt *minirt)
 {

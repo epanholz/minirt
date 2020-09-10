@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 11:46:23 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 14:19:03 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,13 @@ typedef	struct		s_tri
 	int				g;
 }					t_tri;
 
-typedef	struct		s_matrix43
+typedef	struct		s_matrix
 {
 	t_vec3			row1;
 	t_vec3			row2;
 	t_vec3			row3;
 	t_vec3			row4;
-}					t_matrix43;
+}					t_matrix;
 
 typedef struct		s_object_list
 {
@@ -296,15 +296,12 @@ void 		delete_cam_list(t_camera_list **head);
 t_sph		*return_sphere(t_minirt *minirt);
 t_cam		*return_cam(t_minirt *minirt, int index);
 t_light		*return_light(t_minirt *minirt, int index);
-t_vec3		vectorPlus(t_vec3 *v1, t_vec3 *v2);
-double		vectorDot(t_vec3 *v1, t_vec3 *v2);
-t_vec3		vectorSub(t_vec3 *v1, t_vec3 *v2);
+t_vec3		vec_plus(t_vec3 *v1, t_vec3 *v2);
+double		vec_dot(t_vec3 *v1, t_vec3 *v2);
+t_vec3		vec_sub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vec_x_d(t_vec3 *v, double x);
-t_vec3		crossProduct(t_vec3 *v1, t_vec3 *v2);
-t_vec3  	vec3(double x, double y, double z);
-double		vec_distance(t_vec3 *v1, t_vec3 *v2);
-double		vec3_pow(t_vec3 *v);
+t_vec3		cross_prod(t_vec3 *v1, t_vec3 *v2);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);
@@ -328,9 +325,9 @@ void		find_hit_light2(t_minirt *minirt, t_ray *ray, t_hit *hit_p);
 void		calc_color(t_minirt *minirt, t_hit *hit);
 t_color		apply_color(t_color c1, t_color c2, double	ratio);
 void		generate_ray(t_minirt *minirt);
-t_vec3		apply_matrix(t_matrix43 matrix, t_vec3	vec3);
+t_vec3		apply_matrix(t_matrix matrix, t_vec3	vec3);
 t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
-t_matrix43	lookat_matrix(t_vec3 from, t_vec3 to);
+t_matrix	lookat_matrix(t_vec3 from, t_vec3 to);
 void		create_images(t_minirt *minirt);
 int			change_image(int keycode, t_minirt *minirt);
 void		*ft_memset(void *b, int c, size_t len);

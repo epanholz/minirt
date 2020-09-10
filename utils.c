@@ -6,13 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 17:31:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/08 16:27:44 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/10 12:40:44 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void		*ft_memset(void *b, int c, size_t len)
+void	*ft_memset(void *b, int c, size_t len)
 {
 	size_t			i;
 	unsigned char	*str;
@@ -44,37 +44,29 @@ void	*ft_calloc(size_t count, size_t size)
 
 int		rgbt(int t, int r, int g, int b)
 {
-	return(t << 24 | r << 16 | g << 8 | b);
+	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-int			get_r(int trgb)
+int		get_r(int trgb)
 {
 	return ((trgb >> 16) & 255);
 }
 
-int			get_g(int trgb)
+int		get_g(int trgb)
 {
 	return ((trgb >> 8) & 255);
 }
 
-int			get_b(int trgb)
+int		get_b(int trgb)
 {
 	return (trgb & 255);
 }
 
-
-void            my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
+void	my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
 {
-    char    *dst;
+	char	*dst;
 
-    dst = minirt->var.addr + (y * minirt->var.line_length + x * (minirt->var.bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
+	dst = minirt->var.addr + (y * minirt->var.line_length + x
+		* (minirt->var.bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
 }
-
-// int		close_key(int keycode, t_minirt *minirt)
-// {
-// // FOR THE IMAGE CHANGE
-// //KEY: 123
-// //KEY: 124
-// }
-

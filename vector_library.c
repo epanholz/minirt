@@ -6,45 +6,36 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/03 12:21:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/08/01 22:15:52 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/09/10 12:56:47 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_vec3  vec3(double x, double y, double z)
-{
-    t_vec3  ret;
-    ret.x = x;
-    ret.y = y;
-    ret.z = z;
-    return (ret);
-}
-
-t_vec3   vec_normalize(t_vec3 *vec3)
+t_vec3		vec_normalize(t_vec3 *vec3)
 {
 	t_vec3	temp;
-	double length;
+	double	length;
 
 	length = sqrt(vec3->x * vec3->x + vec3->y * vec3->y + vec3->z * vec3->z);
-	temp.x = vec3->x / length;
-	temp.y = vec3->y / length;
-	temp.z = vec3->z / length;
-	return(temp);
+	temp = (t_vec3){vec3->x / length, vec3->y / length, vec3->z / length};
+	return (temp);
 }
 
-t_vec3 vectorSub(t_vec3 *v1, t_vec3 *v2)
+t_vec3		vec_sub(t_vec3 *v1, t_vec3 *v2)
 {
-	return (vec3(v1->x - v2->x, v1->y - v2->y, v1->z - v2->z));
+	return ((t_vec3){v1->x - v2->x, v1->y - v2->y, v1->z - v2->z});
 }
 
-t_vec3 vectorPlus(t_vec3 *v1, t_vec3 *v2)
+t_vec3		vec_plus(t_vec3 *v1, t_vec3 *v2)
 {
-	t_vec3 result = {v1->x + v2->x, v1->y + v2->y, v1->z + v2->z};
-    return (result);
+	t_vec3 result;
+
+	result = (t_vec3){v1->x + v2->x, v1->y + v2->y, v1->z + v2->z};
+	return (result);
 }
 
-t_vec3	crossProduct(t_vec3 *v1, t_vec3 *v2)
+t_vec3		cross_prod(t_vec3 *v1, t_vec3 *v2)
 {
 	t_vec3	new;
 
@@ -54,23 +45,15 @@ t_vec3	crossProduct(t_vec3 *v1, t_vec3 *v2)
 	return (new);
 }
 
-double vectorDot(t_vec3 *v1, t_vec3 *v2)
+double		vec_dot(t_vec3 *v1, t_vec3 *v2)
 {
 	return (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
 }
 
-t_vec3 	vec_x_d(t_vec3 *v, double x)
+t_vec3		vec_x_d(t_vec3 *v, double x)
 {
-	t_vec3 result = {v->x * x, v->y * x, v->z * x};
+	t_vec3 result;
+
+	result = (t_vec3){v->x * x, v->y * x, v->z * x};
 	return (result);
-}
-
-double	vec_distance(t_vec3 *v1, t_vec3 *v2)
-{
-	return (sqrt((v1->x - v2->x)+(v1->y - v2->y)+(v1->z - v2->z)));	
-}
-
-double	vec3_pow(t_vec3 *v)
-{
-	return (pow(v->x, 2) + pow(v->y, 2) + pow(v->z, 2));
 }
