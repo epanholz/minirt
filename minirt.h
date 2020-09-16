@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 14:19:03 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/16 15:01:17 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ typedef	struct		s_squ
 
 typedef	struct		s_cyl
 {
-	t_vec3			view_point;
+	t_vec3			point;
 	t_vec3			norm_vec;
 	double			diameter;
 	double			height;
@@ -264,15 +264,21 @@ typedef	struct		s_minirt
 void		ft_error(int mod);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
-int			get_r(int trgb);
-int			get_g(int trgb);
-int			get_(int trgb);
 int			ft_strlen(char *s);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 char 		*ft_strjoin(char *s1, char *s2);
 char		*read_file(int fd, char *temp);
-void		check_map(char *map, t_minirt *minirt);
 void		check_arg(char *arg, int p, t_minirt *minirt);
+void		check_map(char *map, t_minirt *minirt);
+void		get_res(char *s, int p, t_minirt *m);
+void		get_ambient_light(char *s, int p, t_minirt *m);
+t_cam		*get_camera(char *s, int p, t_minirt *m);
+t_light		*get_light(char *s, int p, t_minirt *m);
+t_pla		*get_plane(char *s, int p, t_minirt *m);
+t_sph		*get_sphere(char *s, int p, t_minirt *m);
+t_squ		*get_square(char *s, int p, t_minirt *m);
+t_cyl		*get_cylinder(char *s, int p, t_minirt *minirt);
+t_tri		*get_triangle(char *s, int p, t_minirt *minirt);
 double		ft_atod(char *s, t_minirt *m, int mod);
 double		ft_atod_loop(char *s, t_minirt *m, int mod);
 void		check_rgb(char *s, t_minirt *m);
@@ -286,8 +292,6 @@ void		check_sphere(char *s, int p, t_minirt *m);
 void		check_square(char *s, int p, t_minirt *m);
 void		check_cylinder(char *s, int p, t_minirt *m);
 void		check_triangle(char *s, int p, t_minirt *m);
-void		get_res(char *s, int p, t_minirt *m);
-void		get_ambient_light(char *s, int p, t_minirt *m);
 void		make_obj_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
 void		remove_object_node(t_object_list **head, int type);
@@ -306,6 +310,7 @@ int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);
 void		add_camera(t_camera_list **head, t_cam *cam);
+void		delete_cam_list(t_camera_list **head);
 void		make_img_head(t_img_list **head);
 void		add_img(t_img_list **head, void	*image, char *address);
 void		make_light_head(t_light_list **head);
@@ -318,7 +323,7 @@ t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
 t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
 t_hit		intersect_plane(t_ray *ray, t_pla *plane);
 t_hit		intersect_square(t_ray *ray, t_squ *square);
-t_vec3		setsquare(t_vec3 pos, t_vec3 norm_vec);
+t_hit		intersect_cylinder(t_ray *ray, t_cyl *cyl);
 t_hit		find_hit(t_minirt *minirt, t_ray *ray);
 void		find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p);
 void		find_hit_light2(t_minirt *minirt, t_ray *ray, t_hit *hit_p);

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 15:12:32 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/16 14:03:08 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,66 +16,25 @@ static const t_lookup	g_lookup_table[] = {
 	{SPH, &intersect_sphere},
 	{TRI, &intersect_triangle},
 	{PLA, &intersect_plane},
-	{SQU, &intersect_square}
+	{SQU, &intersect_square},
+	{CYL, &intersect_cylinder}
 };
 
-t_matrix				lookat_matrix(t_vec3 from, t_vec3 to)
+void					solve_quadratic(double a, double b, double c, t_hit hit)
 {
-	t_matrix	cam2world;
-	t_vec3		norm_vec;
-	t_vec3		forward;
-	t_vec3		right;
-	t_vec3		up;
-
-	norm_vec = vec_sub(&to, &from);
-	norm_vec = vec_normalize(&norm_vec);
-	if (norm_vec.x == 0.0 && norm_vec.z == 0.0 && fabs(norm_vec.y) == 1.0)
+	double discr;
+	
+	discr = b * b - 4 * a * c;
+	if (discr < 0)
+		return ;
+	else if (discr == 0)
+		hit.t1 = -b / (2 * a);
+	else if (discr > 0)
 	{
-		cam2world.row1 = norm_vec.y == 1.0 ? (t_vec3){1.0, 0.0, 0.0} :
-			(t_vec3){0.0, 0.0, 1.0};
-		cam2world.row2 = norm_vec.y == 1.0 ? (t_vec3){0.0, 0.0, 1.0} :
-			(t_vec3){1.0, 0.0, 0.0};
-		cam2world.row3 = norm_vec.y == 1.0 ? (t_vec3){0.0, 1.0, 0.0} :
-			(t_vec3){0.0, -1.0, 0.0};
-		return (cam2world);
+		hit.t1 = (-b + sqrt(discr)) / (2 * a);
+		hit.t2 = (-b - sqrt(discr)) / (2 * a);
 	}
-	forward = vec_sub(&from, &to);
-	forward = vec_normalize(&forward);
-	right = cross_prod(&(t_vec3){0, 1, 0}, &forward);
-	up = cross_prod(&forward, &right);
-	cam2world = (t_matrix){right, up, forward, (t_vec3){0, 0, 0}};
-	return (cam2world);
-}
-
-t_vec3					apply_matrix(t_matrix matrix, t_vec3 vec3)
-{
-	t_vec3	new;
-
-	new.x = vec3.x * matrix.row1.x + vec3.y * matrix.row2.x
-		+ vec3.z * matrix.row3.x;
-	new.y = vec3.x * matrix.row1.y + vec3.y * matrix.row2.y
-		+ vec3.z * matrix.row3.y;
-	new.z = vec3.x * matrix.row1.z + vec3.y * matrix.row2.z
-		+ vec3.z * matrix.row3.z;
-	return (new);
-}
-
-t_vec3					setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec)
-{
-	t_matrix	c2w;
-
-	if (norm_vec.x == 0 && norm_vec.y == 0 && norm_vec.z == 0)
-		return (from);
-	c2w = lookat_matrix(to, vec_plus(&to, &norm_vec));
-	return (apply_matrix(c2w, from));
-}
-
-t_vec3					setsquare(t_vec3 pos, t_vec3 norm_vec)
-{
-	t_matrix	c2w;
-
-	c2w = lookat_matrix(pos, norm_vec);
-	return (apply_matrix(c2w, pos));
+	//https://www.programiz.com/c-programming/examples/quadratic-roots
 }
 
 t_hit					init_hit(void)
@@ -90,6 +49,46 @@ t_hit					init_hit(void)
 	hit.hit_p = (t_vec3){0, 0, 0};
 	hit.hit_p_new = (t_vec3){0, 0, 0};
 	hit.col = (t_color){0, 0, 0};
+	return (hit);
+}
+
+t_hit					intersect_cylinder(t_ray *ray, t_cyl *cyl)
+{
+	t_hit		hit;
+
+	hit = init_hit();
+	hit.col = (t_color){cyl->r, cyl->g, cyl->b};
+	
+//--------------------------------------------------------------------------// 
+// Ray : P(t) = O + V * t
+// Cylinder [O, D, r]
+// O is point on cylinder core, D is direction of cylinder (normalised), r is radius.
+// point Q on cylinder if ((Q - O) x D)^2 = r^2
+// Cylinder [A, B, r]
+// Point P on infinite cylinder if ((P - A) x (B - A))^2 = r^2 * (B - A)^2
+// expand : ((O - A) x (B - A) + t * (V x (B - A)))^2 = r^2 * (B - A)^2
+// equation in the form (X + t * Y)^2 = d
+// where : 
+// X = (O - A) x (B - A)
+// Y = V x (B - A)
+// d = r^2 * (B - A)^2
+// expand the equation :
+// t^2 * (Y . Y) + t * (2 * (X . Y)) + (X . X) - d = 0
+// => second order equation in the form : a*t^2 + b*t + c = 0 where
+// a = (Y . Y)
+// b = 2 * (X . Y)
+// c = (X . X) - d
+//--------------------------------------------------------------------------//
+// Vector AB = (B - A); Vector AO = (O - A); Vector AOxAB = (AO ^ AB);
+// cross productVector VxAB  = (V ^ AB);
+// cross productfloat  ab2   = (AB * AB);
+// dot productfloat a = (VxAB * VxAB);
+// dot productfloat b = 2 * (VxAB * AOxAB);
+// dot productfloat c = (AOxAB * AOxAB) - (r*r * ab2);
+// solve second order equation : a*t^2 + b*t + c = 0
+//https://www.gamedev.net/forums/topic/467789-raycylinder-intersection/
+
+	(void)ray;
 	return (hit);
 }
 
@@ -287,7 +286,7 @@ void				find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p)
 	current = minirt->var.o_head;
 	while (current)
 	{
-		while (i < 4)
+		while (i < 5)
 		{
 			if (g_lookup_table[i].index == current->object_type)
 			{
@@ -319,7 +318,7 @@ t_hit				find_hit(t_minirt *minirt, t_ray *ray)
 	current = minirt->var.o_head;
 	while (current)
 	{
-		while (i < 4)
+		while (i < 5)
 		{
 			if (g_lookup_table[i].index == current->object_type)
 			{

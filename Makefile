@@ -6,15 +6,16 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/09/10 11:43:02 by pani_zino     ########   odam.nl          #
+#    Updated: 2020/09/16 14:53:13 by pani_zino     ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minirt
 
 SRC := main.c read_file.c get_scene.c check_scene.c check_scene_utils.c object_list.c \
-	object_list_traverse.c vector_library.c utils.c make_scene.c \
-	images.c hooks.c color.c bitmap.c libmlx.dylib \
+	object_list_traverse.c vector_library.c utils.c make_scene.c matrix.c atod.c \
+	image_list.c hooks.c light.c bitmap.c check_scene_objects.c get_objects.c libmlx.dylib \
+	get_scene_loop.c scene_lists.c \
 
 INC := minirt.h
 

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   bitmap.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
+/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/08/07 19:25:34 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/02 19:23:26 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/09/16 10:20:45 by pani_zino     #+#    #+#                 */
+/*   Updated: 2020/09/16 10:21:20 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
