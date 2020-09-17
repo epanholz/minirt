@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/03 12:21:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 12:56:47 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/17 14:59:25 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,14 @@ t_vec3		vec_x_d(t_vec3 *v, double x)
 
 	result = (t_vec3){v->x * x, v->y * x, v->z * x};
 	return (result);
+}
+
+double		vec_magnitude(t_vec3 v1, t_vec3 v2)
+{
+	return(sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) + pow((v2.z - v1.z), 2)));
+}
+
+double	vec_pow(t_vec3 *v)
+{
+	return (pow(v->x, 2) + pow(v->y, 2) + pow(v->z, 2));
 }

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/16 14:20:05 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/17 11:24:04 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
 
 	temp = hit->col;
 	light_color = light->color;
-	dist = vec_sub(&light->light_point, &hit->hit_p_new);
+	dist = vec_sub(&light->light_point, &hit->hit_p);
 	dist_norm = vec_normalize(&dist);
 	dotnormal = vec_dot(&hit->surface_norm, &dist_norm);
 	if ((dotnormal <= 1e-6 && hit->object == TRI)
@@ -69,9 +69,9 @@ void		calc_color(t_minirt *m, t_hit *hit)
 	}
 	while (current)
 	{
-		dir = vec_sub(&current->light->light_point, &hit->hit_p_new);
+		dir = vec_sub(&current->light->light_point, &hit->hit_p);
 		ray.dir = vec_normalize(&dir);
-		ray.orig = hit->hit_p_new;
+		ray.orig = hit->hit_p;
 		find_hit_light(m, &ray, sqrt(vec_dot(&dir, &dir) - 10 * 1e-6), hit);
 		if (hit->hit == 0)
 			amb = col_add(amb,

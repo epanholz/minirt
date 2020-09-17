@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/16 15:01:17 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/17 14:59:28 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ typedef	struct		s_squ
 
 typedef	struct		s_cyl
 {
-	t_vec3			point;
+	t_vec3			center;
 	t_vec3			norm_vec;
 	double			diameter;
 	double			height;
@@ -206,7 +206,6 @@ typedef struct		s_hit
 	int				hit;
 	t_vec3			surface_norm;
 	t_vec3			hit_p;
-	t_vec3			hit_p_new;
 	double			t1;
 	double			t2;
 	t_color			col;
@@ -306,6 +305,8 @@ t_vec3		vec_sub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vec_x_d(t_vec3 *v, double x);
 t_vec3		cross_prod(t_vec3 *v1, t_vec3 *v2);
+double		vec_magnitude(t_vec3 v1, t_vec3 v2);
+double		vec_pow(t_vec3 *v);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);
 void		make_cam_head(t_camera_list **head);

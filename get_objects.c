@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 14:31:22 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 14:32:32 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/17 12:13:16 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ t_cyl		*get_cylinder(char *s, int p, t_minirt *minirt)
 	cylinder = (t_cyl*)malloc(sizeof(t_cyl));
 	check_cylinder(s, p, minirt);
 	minirt->utils.i = p;
-	cylinder->point.x = ft_atod_loop(s, minirt, DOUBLE);
-	cylinder->point.y = ft_atod_loop(s, minirt, DOUBLE);
-	cylinder->point.z = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->center.x = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->center.y = ft_atod_loop(s, minirt, DOUBLE);
+	cylinder->center.z = ft_atod_loop(s, minirt, DOUBLE);
 	cylinder->norm_vec.x = ft_atod_loop(s, minirt, DOUBLE);
 	cylinder->norm_vec.y = ft_atod_loop(s, minirt, DOUBLE);
 	cylinder->norm_vec.z = ft_atod_loop(s, minirt, DOUBLE);
