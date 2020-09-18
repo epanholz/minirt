@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/17 16:58:20 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/18 16:08:42 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_hit		get_hit_cyl(t_ray *ray, t_cyl *cyl, t_hit hit)
 
 	ret = INFINITY;
 
-	temp1 = vec_x_d(&cyl->norm_vec, vec_dot(&ray->dir, &cyl->norm_vec));
+	temp1 = vec_x_d(&cyl->norm_vec, cyl->height / 2);
 	base[0] = vec_sub(&cyl->center, &temp1);
 	base[1] = vec_plus(&cyl->center, &temp1);
 	dot_temp[0] = vec_x_d(&ray->dir, hit.t1);
@@ -109,36 +109,44 @@ t_hit		get_hit_cyl(t_ray *ray, t_cyl *cyl, t_hit hit)
 
 t_hit					intersect_cylinder(t_ray *ray, t_cyl *cyl)
 {
-	// t_hit		hit;
-	// t_vec3		dist;
-	// t_vec3		surf_norm[3];
-	// t_vec3		temp[4];
-	// double		dot[2];
-	// double		radius;
-	// double		abc[3];
+	t_hit		hit;
+	t_vec3		dist;
+	t_vec3		temp[4];
+	t_vec3		norm_temp;
+	double		dot[2];
+	double		radius;
+	double		abc[3];
 	
 
-	// hit = init_hit();
-	// hit.object = CYL;
-	// hit.col = (t_color){cyl->r, cyl->g, cyl->b};
-	// radius = cyl->diameter / 2;
-	// dist = vec_sub(&ray->orig, &cyl->center);
-	// dot[0] = vec_dot(&ray->dir, &cyl->norm_vec);
-	// temp[0] = vec_x_d(&cyl->norm_vec, dot[0]);
-	// dot[1] = vec_dot(&dist, &cyl->norm_vec);
-	// temp[1] = vec_x_d(&cyl->norm_vec, dot[1]);
+	hit = init_hit();
+	hit.object = CYL;
+	hit.col = (t_color){cyl->r, cyl->g, cyl->b};
+	if (vec_pow(&cyl->norm_vec) != 0)
+		cyl->norm_vec = vec_normalize(&cyl->norm_vec);
+	radius = cyl->diameter / 2;
+	dist = vec_sub(&ray->orig, &cyl->center);
+	dot[0] = vec_dot(&ray->dir, &cyl->norm_vec);
+	temp[0] = vec_x_d(&cyl->norm_vec, dot[0]);
+	dot[1] = vec_dot(&dist, &cyl->norm_vec);
+	temp[1] = vec_x_d(&cyl->norm_vec, dot[1]);
 
-	// temp[2] = vec_sub(&ray->dir, &temp[0]);
-	// abc[0] = vec_pow(&temp[2]);
+	temp[2] = vec_sub(&ray->dir, &temp[0]);
+	abc[0] = vec_pow(&temp[2]);
 
-	// temp[3] = vec_sub(&dist, &temp[1]);
-	// abc[1] = 2.0 * vec_dot(&temp[2], &temp[3]);
+	temp[3] = vec_sub(&dist, &temp[1]);
+	abc[1] = 2.0 * vec_dot(&temp[2], &temp[3]);
 
-	// abc[2] = vec_pow(&temp[3]) - (radius * radius);
+	abc[2] = vec_pow(&temp[3]) - (radius * radius);
 
-	// hit = solve_quadratic(abc[0], abc[1], abc[2], hit);
-	// //hit = get_hit_cyl(ray, cyl, hit);
 
+	hit = solve_quadratic(abc[0], abc[1], abc[2], hit);
+	hit = get_hit_cyl(ray, cyl, hit);
+	if (hit.hit == 1)
+	{
+		norm_temp = vec_x_d(&ray->dir, hit.t1 - 10 * 1e-6);
+		hit.hit_p = vec_plus(&ray->orig, &norm_temp);
+	}
+	//t_vec3		surf_norm[3];
 	// if (hit.hit == 1)
 	// {
 	// 	surf_norm[0] = vec_x_d(&ray->dir, -1);
@@ -146,48 +154,117 @@ t_hit					intersect_cylinder(t_ray *ray, t_cyl *cyl)
 	// 	surf_norm[2] = vec_sub(&surf_norm[1], &cyl->center);
 	// 	hit.surface_norm = vec_normalize(&surf_norm[2]);
 	// }
+	return(hit);
 
-	// return(hit);
 
+	// t_hit		hit;
+	// t_vec3		source;
+	// t_vec3		cross_norm[2];
+	// t_vec3		vu;
+	// t_vec3		vo;
+	// t_vec3		norm_temp;
+	// t_vec3		cyl_dir_inv;
+	// double		radius;
+	// double		len;
+	// double		dist[2];
+	// double		t;
+	// double 		s;
 
-	t_hit		hit;
-	t_vec3		source;
-	t_vec3		cross_norm;
-	t_vec3		vu;
-	t_vec3		vo;
-	t_vec3		norm_temp;
-	t_vec3		surf_norm[3];
-	double		radius;
-	double		len;
-	double		dist;
-	double		t;
-	double 		s;
+	// hit = init_hit();
+	// hit.col = (t_color){cyl->r, cyl->g, cyl->b};
+	// 	if (vec_pow(&cyl->norm_vec) != 0)
+	// 	cyl->norm_vec = vec_normalize(&cyl->norm_vec);
+	// if (cyl->norm_vec.x == 0 && cyl->norm_vec.y == 0 && cyl->norm_vec.z == 0)
+	// 	cyl->norm_vec = (t_vec3){0, 1, 0};
+	// radius = cyl->diameter / 2;
+	// cyl_dir_inv = vec_x_d(&cyl->norm_vec, -1);
+	// source = vec_sub(&ray->orig, &cyl->center);
+	// cross_norm[0] = cross_prod(&ray->dir, &cyl->norm_vec);
+	// cross_norm[1] = cross_prod(&ray->dir, &cyl_dir_inv);
+	// len = sqrt(pow(cross_norm[0].x, 2) + pow(cross_norm[0].y, 2) + pow(cross_norm[0].z, 2));
+	// dist[0] = vec_dot(&source, &cross_norm[0]);
+	// dist[1] = vec_dot(&source, &cross_norm[1]);
+	// if (dist[0] <= radius)
+	// {
+	// 	vu = cross_prod(&source, &cyl->norm_vec);
+	// 	t = -vec_dot(&vu, &cross_norm[0]) / len;
+	// 	vo = cross_prod(&cross_norm[0], &cyl->norm_vec);
+	// 	s = fabs(sqrt(radius * radius - dist[0] * dist[0]) / vec_dot(&ray->dir, &vo));
+	// 	hit.t1 = t - s;
+	// 	hit.t2 = t + s;
 
-	hit = init_hit();
-	hit.col = (t_color){cyl->r, cyl->g, cyl->b};
-	radius = cyl->diameter / 2;
-	source = vec_sub(&ray->orig, &cyl->center);
-	cross_norm = cross_prod(&ray->dir, &cyl->norm_vec);
-	len = sqrt(pow(cross_norm.x, 2) + pow(cross_norm.y, 2) + pow(cross_norm.z, 2));
-	dist = vec_dot(&source, &cross_norm);
-	if (dist <= radius)
-	{
-		hit.hit = 1;
-		vu = cross_prod(&source, &cyl->norm_vec);
-		t = -vec_dot(&vu, &cross_norm) / len;
-		vo = cross_prod(&cross_norm, &cyl->norm_vec);
-		s = fabs(sqrt(radius * radius - dist * dist) / vec_dot(&ray->dir, &vo));
-		hit.t1 = t - s;
-		hit.t2 = t + s;
-		norm_temp = vec_x_d(&ray->dir, t - 10 * 1e-6);
-		hit.hit_p = vec_plus(&ray->orig, &norm_temp);
-		//hit = get_hit_cyl(ray, cyl, hit);
-		surf_norm[0] = vec_x_d(&ray->dir, -1);
-		surf_norm[1] = vec_plus(&ray->orig, &surf_norm[0]);
-		surf_norm[2] = vec_sub(&surf_norm[1], &cyl->center);
-		hit.surface_norm = vec_normalize(&surf_norm[2]);
-	}
-	return (hit);
+	// 	// double denom, denom2, t5, t6;
+	// 	// t_vec3	length;
+	// 	// t_vec3	dir2;
+	// 	// dir2 = vec_x_d(&cyl->norm_vec, -1);
+	// 	// denom = vec_dot(&cyl->norm_vec, &ray->dir);
+	// 	// denom2 = vec_dot(&dir2, &ray->dir);
+	// 	// length = vec_sub(&cyl->center, &ray->orig);
+	// 	// t5 = vec_dot(&length, &cyl->norm_vec) / denom;
+	// 	// t6 = vec_dot(&length, &dir2) / denom2;
+	// 	// if (t5 > hit.t2 || t6 < hit.t1)
+	// 	// 	return (hit);
+
+	// 	double		t2;
+	// 	double		dc, dw;
+	// 	dc = vec_dot(&cyl->norm_vec, &ray->dir);
+	// 	dw = vec_dot(&cyl->norm_vec, &ray->orig) + dist[0];
+	// 	if (dc == 0.0 && dw >= 0.0)
+	// 		return (hit);
+	// 	else
+	// 	{
+	// 		t2 = - dw / dc;
+	// 		if (dc >= 0.0)
+	// 		{
+	// 			if (t2 > hit.t1 && t2 < hit.t2)
+	// 				hit.t2 = t2;
+	// 			if (t2 < hit.t1)
+	// 				return(hit);
+	// 		}
+	// 		else
+	// 		{
+	// 			if (t2 > hit.t1 && t2 < hit.t2)
+	// 				hit.t1 = t2;
+	// 			if (t2 > hit.t2)
+	// 				return (hit);
+	// 		}
+	// 	}
+	// 	dc = vec_dot(&cyl_dir_inv, &ray->dir);
+	// 	dw = vec_dot(&cyl_dir_inv, &ray->orig) + dist[1];
+	// 	if (dc == 0.0 && dw >= 0.0)
+	// 		return (hit);
+	// 	else
+	// 	{
+	// 		t2 = - dw / dc;
+	// 		if (dc >= 0.0)
+	// 		{
+	// 			if (t2 > hit.t1 && t2 < hit.t2)
+	// 				hit.t2 = t2;
+	// 			if (t2 < hit.t1)
+	// 				return(hit);
+	// 		}
+	// 		else
+	// 		{
+	// 			if (t2 > hit.t1 && t2 < hit.t2)
+	// 				hit.t1 = t2;
+	// 			if (t2 > hit.t2)
+	// 				return (hit);
+	// 		}
+	// 	}
+	// 	if (hit.t1 > hit.t2)
+	// 		return(hit);
+
+	// 	norm_temp = vec_x_d(&ray->dir, t - 10 * 1e-6);
+	// 	hit.hit_p = vec_plus(&ray->orig, &norm_temp);
+	// 	hit.hit = 1;
+	// 	//hit = get_hit_cyl(ray, cyl, hit);
+	// 	t_vec3		surf_norm[3];
+	// 	surf_norm[0] = vec_x_d(&ray->dir, -1);
+	// 	surf_norm[1] = vec_plus(&ray->orig, &surf_norm[0]);
+	// 	surf_norm[2] = vec_sub(&surf_norm[1], &cyl->center);
+	// 	hit.surface_norm = vec_normalize(&surf_norm[2]);
+	// }
+	// return (hit);
 }
 
 t_hit					intersect_triangle(t_ray *ray, t_tri *triangle)
