@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 15:07:20 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 16:52:00 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -588,8 +588,8 @@ void				make_scene(t_minirt *minirt)
 	{
 		minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 		mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, current->img, 0, 0);
-		mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
-		mlx_key_hook(minirt->var.win, change_image, minirt);
+		mlx_hook(minirt->var.win, 17, 0, close_button, minirt);
+		mlx_key_hook(minirt->var.win, key_hook, minirt);
 		mlx_loop(minirt->var.mlx);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 15:52:24 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 17:27:41 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,8 +313,9 @@ t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vec_x_d(t_vec3 *v, double x);
 t_vec3		cross_prod(t_vec3 *v1, t_vec3 *v2);
 double		vec_pow(t_vec3 *v);
-int			close_key(int keycode, t_minirt *minirt);
-int			close_button(void);
+int			key_hook(int keycode, t_minirt *minirt);
+int			close_button(t_minirt *minirt);
+void		change_image(t_minirt *minirt);
 void		make_scene(t_minirt *minirt);
 t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
 t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
@@ -331,7 +332,6 @@ t_vec3		apply_matrix(t_matrix matrix, t_vec3	vec3);
 t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
 t_matrix	lookat_matrix(t_vec3 from, t_vec3 to);
 void		create_images(t_minirt *minirt);
-int			change_image(int keycode, t_minirt *minirt);
 void		*ft_memset(void *b, int c, size_t len);
 void		ft_bzero(void *s, size_t n);
 void		*ft_calloc(size_t count, size_t size);

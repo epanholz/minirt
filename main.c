@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 15:19:31 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 17:42:56 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		check_save(char *str)
 {
-	const char	cmp[] = "--save";
+	const char	cmp[6] = "--save";
 	int			i;
 
 	i = 0;
@@ -26,6 +26,24 @@ int		check_save(char *str)
 	}
 	if (i <= 5)
 		return (1);
+	return (0);
+}
+
+int		check_rt(char *str)
+{
+	const char	rt[3] = ".rt";
+	int			len1;
+	int			len2;
+
+	len1 = ft_strlen(str) - 1;
+	len2 = 2;
+	while (len2)
+	{
+		if (str[len1] != rt[len2])
+			return (1);
+		len1--;
+		len2--;
+	}
 	return (0);
 }
 
@@ -62,6 +80,11 @@ int		main(int ac, char **av)
 			minirt->scene.save = 1;
 			printf("\nsaving ..\n\n");
 		}
+		if (check_rt(av[1]) == 1)
+		{
+			printf("Ruuuude .. that's not an .rt file!\n");
+			return (0);
+		}
 		fd = open(av[1], O_RDONLY);
 		buff = read_file(fd, buff);
 		check_map(buff, minirt);
@@ -73,6 +96,5 @@ int		main(int ac, char **av)
 	delete_light_list(&minirt->var.l_head);
 	delete_img_list(&minirt->var.i_head);
 	free(minirt);
-	system("leaks minirt");
 	exit(0);
 }
