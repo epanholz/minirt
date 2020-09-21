@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/18 16:08:42 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 15:07:20 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -521,6 +521,8 @@ void				generate_ray(t_minirt *minirt)
 
 	current = minirt->var.i_head;
 	ray = (t_ray*)malloc(sizeof(t_ray));
+	if (ray == NULL)
+		ft_error(MALLOC);
 	aspect_ratio = minirt->scene.res_x / minirt->scene.res_y;
 	while (current)
 	{
@@ -557,6 +559,7 @@ void				generate_ray(t_minirt *minirt)
 		}
 		current = current->next;
 	}
+	free(ray);
 }
 
 void				make_scene(t_minirt *minirt)
@@ -585,8 +588,6 @@ void				make_scene(t_minirt *minirt)
 	{
 		minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x, minirt->scene.res_y, "Scene Window");
 		mlx_put_image_to_window(minirt->var.mlx, minirt->var.win, current->img, 0, 0);
-		// delete_object_list(&minirt->var.o_head);
-		// delete_cam_list(&minirt->var.c_head);
 		mlx_hook(minirt->var.win, 17, 0L, close_button, minirt);
 		mlx_key_hook(minirt->var.win, change_image, minirt);
 		mlx_loop(minirt->var.mlx);

@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 14:38:58 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/21 14:16:33 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 15:22:17 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		check_arg(char *arg, int p, t_minirt *minirt)
 	else if (arg[p] == 'A' && arg[p + 1] == ' ')
 		get_ambient_light(arg, p + 1, minirt);
 	else if (arg[p] == 'c' && arg[p + 1] == ' ')
-		add_camera(&minirt->var.c_head, get_camera(arg, p + 1, minirt));
+		add_cam(&minirt->var.c_head, get_camera(arg, p + 1, minirt));
 	else if (arg[p] == 'l' && arg[p + 1] == ' ')
 		add_light(&minirt->var.l_head, get_light(arg, p + 1, minirt));
 	else if (arg[p] == 'p' && arg[p + 1] == 'l' && arg[p + 2] == ' ')

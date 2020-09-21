@@ -1,54 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   object_list.c                                      :+:    :+:            */
+/*   scene_lists.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
+/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 15:37:18 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/09/16 14:50:17 by pani_zino     #+#    #+#                 */
+/*   Updated: 2020/09/21 15:42:23 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	make_obj_head(t_object_list **head)
+void	make_light_head(t_light_list **head)
 {
-	t_object_list *new_head;
+	t_light_list *new_head;
 
-	new_head = (t_object_list*)malloc(sizeof(t_object_list));
+	new_head = (t_light_list*)malloc(sizeof(t_light_list));
 	if (new_head == NULL)
 		ft_error(MALLOC);
-	new_head->object_type = 0;
-	new_head->scene_object = NULL;
+	new_head->light_index = 0;
+	new_head->light = NULL;
 	new_head->next = NULL;
 	*head = new_head;
 }
 
-void	add_object(t_object_list **head, int type, void *scene)
+void	add_light(t_light_list **head, t_light *light)
 {
-	t_object_list	*newnode;
-	t_object_list	*current;
+	static int		index;
+	t_light_list	*newnode;
+	t_light_list	*current;
 
+	index++;
 	current = *head;
-	if (current->scene_object == NULL)
-		*current = (t_object_list){type, scene, NULL};
+	if (current->light == NULL)
+		*current = (t_light_list){index, light, NULL};
 	else
 	{
-		newnode = (t_object_list*)malloc(sizeof(t_object_list));
+		newnode = (t_light_list*)malloc(sizeof(t_light_list));
 		if (newnode == NULL)
 			ft_error(MALLOC);
-		*newnode = (t_object_list){type, scene, NULL};
+		*newnode = (t_light_list){index, light, NULL};
 		while (current->next != NULL)
 			current = current->next;
 		current->next = newnode;
 	}
 }
 
-void	delete_object_list(t_object_list **head)
+void	delete_light_list(t_light_list **head)
 {
-	t_object_list *current;
-	t_object_list *next;
+	t_light_list *current;
+	t_light_list *next;
 
 	current = *head;
 	while (current != NULL)

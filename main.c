@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 14:16:25 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 15:19:31 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ int		main(int ac, char **av)
 	}
 	else
 		printf("\nError\nWrong input duh ..\n\n");
-	//delete_cam_list(&minirt->var.c_head);	
-	// delete_object_list(&minirt->var.o_head);
-	// delete_light_list(&minirt->var.l_head);
-	// delete_img_list(&minirt->var.i_head);
-	//free(minirt);
-	//system("leaks minirt");
+	delete_cam_list(&minirt->var.c_head);	
+	delete_object_list(&minirt->var.o_head);
+	delete_light_list(&minirt->var.l_head);
+	delete_img_list(&minirt->var.i_head);
+	free(minirt);
+	system("leaks minirt");
 	exit(0);
 }

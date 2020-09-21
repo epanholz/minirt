@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 13:40:39 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 15:52:24 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ typedef	struct		s_matrix
 
 typedef struct		s_object_list
 {
-	int				index;
 	int				object_type;
 	void			*scene_object;
 	void			*next;
@@ -293,10 +292,9 @@ void		check_cylinder(char *s, int p, t_minirt *m);
 void		check_triangle(char *s, int p, t_minirt *m);
 void		make_obj_head(t_object_list **head);
 void		add_object(t_object_list **head, int type, void *scene);
-void		remove_object_node(t_object_list **head, int type);
 void 		delete_object_list(t_object_list **head);
 void		make_cam_head(t_camera_list **head);
-void		add_camera(t_camera_list **head, t_cam *cam);
+void		add_cam(t_camera_list **head, t_cam *cam);
 void		make_img_head(t_img_list **head);
 void		add_img(t_img_list **head, void	*image, char *address);
 void		delete_img_list(t_img_list **head);
@@ -304,9 +302,7 @@ void		make_light_head(t_light_list **head);
 void		add_light(t_light_list **head, t_light *light);
 void 		delete_cam_list(t_camera_list **head);
 void		delete_light_list(t_light_list **head);
-t_sph		*return_sphere(t_minirt *minirt);
 t_cam		*return_cam(t_minirt *minirt, int index);
-t_light		*return_light(t_minirt *minirt, int index);
 void		traverse_cam_list(t_camera_list **head);
 void		traverse_light_list(t_light_list **head);
 void		traverse_img_list(t_img_list **head);
@@ -316,7 +312,6 @@ t_vec3		vec_sub(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_normalize(t_vec3 *vec3);
 t_vec3 		vec_x_d(t_vec3 *v, double x);
 t_vec3		cross_prod(t_vec3 *v1, t_vec3 *v2);
-double		vec_magnitude(t_vec3 v1, t_vec3 v2);
 double		vec_pow(t_vec3 *v);
 int			close_key(int keycode, t_minirt *minirt);
 int			close_button(void);

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/29 21:09:16 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 14:16:20 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 15:36:20 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,16 @@ void	add_img(t_img_list **head, void *image, char *address)
 	index++;
 	current = *head;
 	if (current->img == NULL)
-	{
-		current->img_index = index;
-		current->img = image;
-		current->addr = address;
-		current->next = NULL;
-	}
+		*current = (t_img_list){index, image, address, NULL};
 	else
 	{
-	newnode = (t_img_list*)malloc(sizeof(t_img_list));
-	if (newnode == NULL)
-		ft_error(MALLOC);
-	newnode->img_index = index;
-	newnode->img = image;
-	newnode->addr = address;
-	newnode->next = NULL;
-	while (current->next != NULL)
-		current = current->next;
-	current->next = newnode;
+		newnode = (t_img_list*)malloc(sizeof(t_img_list));
+		if (newnode == NULL)
+			ft_error(MALLOC);
+		*newnode = (t_img_list){index, image, address, NULL};
+		while (current->next != NULL)
+			current = current->next;
+		current->next = newnode;
 	}
 }
 
