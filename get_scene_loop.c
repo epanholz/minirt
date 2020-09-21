@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 14:38:58 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 14:39:44 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 14:16:33 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void		check_map(char *map, t_minirt *minirt)
 	int				index;
 
 	index = 0;
-	make_obj_head(&minirt->var.o_head);
 	make_cam_head(&minirt->var.c_head);
+	make_obj_head(&minirt->var.o_head);
 	make_img_head(&minirt->var.i_head);
 	make_light_head(&minirt->var.l_head);
 	while (map[index])

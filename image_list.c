@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/29 21:09:16 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/16 14:53:06 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 14:16:20 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ void	add_img(t_img_list **head, void *image, char *address)
 	t_img_list		*current;
 
 	index++;
+	current = *head;
+	if (current->img == NULL)
+	{
+		current->img_index = index;
+		current->img = image;
+		current->addr = address;
+		current->next = NULL;
+	}
+	else
+	{
 	newnode = (t_img_list*)malloc(sizeof(t_img_list));
 	if (newnode == NULL)
 		ft_error(MALLOC);
@@ -40,15 +50,25 @@ void	add_img(t_img_list **head, void *image, char *address)
 	newnode->img = image;
 	newnode->addr = address;
 	newnode->next = NULL;
-	current = *head;
-	if (current->img == NULL)
-		*head = newnode;
-	else
-	{
-		while (current->next != NULL)
-			current = current->next;
-		current->next = newnode;
+	while (current->next != NULL)
+		current = current->next;
+	current->next = newnode;
 	}
+}
+
+void	delete_img_list(t_img_list **head)
+{
+	t_img_list *current;
+	t_img_list *next;
+
+	current = *head;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*head = NULL;
 }
 
 void	create_images(t_minirt *minirt)

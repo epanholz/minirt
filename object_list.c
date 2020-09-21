@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/10 20:20:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/16 14:49:52 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 14:15:17 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,24 @@ void	add_object(t_object_list **head, int type, void *scene)
 	t_object_list	*newnode;
 	t_object_list	*current;
 
+	current = *head;
+	if (current->scene_object == NULL)
+	{
+		current->object_type = type;
+		current->scene_object = scene;
+		current->next = NULL;
+	}
+	else
+	{
 	newnode = (t_object_list*)malloc(sizeof(t_object_list));
 	if (newnode == NULL)
 		ft_error(MALLOC);
 	newnode->object_type = type;
 	newnode->scene_object = scene;
 	newnode->next = NULL;
-	current = *head;
-	if (current->scene_object == NULL)
-		*head = newnode;
-	else
-	{
-		while (current->next != NULL)
-			current = current->next;
-		current->next = newnode;
+	while (current->next != NULL)
+		current = current->next;
+	current->next = newnode;
 	}
 }
 

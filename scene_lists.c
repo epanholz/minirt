@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   list_scene.c                                       :+:    :+:            */
+/*   scene_lists.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 14:50:17 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 14:50:48 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/21 14:13:41 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	delete_cam_list(t_camera_list **head)
 {
-	t_camera_list *current;
-	t_camera_list *next;
+	t_camera_list *new;
+	t_camera_list *temp;
 
-	current = *head;
-	while (current != NULL)
+	new = *head;
+	while (new != NULL)
 	{
-		next = current->next;
-		free(current);
-		current = next;
+		temp = new;
+		new = new->next;
+		free(temp);
 	}
 	*head = NULL;
 }
@@ -47,17 +47,21 @@ void	add_camera(t_camera_list **head, t_cam *cam)
 	t_camera_list	*current;
 
 	index++;
-	newnode = (t_camera_list*)malloc(sizeof(t_camera_list));
-	if (newnode == NULL)
-		ft_error(MALLOC);
-	newnode->cam_index = index;
-	newnode->cam = cam;
-	newnode->next = NULL;
 	current = *head;
 	if (current->cam == NULL)
-		*head = newnode;
+	{
+		current->cam_index = index;
+		current->cam = cam;
+		current->next = NULL;
+	}
 	else
 	{
+		newnode = (t_camera_list*)malloc(sizeof(t_camera_list));
+		if (newnode == NULL)
+			ft_error(MALLOC);
+		newnode->cam_index = index;
+		newnode->cam = cam;
+		newnode->next = NULL;
 		while (current->next != NULL)
 			current = current->next;
 		current->next = newnode;
@@ -84,19 +88,40 @@ void	add_light(t_light_list **head, t_light *light)
 	t_light_list	*current;
 
 	index++;
+	current = *head;
+	if (current->light == NULL)
+	{
+		current->light_index = index;
+		current->light = light;
+		current->next = NULL;
+	}
+	else
+	{
 	newnode = (t_light_list*)malloc(sizeof(t_light_list));
 	if (newnode == NULL)
 		ft_error(MALLOC);
 	newnode->light_index = index;
 	newnode->light = light;
 	newnode->next = NULL;
-	current = *head;
-	if (current->light == NULL)
-		*head = newnode;
-	else
-	{
-		while (current->next != NULL)
-			current = current->next;
-		current->next = newnode;
+	while (current->next != NULL)
+		current = current->next;
+	current->next = newnode;
 	}
 }
+
+void	delete_light_list(t_light_list **head)
+{
+	t_light_list *current;
+	t_light_list *next;
+
+	current = *head;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*head = NULL;
+}
+
+
