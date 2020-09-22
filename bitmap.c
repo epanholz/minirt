@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 10:20:45 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 10:21:20 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/22 12:11:27 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,27 @@ t_bitmap	*initialize_bitmap(int width, int heigth)
 	return (bmp);
 }
 
-void		write_file_header(int fd, t_bmp_file_header *file_header)
+int			write_headers(int fd, t_bmp_file *file, t_bmp_info *info)
 {
-	write(fd, &file_header->bitmap_type, 2);
-	write(fd, &file_header->file_size, 4);
-	write(fd, &file_header->reserved1, 2);
-	write(fd, &file_header->reserved2, 2);
-	write(fd, &file_header->offset_bits, 4);
-}
+	int ret;
 
-void		write_info_header(int fd, t_bmp_info_header *info_header)
-{
-	write(fd, &info_header->size_header, 4);
-	write(fd, &info_header->width, 4);
-	write(fd, &info_header->height, 4);
-	write(fd, &info_header->planes, 2);
-	write(fd, &info_header->bit_count, 2);
-	write(fd, &info_header->compression, 4);
-	write(fd, &info_header->image_size, 4);
-	write(fd, &info_header->ppm_x, 4);
-	write(fd, &info_header->ppm_y, 4);
-	write(fd, &info_header->clr_used, 4);
-	write(fd, &info_header->clr_important, 4);
+	ret = write(fd, &file->bitmap_type, 2);
+	ret += write(fd, &file->file_size, 4);
+	ret += write(fd, &file->reserved1, 2);
+	ret += write(fd, &file->reserved2, 2);
+	ret += write(fd, &file->offset_bits, 4);
+	ret += write(fd, &info->size_header, 4);
+	ret += write(fd, &info->width, 4);
+	ret += write(fd, &info->height, 4);
+	ret += write(fd, &info->planes, 2);
+	ret += write(fd, &info->bit_count, 2);
+	ret += write(fd, &info->compression, 4);
+	ret += write(fd, &info->image_size, 4);
+	ret += write(fd, &info->ppm_x, 4);
+	ret += write(fd, &info->ppm_y, 4);
+	ret += write(fd, &info->clr_used, 4);
+	ret += write(fd, &info->clr_important, 4);
+	return (ret);
 }
 
 int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr)
@@ -78,18 +77,20 @@ int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr)
 	return (1);
 }
 
-int			write_bitmap_to_file(t_bitmap *bmp)
+void		write_bitmap(t_minirt *minirt, char *img_addr)
 {
-	int fd;
-	int	ret;
+	int			fd;
+	t_bitmap	*bmp;
 
-	ret = 1;
+	bmp = initialize_bitmap(minirt->scene.res_x, minirt->scene.res_y);
+	fill_bmp_buff(bmp, minirt, img_addr);
 	fd = open("UwU.bmp", O_WRONLY | O_CREAT, 0644);
-	write_file_header(fd, &bmp->file);
-	write_info_header(fd, &bmp->info);
+	if (fd < 0)
+		ft_error(OPEN);
+	if (write_headers(fd, &bmp->file, &bmp->info) != 54)
+		ft_error(WRITE);
 	write(fd, bmp->buff, (size_t)bmp->info.width * bmp->info.height * 4);
 	close(fd);
 	free(bmp->buff);
 	free(bmp);
-	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/03 17:48:19 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/10 12:35:15 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/22 12:17:26 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ char	*read_file(int fd, char *temp)
 	char	buff[1024 + 1];
 	int		bytes_read;
 
+	if (fd < 0)
+		ft_error(OPEN);
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{

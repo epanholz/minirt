@@ -1,0 +1,118 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   intersect_cylinder.c                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2020/09/22 15:58:28 by pani_zino     #+#    #+#                 */
+/*   Updated: 2020/09/22 16:28:05 by pani_zino     ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
+
+t_hit			solve_quadratic(double a, double b, double c, t_hit hit)
+{
+	double discr;
+
+	discr = b * b - 4 * a * c;
+	if (discr < 0)
+		return (hit);
+	else if (discr == 0)
+	{
+		hit.hit = 1;
+		hit.t1 = -b / (2 * a);
+	}
+	else if (discr > 0)
+	{
+		hit.hit = 1;
+		hit.t1 = (-b + sqrt(discr)) / (2 * a);
+		hit.t2 = (-b - sqrt(discr)) / (2 * a);
+	}
+	return (hit);
+}
+
+void			find_hit_cyl(t_ray *ray, t_cyl *cyl,
+					t_hit *hit, t_cyl_utils utils)
+{
+	double	ret;
+	t_vec3	surf_norm[3];
+	t_vec3	temp;
+
+	ret = INFINITY;
+	if (hit->t1 > 1e-6 && utils.dot1 > 0.0 && utils.dot2 < 0.0)
+		ret = hit->t1;
+	if (hit->t2 > 1e-6 && utils.dot3 > 0.0 && utils.dot4 < 0.0)
+	{
+		if (ret != INFINITY)
+			ret = fmin(hit->t1, hit->t2);
+		else
+			ret = hit->t2;
+	}
+	if (ret > 1e-6)
+	{
+		hit->t1 = ret;
+		surf_norm[0] = vec_x_d(&ray->dir, -1);
+		surf_norm[1] = vec_plus(&ray->orig, &surf_norm[0]);
+		surf_norm[2] = vec_sub(&surf_norm[1], &cyl->center);
+		hit->surface_norm = vec_normalize(&surf_norm[2]);
+	}
+	temp = vec_x_d(&ray->dir, hit->t1 - 10 * 1e-6);
+	hit->hit_p = vec_plus(&ray->orig, &temp);
+	hit->object = CYL;
+}
+
+t_cyl_utils		get_utils(t_ray *ray, t_cyl *cyl, t_hit hit)
+{
+	t_cyl_utils	utils;
+	t_vec3		temp1;
+	t_vec3		dot_temp[3];
+	t_vec3		base[2];
+
+	temp1 = vec_x_d(&cyl->norm_vec, cyl->height / 2);
+	base[0] = vec_sub(&cyl->center, &temp1);
+	base[1] = vec_plus(&cyl->center, &temp1);
+	dot_temp[0] = vec_x_d(&ray->dir, hit.t1);
+	dot_temp[1] = vec_plus(&ray->orig, &dot_temp[0]);
+	dot_temp[2] = vec_sub(&dot_temp[1], &base[0]);
+	utils.dot1 = vec_dot(&cyl->norm_vec, &dot_temp[2]);
+	dot_temp[2] = vec_sub(&dot_temp[1], &base[1]);
+	utils.dot2 = vec_dot(&cyl->norm_vec, &dot_temp[2]);
+	dot_temp[0] = vec_x_d(&ray->dir, hit.t2);
+	dot_temp[1] = vec_plus(&ray->orig, &dot_temp[0]);
+	dot_temp[2] = vec_sub(&dot_temp[1], &base[0]);
+	utils.dot3 = vec_dot(&cyl->norm_vec, &dot_temp[2]);
+	dot_temp[2] = vec_sub(&dot_temp[1], &base[1]);
+	utils.dot4 = vec_dot(&cyl->norm_vec, &dot_temp[2]);
+	return (utils);
+}
+
+t_hit			intersect_cylinder(t_ray *ray, t_cyl *cyl)
+{
+	t_hit		hit;
+	t_cyl_utils	utils;
+	t_vec3		temp[5];
+	double		dot[2];
+	double		abc[3];
+
+	hit = init_hit();
+	hit.col = (t_color){cyl->r, cyl->g, cyl->b};
+	if (vec_pow(&cyl->norm_vec) != 0)
+		cyl->norm_vec = vec_normalize(&cyl->norm_vec);
+	temp[4] = vec_sub(&ray->orig, &cyl->center);
+	dot[0] = vec_dot(&ray->dir, &cyl->norm_vec);
+	temp[0] = vec_x_d(&cyl->norm_vec, dot[0]);
+	dot[1] = vec_dot(&temp[4], &cyl->norm_vec);
+	temp[1] = vec_x_d(&cyl->norm_vec, dot[1]);
+	temp[2] = vec_sub(&ray->dir, &temp[0]);
+	abc[0] = vec_pow(&temp[2]);
+	temp[3] = vec_sub(&temp[4], &temp[1]);
+	abc[1] = 2.0 * vec_dot(&temp[2], &temp[3]);
+	abc[2] = vec_pow(&temp[3]) - ((cyl->diameter / 2) * (cyl->diameter / 2));
+	hit = solve_quadratic(abc[0], abc[1], abc[2], hit);
+	utils = get_utils(ray, cyl, hit);
+	if (hit.hit == 1)
+		find_hit_cyl(ray, cyl, &hit, utils);
+	return (hit);
+}

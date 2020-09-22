@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 17:42:56 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/22 12:26:45 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,19 @@ int		main(int ac, char **av)
 		if (ac == 3)
 		{
 			if (check_save(av[2]) == 1)
-			{
-				printf("Error\nWrong second argument!\n");
-				return (0);
-			}
+				ft_error(ARG);
 			minirt->scene.save = 1;
-			printf("\nsaving ..\n\n");
+			write(1, "\n𝚜𝚊𝚟𝚒𝚗𝚐 𝚋𝚒𝚝𝚖𝚊𝚙 ..\n\n", 56);
 		}
 		if (check_rt(av[1]) == 1)
-		{
-			printf("Ruuuude .. that's not an .rt file!\n");
-			return (0);
-		}
+			ft_error(RT);
 		fd = open(av[1], O_RDONLY);
 		buff = read_file(fd, buff);
 		check_map(buff, minirt);
 	}
 	else
-		printf("\nError\nWrong input duh ..\n\n");
-	delete_cam_list(&minirt->var.c_head);	
+		ft_error(INPUT);
+	delete_cam_list(&minirt->var.c_head);
 	delete_object_list(&minirt->var.o_head);
 	delete_light_list(&minirt->var.l_head);
 	delete_img_list(&minirt->var.i_head);

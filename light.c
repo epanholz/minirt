@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/17 11:24:04 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/22 15:15:45 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void		calc_color(t_minirt *m, t_hit *hit)
 		dir = vec_sub(&current->light->light_point, &hit->hit_p);
 		ray.dir = vec_normalize(&dir);
 		ray.orig = hit->hit_p;
+		hit->hit = 1;
 		find_hit_light(m, &ray, sqrt(vec_dot(&dir, &dir) - 10 * 1e-6), hit);
 		if (hit->hit == 0)
 			amb = col_add(amb,

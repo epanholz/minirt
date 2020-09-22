@@ -6,19 +6,9 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/21 17:27:41 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/22 17:29:29 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
-/* 
-MY FILES
-main.c 
-read_file.c 
-get_scene.c 
-check_scene.c
-check_scene_utils.c 
-object_list.c 
-*/
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -39,25 +29,25 @@ typedef enum		e_type
 
 typedef enum		e_error
 {
-	INVAL, MALLOC, READ
+	INVAL, MALLOC, READ, WRITE, OPEN,
+	ARG, RT, INPUT
 }					t_error;
 
 typedef enum		e_objects
 {
-	CAM = 1, LIGHT, PLA, SPH,
-	SQU, CYL, TRI
+	PLA = 1, SPH, SQU, CYL, TRI
 }					t_objects;
 
-typedef struct	s_bmp_file_header 
+typedef struct	s_bmp_file 
 {
-    unsigned char	bitmap_type;     // 2 bytes
+    unsigned char	bitmap_type;    	// 2 bytes
     int             file_size;          // 4 bytes
     short           reserved1;          // 2 bytes
     short           reserved2;          // 2 bytes
     unsigned int    offset_bits;        // 4 bytes
-}				t_bmp_file_header;
+}				t_bmp_file;
 
-typedef	struct	s_bmp_info_header
+typedef	struct	s_bmp_info
 {
     unsigned int    size_header;        // 4 bytes
     unsigned int    width;              // 4 bytes
@@ -70,13 +60,13 @@ typedef	struct	s_bmp_info_header
     unsigned int    ppm_y;              // 4 bytes
     unsigned int    clr_used;           // 4 bytes
     unsigned int    clr_important;      // 4 bytes
-}				t_bmp_info_header;
+}				t_bmp_info;
 
 typedef struct	s_bitmap
 {
-	t_bmp_file_header	file;
-	t_bmp_info_header	info;
-	void				*buff;
+	t_bmp_file	file;
+	t_bmp_info	info;
+	void		*buff;
 }				t_bitmap;
 
 
@@ -87,9 +77,20 @@ typedef	struct		s_vec3
 	double			z;
 }					t_vec3;
 
-typedef struct		s_ray{
-        t_vec3 orig;
-        t_vec3 dir;
+typedef struct		s_ray_utils
+{
+	double			asp_rat;
+	int				pixy;
+	int				pixx;
+	double			camy;
+	double			camx;
+}					t_ray_utils;
+
+typedef struct		s_ray
+{
+        t_vec3		orig;
+        t_vec3		dir;
+		t_ray_utils	u;
 }					t_ray;
 
 typedef struct		s_color
@@ -225,6 +226,48 @@ typedef struct  	s_utils
 	int				sign;
 }               	t_utils;
 
+typedef struct		s_cyl_utils
+{
+	double			dot1;
+	double			dot2;
+	double			dot3;
+	double			dot4;
+}					t_cyl_utils;
+
+typedef struct		s_tri_utils
+{
+	t_vec3		norm_temp;
+	t_vec3		A;
+	t_vec3		B;
+	t_vec3		N;
+	t_vec3		edge0;
+	t_vec3		edge1;
+	t_vec3		edge2;
+	t_vec3		C0;
+	t_vec3		C1;
+	t_vec3		C2;
+	t_vec3		temp;
+	t_vec3		p;
+	t_vec3		t0;
+	t_vec3		t1;
+	t_vec3		t2;
+	double		t;
+	double		D;
+}					t_tri_utils;
+
+typedef struct		s_squ_utils
+{
+	t_vec3		v0;
+	t_vec3		v1;
+	t_vec3		v2;
+	t_vec3		v3;
+	t_vec3		temp1;
+	t_vec3		temp2;
+	t_tri		t1;
+	t_tri		t2;
+	double		r;
+}					t_squ_utils;
+
 typedef struct 		s_scene 
 {
 	int				res;
@@ -317,6 +360,8 @@ int			key_hook(int keycode, t_minirt *minirt);
 int			close_button(t_minirt *minirt);
 void		change_image(t_minirt *minirt);
 void		make_scene(t_minirt *minirt);
+t_hit		init_hit(void);
+t_hit		solve_quadratic(double a, double b, double c, t_hit hit);
 t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
 t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
 t_hit		intersect_plane(t_ray *ray, t_pla *plane);
@@ -337,7 +382,7 @@ void		ft_bzero(void *s, size_t n);
 void		*ft_calloc(size_t count, size_t size);
 t_bitmap	*initialize_bitmap(int width, int heigth);
 int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
-int			write_bitmap_to_file(t_bitmap *bmp);
+void		write_bitmap(t_minirt *minirt, char *img_addr);
 
 
 #endif
