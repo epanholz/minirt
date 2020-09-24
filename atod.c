@@ -6,13 +6,13 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 14:11:17 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 14:12:03 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:12:23 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void		ft_atod_check(char *s, t_minirt *m, int mod)
+static void		ft_atod_check(char *s, t_minirt *m, int mod)
 {
 	int i;
 
@@ -31,7 +31,7 @@ void		ft_atod_check(char *s, t_minirt *m, int mod)
 		ft_error(INVAL);
 }
 
-double		ft_atod(char *s, t_minirt *m, int mod)
+double			ft_atod(char *s, t_minirt *m, int mod)
 {
 	double	ret;
 	double	x;
@@ -60,7 +60,7 @@ double		ft_atod(char *s, t_minirt *m, int mod)
 	return (s[m->utils.sign] == '-' ? -1 * (ret + x) : ret + x);
 }
 
-double		ft_atod_loop(char *s, t_minirt *m, int mod)
+double			ft_atod_loop(char *s, t_minirt *m, int mod)
 {
 	double	ret;
 

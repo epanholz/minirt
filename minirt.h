@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/24 13:59:31 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 15:11:56 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,7 +363,6 @@ int			close_button(t_minirt *minirt);
 void		change_image(t_minirt *minirt);
 void		make_scene(t_minirt *minirt);
 t_hit		init_hit(void);
-t_hit		solve_quadratic(double a, double b, double c, t_hit hit);
 t_hit		intersect_sphere(t_ray *ray, t_sph *sphere);
 t_hit		intersect_triangle(t_ray *ray, t_tri *triangle);
 t_hit		intersect_plane(t_ray *ray, t_pla *plane);
@@ -371,10 +370,7 @@ t_hit		intersect_square(t_ray *ray, t_squ *square);
 t_hit		intersect_cylinder(t_ray *ray, t_cyl *cyl);
 t_hit		find_hit(t_minirt *minirt, t_ray *ray);
 void		find_hit_light(t_minirt *minirt, t_ray *ray, double l, t_hit *hit_p);
-void		find_hit_light2(t_minirt *minirt, t_ray *ray, t_hit *hit_p);
 void		calc_color(t_minirt *minirt, t_hit *hit);
-t_color		apply_color(t_color c1, t_color c2, double	ratio);
-void		generate_ray(t_minirt *minirt);
 t_vec3		apply_matrix(t_matrix matrix, t_vec3	vec3);
 t_vec3		setcam(t_vec3 from, t_vec3 to, t_vec3 norm_vec);
 t_matrix	lookat_matrix(t_vec3 from, t_vec3 to);
@@ -382,8 +378,6 @@ void		create_images(t_minirt *minirt);
 void		*ft_memset(void *b, int c, size_t len);
 void		ft_bzero(void *s, size_t n);
 void		*ft_calloc(size_t count, size_t size);
-t_bitmap	*initialize_bitmap(int width, int heigth);
-int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr);
 void		write_bitmap(t_minirt *minirt, char *img_addr);
 
 

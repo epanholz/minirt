@@ -6,13 +6,13 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 10:20:45 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 12:11:27 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:14:43 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_bitmap	*initialize_bitmap(int width, int heigth)
+static t_bitmap		*initialize_bitmap(int width, int heigth)
 {
 	t_bitmap	*bmp;
 
@@ -29,7 +29,7 @@ t_bitmap	*initialize_bitmap(int width, int heigth)
 	return (bmp);
 }
 
-int			write_headers(int fd, t_bmp_file *file, t_bmp_info *info)
+static int			write_headers(int fd, t_bmp_file *file, t_bmp_info *info)
 {
 	int ret;
 
@@ -52,7 +52,8 @@ int			write_headers(int fd, t_bmp_file *file, t_bmp_info *info)
 	return (ret);
 }
 
-int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr)
+static int			fill_bmp_buff(t_bitmap *bmp,
+						t_minirt *minirt, char *img_addr)
 {
 	void	*buff;
 	int		y;
@@ -77,7 +78,7 @@ int			fill_bmp_buff(t_bitmap *bmp, t_minirt *minirt, char *img_addr)
 	return (1);
 }
 
-void		write_bitmap(t_minirt *minirt, char *img_addr)
+void				write_bitmap(t_minirt *minirt, char *img_addr)
 {
 	int			fd;
 	t_bitmap	*bmp;

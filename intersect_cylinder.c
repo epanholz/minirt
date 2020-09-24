@@ -6,13 +6,13 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 15:58:28 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 16:28:05 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:22:31 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_hit			solve_quadratic(double a, double b, double c, t_hit hit)
+static t_hit			solve_quadratic(double a, double b, double c, t_hit hit)
 {
 	double discr;
 
@@ -33,8 +33,8 @@ t_hit			solve_quadratic(double a, double b, double c, t_hit hit)
 	return (hit);
 }
 
-void			find_hit_cyl(t_ray *ray, t_cyl *cyl,
-					t_hit *hit, t_cyl_utils utils)
+static void				find_hit_cyl(t_ray *ray, t_cyl *cyl,
+							t_hit *hit, t_cyl_utils utils)
 {
 	double	ret;
 	t_vec3	surf_norm[3];
@@ -63,7 +63,7 @@ void			find_hit_cyl(t_ray *ray, t_cyl *cyl,
 	hit->object = CYL;
 }
 
-t_cyl_utils		get_utils(t_ray *ray, t_cyl *cyl, t_hit hit)
+static t_cyl_utils		get_utils(t_ray *ray, t_cyl *cyl, t_hit hit)
 {
 	t_cyl_utils	utils;
 	t_vec3		temp1;
@@ -88,7 +88,7 @@ t_cyl_utils		get_utils(t_ray *ray, t_cyl *cyl, t_hit hit)
 	return (utils);
 }
 
-t_hit			intersect_cylinder(t_ray *ray, t_cyl *cyl)
+t_hit					intersect_cylinder(t_ray *ray, t_cyl *cyl)
 {
 	t_hit		hit;
 	t_cyl_utils	utils;

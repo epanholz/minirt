@@ -6,13 +6,13 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 14:29:40 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 17:32:44 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:24:13 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_tri_utils		get_tri_variables(t_ray *ray, t_tri *tri)
+static t_tri_utils		get_tri_variables(t_ray *ray, t_tri *tri)
 {
 	t_tri_utils	utils;
 
@@ -37,7 +37,7 @@ t_tri_utils		get_tri_variables(t_ray *ray, t_tri *tri)
 	return (utils);
 }
 
-t_hit			intersect_triangle(t_ray *ray, t_tri *tri)
+t_hit					intersect_triangle(t_ray *ray, t_tri *tri)
 {
 	t_hit		hit;
 	t_tri_utils	utils;

@@ -6,13 +6,13 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 14:40:21 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 15:06:24 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 15:10:01 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	render(t_minirt *minirt, t_ray *ray)
+static void		render(t_minirt *minirt, t_ray *ray)
 {
 	t_hit	hit;
 
@@ -28,7 +28,7 @@ void	render(t_minirt *minirt, t_ray *ray)
 			rgbt(0, 0, 0, 0));
 }
 
-void	shoot_ray(t_minirt *minirt, t_ray *ray, t_cam *cam)
+static void		shoot_ray(t_minirt *minirt, t_ray *ray, t_cam *cam)
 {
 	while (ray->u.pixy < minirt->scene.res_y)
 	{
@@ -50,7 +50,7 @@ void	shoot_ray(t_minirt *minirt, t_ray *ray, t_cam *cam)
 	}
 }
 
-void	generate_ray(t_minirt *minirt)
+static void		generate_ray(t_minirt *minirt)
 {
 	t_cam			*cam;
 	t_ray			*ray;
@@ -77,7 +77,7 @@ void	generate_ray(t_minirt *minirt)
 	free(ray);
 }
 
-void	make_scene(t_minirt *minirt)
+void			make_scene(t_minirt *minirt)
 {
 	t_img_list	*current;
 	int			x;

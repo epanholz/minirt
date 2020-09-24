@@ -6,13 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/24 13:58:37 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:08:38 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int		check_save(char *str)
+static int		check_save(char *str)
 {
 	const char	cmp[6] = "--save";
 	int			i;
@@ -29,7 +29,7 @@ int		check_save(char *str)
 	return (0);
 }
 
-int		check_rt(char *str)
+static int		check_rt(char *str)
 {
 	const char	rt[3] = ".rt";
 	int			len1;
@@ -47,7 +47,7 @@ int		check_rt(char *str)
 	return (0);
 }
 
-void	init_minirt(t_minirt *minirt)
+static void		init_minirt(t_minirt *minirt)
 {
 	minirt->scene.res = 0;
 	minirt->scene.save = 0;
@@ -59,7 +59,7 @@ void	init_minirt(t_minirt *minirt)
 	minirt->var.l_head = NULL;
 }
 
-void	delete_lists(t_minirt *minirt)
+static void		delete_lists(t_minirt *minirt)
 {
 	delete_cam_list(&minirt->var.c_head);
 	delete_object_list(&minirt->var.o_head);
@@ -67,7 +67,7 @@ void	delete_lists(t_minirt *minirt)
 	delete_img_list(&minirt->var.i_head);
 }
 
-int		main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	t_minirt	*minirt;
 

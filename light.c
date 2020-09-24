@@ -6,13 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/22 15:15:45 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:25:04 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_color		col_add(t_color c1, t_color c2)
+static t_color		col_add(t_color c1, t_color c2)
 {
 	c1.r += c2.r;
 	c1.g += c2.g;
@@ -20,7 +20,7 @@ t_color		col_add(t_color c1, t_color c2)
 	return (c1);
 }
 
-t_color		apply_color(t_color c1, t_color c2, double ratio)
+static t_color		apply_color(t_color c1, t_color c2, double ratio)
 {
 	c1.r *= c2.r * ratio / 255;
 	c1.g *= c2.g * ratio / 255;
@@ -28,7 +28,7 @@ t_color		apply_color(t_color c1, t_color c2, double ratio)
 	return (c1);
 }
 
-t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
+static t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
 {
 	t_color	temp;
 	t_color	light_color;
@@ -53,7 +53,7 @@ t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
 	return (temp);
 }
 
-void		calc_color(t_minirt *m, t_hit *hit)
+void				calc_color(t_minirt *m, t_hit *hit)
 {
 	t_light_list	*current;
 	t_color			amb;

@@ -6,13 +6,13 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 17:12:31 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 17:28:58 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 14:23:49 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_squ_utils		get_squ_utils(t_squ *square, t_matrix c2w)
+static t_squ_utils		get_squ_utils(t_squ *square, t_matrix c2w)
 {
 	t_squ_utils	utils;
 
@@ -32,7 +32,7 @@ t_squ_utils		get_squ_utils(t_squ *square, t_matrix c2w)
 	return (utils);
 }
 
-t_hit			intersect_square(t_ray *ray, t_squ *square)
+t_hit					intersect_square(t_ray *ray, t_squ *square)
 {
 	t_hit		hit[2];
 	t_squ_utils	utils;
