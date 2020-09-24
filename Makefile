@@ -6,14 +6,14 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/09/22 17:39:24 by pani_zino     ########   odam.nl          #
+#    Updated: 2020/09/24 14:00:01 by pani_zino     ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := miniRT
 
 SRC := main.c read_file.c read_file_utils.c get_scene.c check_scene.c check_scene_utils.c \
-	cam_list.c color_utils.c matrix.c atod.c object_list.c intersect_triangle.c intersect_sphere.c \
+	cam_list.c utils.c matrix.c atod.c object_list.c intersect_triangle.c intersect_sphere.c \
 	image_list.c hooks.c light.c bitmap.c check_scene_objects.c get_objects.c error.c \
 	get_scene_loop.c light_list.c render.c render_loop.c intersect_plane.c intersect_cylinder.c \
 	intersect_square.c vector_library1.c vector_library2.c libmlx.dylib\

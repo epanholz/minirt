@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/22 17:29:29 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 13:59:31 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,6 +303,8 @@ typedef	struct		s_minirt
 }					t_minirt;
 
 void		ft_error(int mod);
+void		ft_save(void);
+void		ft_delay(void);
 void        my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int			rgbt(int t, int r, int g, int b);
 int			ft_strlen(char *s);
@@ -310,7 +312,7 @@ void		*ft_memcpy(void *dst, const void *src, size_t n);
 char 		*ft_strjoin(char *s1, char *s2);
 char		*read_file(int fd, char *temp);
 void		check_arg(char *arg, int p, t_minirt *minirt);
-void		check_map(char *map, t_minirt *minirt);
+void		check_scene(char *arg, t_minirt *minirt);
 void		get_res(char *s, int p, t_minirt *m);
 void		get_ambient_light(char *s, int p, t_minirt *m);
 t_cam		*get_camera(char *s, int p, t_minirt *m);

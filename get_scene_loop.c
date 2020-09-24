@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 14:38:58 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/21 15:22:17 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 13:30:48 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,26 @@ void		check_arg(char *arg, int p, t_minirt *minirt)
 		ft_error(INVAL);
 }
 
-void		check_map(char *map, t_minirt *minirt)
+void		check_scene(char *arg, t_minirt *minirt)
 {
-	int				index;
+	int			index;
+	int			fd;
+	char		*scene;
 
 	index = 0;
+	scene = NULL;
+	fd = open(arg, O_RDONLY);
+	scene = read_file(fd, scene);
 	make_cam_head(&minirt->var.c_head);
 	make_obj_head(&minirt->var.o_head);
 	make_img_head(&minirt->var.i_head);
 	make_light_head(&minirt->var.l_head);
-	while (map[index])
+	while (scene[index])
 	{
-		check_arg(map, index, minirt);
-		while (map[index] && map[index] != '\n')
+		check_arg(scene, index, minirt);
+		while (scene[index] && scene[index] != '\n')
 			index++;
-		while (map[index] && map[index] == '\n')
+		while (scene[index] && scene[index] == '\n')
 			index++;
 		minirt->utils.i = 0;
 	}

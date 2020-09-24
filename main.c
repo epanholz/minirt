@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/22 12:26:45 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/24 13:58:37 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,20 @@ void	init_minirt(t_minirt *minirt)
 	minirt->var.l_head = NULL;
 }
 
+void	delete_lists(t_minirt *minirt)
+{
+	delete_cam_list(&minirt->var.c_head);
+	delete_object_list(&minirt->var.o_head);
+	delete_light_list(&minirt->var.l_head);
+	delete_img_list(&minirt->var.i_head);
+}
+
 int		main(int ac, char **av)
 {
 	t_minirt	*minirt;
-	int			fd;
-	char		*buff;
 
 	minirt = (t_minirt*)malloc(sizeof(t_minirt));
 	init_minirt(minirt);
-	buff = NULL;
 	if (ac == 3 || ac == 2)
 	{
 		if (ac == 3)
@@ -75,20 +80,15 @@ int		main(int ac, char **av)
 			if (check_save(av[2]) == 1)
 				ft_error(ARG);
 			minirt->scene.save = 1;
-			write(1, "\n𝚜𝚊𝚟𝚒𝚗𝚐 𝚋𝚒𝚝𝚖𝚊𝚙 ..\n\n", 56);
+			ft_save();
 		}
 		if (check_rt(av[1]) == 1)
 			ft_error(RT);
-		fd = open(av[1], O_RDONLY);
-		buff = read_file(fd, buff);
-		check_map(buff, minirt);
+		check_scene(av[1], minirt);
 	}
 	else
 		ft_error(INPUT);
-	delete_cam_list(&minirt->var.c_head);
-	delete_object_list(&minirt->var.o_head);
-	delete_light_list(&minirt->var.l_head);
-	delete_img_list(&minirt->var.i_head);
+	delete_lists(minirt);
 	free(minirt);
 	exit(0);
 }
