@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/07/15 20:34:47 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/22 15:15:56 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:42:50 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void					find_hit_light(t_minirt *minirt, t_ray *ray,
 
 	hit[0] = init_hit();
 	i = 0;
-	current = minirt->var.o_head;
+	current = minirt->list.o_head;
 	while (current)
 	{
 		while (i < 5)
@@ -73,7 +73,7 @@ t_hit					find_hit(t_minirt *minirt, t_ray *ray)
 
 	hit[0] = init_hit();
 	i = 0;
-	current = minirt->var.o_head;
+	current = minirt->list.o_head;
 	while (current)
 	{
 		while (i < 5)

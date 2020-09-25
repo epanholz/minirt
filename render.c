@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 14:40:21 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/24 15:10:01 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:43:22 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void		generate_ray(t_minirt *minirt)
 	t_ray			*ray;
 	t_img_list		*current;
 
-	current = minirt->var.i_head;
+	current = minirt->list.i_head;
 	ray = (t_ray*)malloc(sizeof(t_ray));
 	if (ray == NULL)
 		ft_error(MALLOC);
@@ -69,8 +69,8 @@ static void		generate_ray(t_minirt *minirt)
 		ray->u.camx = 0;
 		cam = return_cam(minirt, current->img_index);
 		ray->orig = cam->view_point;
-		minirt->var.img = current->img;
-		minirt->var.addr = current->addr;
+		minirt->mlx.img = current->img;
+		minirt->mlx.addr = current->addr;
 		shoot_ray(minirt, ray, cam);
 		current = current->next;
 	}
@@ -85,23 +85,23 @@ void			make_scene(t_minirt *minirt)
 
 	x = minirt->scene.res_x;
 	y = minirt->scene.res_y;
-	minirt->var.mlx = mlx_init();
-	mlx_get_screen_size(minirt->var.mlx, &x, &y);
+	minirt->mlx.mlx = mlx_init();
+	mlx_get_screen_size(minirt->mlx.mlx, &x, &y);
 	minirt->scene.res_x = (minirt->scene.res_x > x) ? x : minirt->scene.res_x;
 	minirt->scene.res_y = (minirt->scene.res_y > y) ? y : minirt->scene.res_y;
 	create_images(minirt);
 	generate_ray(minirt);
-	current = minirt->var.i_head;
+	current = minirt->list.i_head;
 	if (minirt->scene.save == 1)
 		write_bitmap(minirt, current->addr);
 	else
 	{
-		minirt->var.win = mlx_new_window(minirt->var.mlx, minirt->scene.res_x,
+		minirt->mlx.win = mlx_new_window(minirt->mlx.mlx, minirt->scene.res_x,
 			minirt->scene.res_y, "Scene Window");
-		mlx_put_image_to_window(minirt->var.mlx, minirt->var.win,
+		mlx_put_image_to_window(minirt->mlx.mlx, minirt->mlx.win,
 			current->img, 0, 0);
-		mlx_hook(minirt->var.win, 17, 0, close_button, minirt);
-		mlx_key_hook(minirt->var.win, key_hook, minirt);
-		mlx_loop(minirt->var.mlx);
+		mlx_hook(minirt->mlx.win, 17, 0, close_button, minirt);
+		mlx_key_hook(minirt->mlx.win, key_hook, minirt);
+		mlx_loop(minirt->mlx.mlx);
 	}
 }

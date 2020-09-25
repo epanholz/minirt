@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/08/01 17:52:15 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/24 14:25:04 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:41:43 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void				calc_color(t_minirt *m, t_hit *hit)
 	t_vec3			dir;
 
 	amb = apply_color(hit->col, m->scene.a_color, m->scene.alight_r);
-	current = m->var.l_head;
+	current = m->list.l_head;
 	if (current->light_index == 0)
 	{
 		hit->col = col_add(amb, hit->col);

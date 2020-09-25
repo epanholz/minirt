@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/03/04 18:28:53 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/24 14:08:38 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:42:12 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,18 @@ static void		init_minirt(t_minirt *minirt)
 	minirt->scene.save = 0;
 	minirt->scene.ambient_light = 0;
 	minirt->scene.camera = 0;
-	minirt->var.c_head = NULL;
-	minirt->var.o_head = NULL;
-	minirt->var.i_head = NULL;
-	minirt->var.l_head = NULL;
+	minirt->list.c_head = NULL;
+	minirt->list.o_head = NULL;
+	minirt->list.i_head = NULL;
+	minirt->list.l_head = NULL;
 }
 
 static void		delete_lists(t_minirt *minirt)
 {
-	delete_cam_list(&minirt->var.c_head);
-	delete_object_list(&minirt->var.o_head);
-	delete_light_list(&minirt->var.l_head);
-	delete_img_list(&minirt->var.i_head);
+	delete_cam_list(&minirt->list.c_head);
+	delete_object_list(&minirt->list.o_head);
+	delete_light_list(&minirt->list.l_head);
+	delete_img_list(&minirt->list.i_head);
 }
 
 int				main(int ac, char **av)

@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/21 15:42:27 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/21 15:45:32 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:40:21 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_cam	*return_cam(t_minirt *minirt, int index)
 	t_cam			*cam;
 	t_camera_list	*current;
 
-	current = minirt->var.c_head;
+	current = minirt->list.c_head;
 	while (current)
 	{
 		if (current->cam_index == index)

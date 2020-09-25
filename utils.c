@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   color_utils.c                                      :+:    :+:            */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/22 17:38:28 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/24 13:59:02 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:36:19 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = minirt->var.addr + (y * minirt->var.line_length + x
-		* (minirt->var.bits_per_pixel / 8));
+	dst = minirt->mlx.addr + (y * minirt->mlx.line_length + x
+		* (minirt->mlx.bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
 

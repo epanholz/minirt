@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 10:20:45 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/24 14:14:43 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:33:46 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int			fill_bmp_buff(t_bitmap *bmp,
 	while (y >= 0)
 	{
 		ft_memcpy(buff + (i * x * 4),
-				img_addr + (y * minirt->var.line_length),
+				img_addr + (y * minirt->mlx.line_length),
 				(size_t)bmp->info.width * 4);
 		i++;
 		y--;

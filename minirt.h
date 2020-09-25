@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/24 15:11:56 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 13:38:00 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ typedef struct	s_bitmap
 	t_bmp_info	info;
 	void		*buff;
 }				t_bitmap;
-
 
 typedef	struct		s_vec3
 {
@@ -280,7 +279,16 @@ typedef struct 		s_scene
 	t_color			a_color;
 }					t_scene;
 
-typedef struct  	s_var 
+typedef	struct		s_list
+{
+	t_object_list	*o_head;
+	t_camera_list	*c_head;
+	t_img_list		*i_head;
+	t_light_list	*l_head;
+}					t_list;
+
+
+typedef struct  	s_mlx 
 {
     void			*mlx;
     void			*win;
@@ -289,16 +297,13 @@ typedef struct  	s_var
     int				bits_per_pixel;
     int				line_length;
     int				endian;
-	t_object_list	*o_head;
-	t_camera_list	*c_head;
-	t_img_list		*i_head;
-	t_light_list	*l_head;
-}              		t_var;
+}              		t_mlx;
 
 typedef	struct		s_minirt 
 {
 	t_scene			scene;
-	t_var			var;
+	t_mlx			mlx;
+	t_list			list;
 	t_utils			utils;
 }					t_minirt;
 
