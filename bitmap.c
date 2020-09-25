@@ -6,7 +6,7 @@
 /*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/09/16 10:20:45 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 13:33:46 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 14:34:30 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int			write_headers(int fd, t_bmp_file *file, t_bmp_info *info)
 	return (ret);
 }
 
-static int			fill_bmp_buff(t_bitmap *bmp,
+void				fill_bmp_buff(t_bitmap *bmp,
 						t_minirt *minirt, char *img_addr)
 {
 	void	*buff;
@@ -65,7 +65,7 @@ static int			fill_bmp_buff(t_bitmap *bmp,
 	i = 0;
 	buff = ft_calloc(sizeof(int), bmp->info.width * bmp->info.height);
 	if (!buff)
-		return (0);
+		ft_error (MALLOC);
 	while (y >= 0)
 	{
 		ft_memcpy(buff + (i * x * 4),
@@ -75,7 +75,6 @@ static int			fill_bmp_buff(t_bitmap *bmp,
 		y--;
 	}
 	bmp->buff = buff;
-	return (1);
 }
 
 void				write_bitmap(t_minirt *minirt, char *img_addr)
@@ -90,7 +89,8 @@ void				write_bitmap(t_minirt *minirt, char *img_addr)
 		ft_error(OPEN);
 	if (write_headers(fd, &bmp->file, &bmp->info) != 54)
 		ft_error(WRITE);
-	write(fd, bmp->buff, (size_t)bmp->info.width * bmp->info.height * 4);
+	if (write(fd, bmp->buff, (size_t)bmp->info.width * bmp->info.height * 4) < 0)
+		ft_error(WRITE);
 	close(fd);
 	free(bmp->buff);
 	free(bmp);

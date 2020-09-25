@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/28 18:50:02 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/09/25 13:38:00 by pani_zino     ########   odam.nl         */
+/*   Updated: 2020/09/25 14:42:22 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINIRT_H
 
 # include <mlx.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <sys/types.h>
@@ -40,26 +39,26 @@ typedef enum		e_objects
 
 typedef struct	s_bmp_file 
 {
-    unsigned char	bitmap_type;    	// 2 bytes
-    int             file_size;          // 4 bytes
-    short           reserved1;          // 2 bytes
-    short           reserved2;          // 2 bytes
-    unsigned int    offset_bits;        // 4 bytes
+    unsigned char	bitmap_type;
+    int             file_size;
+    short           reserved1;
+    short           reserved2;
+    unsigned int    offset_bits;
 }				t_bmp_file;
 
 typedef	struct	s_bmp_info
 {
-    unsigned int    size_header;        // 4 bytes
-    unsigned int    width;              // 4 bytes
-    unsigned int    height;             // 4 bytes
-    short int       planes;             // 2 bytes
-    short int       bit_count;          // 2 bytes
-    unsigned int    compression;        // 4 bytes
-    unsigned int    image_size;         // 4 bytes
-    unsigned int    ppm_x;              // 4 bytes
-    unsigned int    ppm_y;              // 4 bytes
-    unsigned int    clr_used;           // 4 bytes
-    unsigned int    clr_important;      // 4 bytes
+    unsigned int    size_header;
+    unsigned int    width;
+    unsigned int    height;
+    short int       planes;
+    short int       bit_count;
+    unsigned int    compression;
+    unsigned int    image_size;
+    unsigned int    ppm_x;
+    unsigned int    ppm_y;
+    unsigned int    clr_used;
+    unsigned int    clr_important;
 }				t_bmp_info;
 
 typedef struct	s_bitmap
@@ -353,9 +352,6 @@ void		add_light(t_light_list **head, t_light *light);
 void 		delete_cam_list(t_camera_list **head);
 void		delete_light_list(t_light_list **head);
 t_cam		*return_cam(t_minirt *minirt, int index);
-void		traverse_cam_list(t_camera_list **head);
-void		traverse_light_list(t_light_list **head);
-void		traverse_img_list(t_img_list **head);
 t_vec3		vec_plus(t_vec3 *v1, t_vec3 *v2);
 double		vec_dot(t_vec3 *v1, t_vec3 *v2);
 t_vec3		vec_sub(t_vec3 *v1, t_vec3 *v2);

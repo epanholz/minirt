@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/09/24 14:00:01 by pani_zino     ########   odam.nl          #
+#    Updated: 2020/09/25 14:50:28 by pani_zino     ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,10 +39,13 @@ $(MLX):
 	@mv mlx/$(MLX) .
 
 clean:
-	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ʀᴇᴍᴏᴠɪɴɢ ᴇxᴇᴄᴜᴛᴀʙʟᴇ ♥\n\e[0m\n"
-	@rm $(NAME) 
-	
-	#@rm $(MLX)
-	#@$(MAKE) -C $(MLX_PATH) clean
+	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴍᴀᴋᴇ ᴄʟᴇᴀɴ ♥\n\e[0m\n"
+	@rm $(MLX)
+	@$(MAKE) -C $(MLX_PATH) clean
 
-re: clean all
+fclean: clean
+	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ʀᴇᴍᴏᴠɪɴɢ ᴇxᴇᴄᴜᴛᴀʙʟᴇ ♥\n\e[0m\n"
+	@$(RM) $(MLX) $(NAME)
+
+re: fclean all
+
