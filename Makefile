@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/09/25 14:50:28 by pani_zino     ########   odam.nl          #
+#    Updated: 2020/09/25 15:57:24 by pani_zino     ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ MLX := libmlx.dylib
 
 all: $(NAME)
 
-$(NAME): 
+$(NAME): $(MLX)
 	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m\n"
 	@gcc $(FLAGS) -g -o $(NAME) $(SRC) $(MLX)
 
@@ -40,12 +40,11 @@ $(MLX):
 
 clean:
 	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴍᴀᴋᴇ ᴄʟᴇᴀɴ ♥\n\e[0m\n"
-	@rm $(MLX)
 	@$(MAKE) -C $(MLX_PATH) clean
 
-fclean: clean
+fclean:
 	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ʀᴇᴍᴏᴠɪɴɢ ᴇxᴇᴄᴜᴛᴀʙʟᴇ ♥\n\e[0m\n"
-	@$(RM) $(MLX) $(NAME)
+	@$(RM) $(NAME) $(MLX)
 
 re: fclean all
 
