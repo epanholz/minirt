@@ -6,21 +6,26 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/09/25 15:57:24 by pani_zino     ########   odam.nl          #
+#    Updated: 2020/09/25 16:18:50 by pani_zino     ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := miniRT
 
-SRC := main.c read_file.c read_file_utils.c get_scene.c check_scene.c check_scene_utils.c \
-	cam_list.c utils.c matrix.c atod.c object_list.c intersect_triangle.c intersect_sphere.c \
-	image_list.c hooks.c light.c bitmap.c check_scene_objects.c get_objects.c error.c \
-	get_scene_loop.c light_list.c render.c render_loop.c intersect_plane.c intersect_cylinder.c \
-	intersect_square.c vector_library1.c vector_library2.c libmlx.dylib\
+SRC := main.c read_file.c read_file_utils.c get_scene.c			\
+	check_scene.c check_scene_utils.c cam_list.c utils.c		\
+	matrix.c atod.c object_list.c intersect_triangle.c			\
+	intersect_sphere.c image_list.c hooks.c light.c				\
+	bitmap.c check_scene_objects.c get_objects.c error.c		\
+	get_scene_loop.c light_list.c render.c render_loop.c		\
+	intersect_plane.c intersect_cylinder.c intersect_square.c	\
+	vector_library1.c vector_library2.c							\
 
 INC := minirt.h
 
-FLAGS := -Wall -Wextra -Werror -I mlx -Lmlx/ -Lmlx -framework OpenGL -framework AppKit
+FLAGS := -Wall -Wextra -Werror -I mlx
+
+MFLAGS := -Lmlx/ -Lmlx -framework OpenGL -framework AppKit
 
 MLX_PATH := ./mlx/
 
@@ -29,22 +34,21 @@ MLX := libmlx.dylib
 all: $(NAME)
 
 $(NAME): $(MLX)
-	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m\n"
-	@gcc $(FLAGS) -g -o $(NAME) $(SRC) $(MLX)
+	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m\n"
+	@gcc $(FLAGS) $(MFLAGS) -g -o $(NAME) $(SRC) $(MLX)
 
 $(MLX):
-	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍʟx ♥\n\e[0m\n"
+	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍʟx ♥\n\e[0m\n"
 	@$(MAKE) -C $(MLX_PATH)
-	@printf "\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴍᴏᴠɪɴɢ ᴅʏʟɪʙ ♥\n\e[0m"
+	@printf "\e[1;36m ♥ ᴍᴏᴠɪɴɢ ᴅʏʟɪʙ ♥\n\e[0m"
 	@mv mlx/$(MLX) .
 
 clean:
-	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ᴍᴀᴋᴇ ᴄʟᴇᴀɴ ♥\n\e[0m\n"
+	@printf "\n\e[1;36m ♥ ᴍᴀᴋᴇ ᴄʟᴇᴀɴ ♥\n\e[0m\n"
 	@$(MAKE) -C $(MLX_PATH) clean
 
-fclean:
-	@printf "\n\e[1;36m (っ◔ ◡ ◔)っ ♥ ʀᴇᴍᴏᴠɪɴɢ ᴇxᴇᴄᴜᴛᴀʙʟᴇ ♥\n\e[0m\n"
+fclean: clean
+	@printf "\n\e[1;36m ♥ ᴍᴀᴋᴇ ꜰᴄʟᴇᴀɴ ♥\n\e[0m\n"
 	@$(RM) $(NAME) $(MLX)
 
 re: fclean all
-
