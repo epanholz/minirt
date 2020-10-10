@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   intersect_sphere.c                                 :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 15:18:53 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 15:38:21 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:20:56 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:20:57 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

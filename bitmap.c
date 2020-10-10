@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   bitmap.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/16 10:20:45 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 14:34:30 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:19:48 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:23:05 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void				fill_bmp_buff(t_bitmap *bmp,
 	i = 0;
 	buff = ft_calloc(sizeof(int), bmp->info.width * bmp->info.height);
 	if (!buff)
-		ft_error (MALLOC);
+		ft_error(MALLOC);
 	while (y >= 0)
 	{
 		ft_memcpy(buff + (i * x * 4),
@@ -89,7 +89,8 @@ void				write_bitmap(t_minirt *minirt, char *img_addr)
 		ft_error(OPEN);
 	if (write_headers(fd, &bmp->file, &bmp->info) != 54)
 		ft_error(WRITE);
-	if (write(fd, bmp->buff, (size_t)bmp->info.width * bmp->info.height * 4) < 0)
+	if (write(fd, bmp->buff,
+		(size_t)bmp->info.width * bmp->info.height * 4) < 0)
 		ft_error(WRITE);
 	close(fd);
 	free(bmp->buff);

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   get_objects.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/16 14:31:22 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/17 12:13:16 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:20:21 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:20:23 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

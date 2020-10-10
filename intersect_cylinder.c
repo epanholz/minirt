@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   intersect_cylinder.c                               :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 15:58:28 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/28 13:49:04 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:20:45 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:20:48 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

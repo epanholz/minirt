@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   get_scene_loop.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/16 14:38:58 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 13:40:45 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:20:26 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:20:27 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

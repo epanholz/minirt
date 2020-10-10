@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   intersect_triangle.c                               :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 14:29:40 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 16:18:26 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:21:05 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:21:07 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

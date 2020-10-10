@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   atod.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/16 14:11:17 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/24 14:12:23 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:19:42 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:19:43 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

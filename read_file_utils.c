@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   read_file_utils.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 17:35:40 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/22 17:36:15 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:21:45 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:21:46 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

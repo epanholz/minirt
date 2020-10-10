@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   cam_list.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/21 15:42:27 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 13:40:21 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:19:55 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:19:57 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

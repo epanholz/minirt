@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   matrix.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/16 14:01:56 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 14:05:15 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:21:29 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:21:32 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

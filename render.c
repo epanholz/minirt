@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   render.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 14:40:21 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 14:30:43 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:21:59 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:22:01 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

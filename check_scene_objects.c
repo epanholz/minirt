@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   check_scene_objects.c                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/16 14:07:07 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/16 14:07:48 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:20:01 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:20:03 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

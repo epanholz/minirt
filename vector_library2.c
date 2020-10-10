@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   vector_library2.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 17:33:53 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/25 13:32:28 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:22:16 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:22:17 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

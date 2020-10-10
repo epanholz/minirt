@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   intersect_square.c                                 :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: pani_zino <pani_zino@student.codam.nl>       +#+                     */
+/*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/09/22 17:12:31 by pani_zino     #+#    #+#                 */
-/*   Updated: 2020/09/24 14:23:49 by pani_zino     ########   odam.nl         */
+/*   Created: 2020/10/10 18:21:00 by epanholz      #+#    #+#                 */
+/*   Updated: 2020/10/10 18:21:02 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
