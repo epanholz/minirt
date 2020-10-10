@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:20:31 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:20:32 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/10 20:29:37 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,10 @@ void		get_res(char *s, int p, t_minirt *m)
 	m->utils.i = p;
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
-	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
-		ft_error(INVAL);
-	m->scene.res_x = ft_atod(s, m, DOUBLE);
+	m->scene.res_x = ft_atod_res(s, m);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
-	if (s[m->utils.i] < '0' || s[m->utils.i] > '9')
-		ft_error(INVAL);
-	m->scene.res_y = ft_atod(s, m, DOUBLE);
+	m->scene.res_y = ft_atod_res(s, m);
 	while (s[m->utils.i] && s[m->utils.i] == ' ')
 		m->utils.i++;
 	if (s[m->utils.i] != '\n' && s[m->utils.i] != '\0')

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:42 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:19:43 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/10 20:29:30 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,23 @@ double			ft_atod_loop(char *s, t_minirt *m, int mod)
 		&& s[m->utils.i] != '-' && s[m->utils.i])
 		m->utils.i++;
 	ret = ft_atod(s, m, mod);
+	return (ret);
+}
+
+double			ft_atod_res(char *s, t_minirt *m)
+{
+	double	ret;
+
+	ret = 0;
+	if (s[m->utils.i] < '0' || s[m->utils.i] > '9' ||
+		s[m->utils.i] == '0' || s[m->utils.i] == '-')
+		ft_error(INVAL);
+	while (s[m->utils.i] && s[m->utils.i] >= '0' && s[m->utils.i] <= '9')
+	{
+		ret = ret * 10 + s[m->utils.i] - '0';
+		m->utils.i++;
+	}
+	if (s[m->utils.i] == '.')
+		ft_error(INVAL);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:27 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:19:29 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/10 20:26:31 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,6 +326,7 @@ t_cyl				*get_cylinder(char *s, int p, t_minirt *minirt);
 t_tri				*get_triangle(char *s, int p, t_minirt *minirt);
 double				ft_atod(char *s, t_minirt *m, int mod);
 double				ft_atod_loop(char *s, t_minirt *m, int mod);
+double				ft_atod_res(char *s, t_minirt *m);
 void				check_rgb(char *s, t_minirt *m);
 void				check_xyz_point(char *s, t_minirt *m);
 void				check_norm_vec(char *s, t_minirt *m);
