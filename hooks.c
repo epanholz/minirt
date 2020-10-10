@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:20:35 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:20:37 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/10 18:42:49 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int		key_hook(int keycode, t_minirt *minirt)
 			current = next;
 		}
 		mlx_destroy_window(minirt->mlx.mlx, minirt->mlx.win);
-		system("leaks miniRT");
 		exit(0);
 	}
 	if (keycode == 124)
@@ -77,7 +76,6 @@ int		close_button(t_minirt *minirt)
 		current = next;
 	}
 	mlx_destroy_window(minirt->mlx.mlx, minirt->mlx.win);
-	//system("leaks miniRT");
 	exit(0);
 	return (0);
 }
