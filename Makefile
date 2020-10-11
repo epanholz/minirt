@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/10/10 20:31:37 by epanholz      ########   odam.nl          #
+#    Updated: 2020/10/11 14:46:08 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,20 +31,27 @@ MLX_PATH := ./mlx/
 
 MLX := libmlx.dylib
 
+OBJ := $(SRC:.c=.o)
+
 all: $(NAME)
 
-$(NAME): $(MLX)
+$(NAME): $(MLX) $(OBJ)
 	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m\n"
-	@gcc $(FLAGS) $(MFLAGS) -o $(NAME) $(SRC) $(MLX)
+	@gcc $(FLAGS) $(MFLAGS) -g -o $(NAME) $(SRC) $(MLX)
 
 $(MLX):
 	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍʟx ♥\n\e[0m\n"
 	@$(MAKE) -C $(MLX_PATH)
 	@printf "\e[1;36m ♥ ᴍᴏᴠɪɴɢ ᴅʏʟɪʙ ♥\n\e[0m"
 	@mv mlx/$(MLX) .
+	
+%.o: %.c
+	@printf "\e[1;36m ᴄᴏᴍᴘɪʟɪɴɢ ᴏʙᴊᴇᴄᴛ ꜰɪʟᴇꜱ \e[0m\n"
+	@gcc $(FLAGS) -c $< -o $@
 
 clean:
 	@printf "\n\e[1;36m ♥ ᴍᴀᴋᴇ ᴄʟᴇᴀɴ ♥\n\e[0m\n"
+	@$(RM) $(OBJ)
 	@$(MAKE) -C $(MLX_PATH) clean
 
 fclean: clean

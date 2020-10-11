@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:27 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 20:26:31 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/11 14:59:34 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ typedef	struct		s_pla
 	t_vec3	view_point;
 	t_vec3	norm_vec;
 	int		r;
-	int		b;
 	int		g;
+	int		b;
 }					t_pla;
 
 typedef	struct		s_sph
@@ -126,8 +126,8 @@ typedef	struct		s_sph
 	t_vec3	sp_center;
 	double	diameter;
 	int		r;
-	int		b;
 	int		g;
+	int		b;
 }					t_sph;
 
 typedef	struct		s_squ
@@ -136,8 +136,8 @@ typedef	struct		s_squ
 	t_vec3	norm_vec;
 	double	side;
 	int		r;
-	int		b;
 	int		g;
+	int		b;
 }					t_squ;
 
 typedef	struct		s_cyl
@@ -147,8 +147,8 @@ typedef	struct		s_cyl
 	double	diameter;
 	double	height;
 	int		r;
-	int		b;
 	int		g;
+	int		b;
 }					t_cyl;
 
 typedef	struct		s_tri
@@ -157,8 +157,8 @@ typedef	struct		s_tri
 	t_vec3	p2;
 	t_vec3	p3;
 	int		r;
-	int		b;
 	int		g;
+	int		b;
 }					t_tri;
 
 typedef	struct		s_matrix
@@ -326,7 +326,6 @@ t_cyl				*get_cylinder(char *s, int p, t_minirt *minirt);
 t_tri				*get_triangle(char *s, int p, t_minirt *minirt);
 double				ft_atod(char *s, t_minirt *m, int mod);
 double				ft_atod_loop(char *s, t_minirt *m, int mod);
-double				ft_atod_res(char *s, t_minirt *m);
 void				check_rgb(char *s, t_minirt *m);
 void				check_xyz_point(char *s, t_minirt *m);
 void				check_norm_vec(char *s, t_minirt *m);
