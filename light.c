@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:18 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:21:20 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/12 16:56:40 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void				calc_color(t_minirt *m, t_hit *hit)
 	if (current->light_index == 0)
 	{
 		hit->col = col_add(amb, hit->col);
+		hit->col = (t_color){fmin(amb.r, 255), fmin(amb.g, 255), fmin(amb.b, 255)};
 		return ;
 	}
 	while (current)
