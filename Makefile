@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/10/15 16:21:01 by epanholz      ########   odam.nl          #
+#    Updated: 2020/10/15 16:44:05 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ all: $(NAME)
 
 $(NAME): $(MLX) $(OBJ)
 	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m\n"
-	@gcc $(FLAGS) $(MFLAGS) -g -o $(NAME) $(SRC) $(MLX)
+	@gcc $(FLAGS) $(MFLAGS) -o $(NAME) $(SRC) $(MLX)
 
 $(MLX):
 	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍʟx ♥\n\e[0m\n"
