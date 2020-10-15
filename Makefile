@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/10/11 14:46:08 by epanholz      ########   odam.nl          #
+#    Updated: 2020/10/15 16:21:01 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,9 @@ $(MLX):
 	@$(MAKE) -C $(MLX_PATH)
 	@printf "\e[1;36m ♥ ᴍᴏᴠɪɴɢ ᴅʏʟɪʙ ♥\n\e[0m"
 	@mv mlx/$(MLX) .
-	
+
 %.o: %.c
-	@printf "\e[1;36m ᴄᴏᴍᴘɪʟɪɴɢ ᴏʙᴊᴇᴄᴛ ꜰɪʟᴇꜱ \e[0m\n"
+	@printf "\e[1;36m ᴄᴏᴍᴘɪʟɪɴɢ ᴏʙᴊᴇᴄᴛꜱ \e[0m\n"
 	@gcc $(FLAGS) -c $< -o $@
 
 clean:
