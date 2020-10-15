@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:23 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/15 15:35:18 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 16:25:19 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int				main(int ac, char **av)
 	t_minirt	*minirt;
 
 	minirt = (t_minirt*)malloc(sizeof(t_minirt));
+	if (!minirt)
+		ft_error(MALLOC);
 	init_minirt(minirt);
 	if (ac == 3 || ac == 2)
 	{

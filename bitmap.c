@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:48 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/15 15:59:51 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 16:24:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static t_bitmap		*initialize_bitmap(double width, double heigth)
 	t_bitmap	*bmp;
 
 	bmp = ft_calloc(sizeof(t_bitmap), 1);
+	if (!bmp)
+		ft_error(MALLOC);
 	ft_memcpy(&bmp->file.bitmap_type, "BM", 2);
 	bmp->file.file_size = 54 + (width * heigth * 4);
 	bmp->file.offset_bits = 54;
