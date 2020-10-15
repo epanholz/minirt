@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:22:04 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:22:06 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 15:37:22 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,4 @@ void	ft_delay(void)
 			d++;
 		c++;
 	}
-}
-
-void	ft_save(void)
-{
-	write(1, "\nsᴀᴠɪɴɢ ʙɪᴛᴍᴀᴘ ", 33);
-	ft_delay();
-	write(1, ". ", 3);
-	ft_delay();
-	write(1, ". ", 3);
-	ft_delay();
-	write(1, ". \n\n", 5);
-	ft_delay();
 }

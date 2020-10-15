@@ -6,13 +6,13 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:48 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:23:05 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 15:59:51 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_bitmap		*initialize_bitmap(int width, int heigth)
+static t_bitmap		*initialize_bitmap(double width, double heigth)
 {
 	t_bitmap	*bmp;
 

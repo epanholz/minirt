@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:18 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/12 16:56:40 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 14:46:22 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ static t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
 	return (temp);
 }
 
+static void			ft_color_help(t_hit *hit, t_color amb)
+{
+	hit->col = col_add(amb, hit->col);
+	hit->col = (t_color){fmin(amb.r, 255), fmin(amb.g, 255), fmin(amb.b, 255)};
+}
+
 void				calc_color(t_minirt *m, t_hit *hit)
 {
 	t_light_list	*current;
@@ -64,8 +70,7 @@ void				calc_color(t_minirt *m, t_hit *hit)
 	current = m->list.l_head;
 	if (current->light_index == 0)
 	{
-		hit->col = col_add(amb, hit->col);
-		hit->col = (t_color){fmin(amb.r, 255), fmin(amb.g, 255), fmin(amb.b, 255)};
+		ft_color_help(hit, amb);
 		return ;
 	}
 	while (current)

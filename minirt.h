@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:27 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/11 14:59:34 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 15:38:28 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,6 @@ typedef	struct		s_minirt
 }					t_minirt;
 
 void				ft_error(int mod);
-void				ft_save(void);
 void				ft_delay(void);
 void				my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int					rgbt(int t, int r, int g, int b);

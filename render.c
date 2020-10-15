@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:59 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:22:01 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 16:10:36 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,27 @@ static void		generate_ray(t_minirt *minirt)
 	free(ray);
 }
 
-void			make_scene(t_minirt *minirt)
+static void		res_resize(t_minirt *m)
 {
-	t_img_list	*current;
 	int			x;
 	int			y;
 
-	x = minirt->scene.res_x;
-	y = minirt->scene.res_y;
+	x = m->scene.res_x;
+	y = m->scene.res_y;
+	if (m->scene.save != 1)
+	{
+		mlx_get_screen_size(m->mlx.mlx, &x, &y);
+		m->scene.res_x = (m->scene.res_x > x) ? x : m->scene.res_x;
+		m->scene.res_y = (m->scene.res_y > y) ? y : m->scene.res_y;
+	}
+}
+
+void			make_scene(t_minirt *minirt)
+{
+	t_img_list	*current;
+
 	minirt->mlx.mlx = mlx_init();
-	mlx_get_screen_size(minirt->mlx.mlx, &x, &y);
-	minirt->scene.res_x = (minirt->scene.res_x > x) ? x : minirt->scene.res_x;
-	minirt->scene.res_y = (minirt->scene.res_y > y) ? y : minirt->scene.res_y;
+	res_resize(minirt);
 	create_images(minirt);
 	generate_ray(minirt);
 	current = minirt->list.i_head;

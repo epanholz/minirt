@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:23 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/10 18:21:25 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/15 15:35:18 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int				main(int ac, char **av)
 			if (check_save(av[2]) == 1)
 				ft_error(ARG);
 			minirt->scene.save = 1;
-			ft_save();
 		}
 		if (check_rt(av[1]) == 1)
 			ft_error(RT);
