@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:20:45 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/16 18:42:17 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/16 21:40:44 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,35 @@ static t_hit			solve_quadratic(double a, double b, double c, t_hit hit)
 	return (hit);
 }
 
+static t_vec3			cyl_normal(t_ray *ray, t_cyl *cyl, double hit, int mod)
+{
+	t_vec3	hb;
+	t_vec3	p;
+	t_vec3	t;
+	t_vec3	surf_norm[3];
+	double	norm_temp;
+
+	t = vec_x_d(&ray->dir, hit);
+	p = vec_plus(&ray->orig, &t);
+	hb = vec_sub(&p, &cyl->center);
+	norm_temp = vec_dot(&hb, &cyl->norm_vec);
+	surf_norm[0] = vec_x_d(&cyl->norm_vec, norm_temp);
+	surf_norm[1] = vec_sub(&hb, &surf_norm[0]);
+	if (mod == 1)
+	{
+		surf_norm[2] = vec_sub(&surf_norm[1], &hb);
+		surf_norm[2] = vec_x_d(&surf_norm[2], -1);
+		vec_normalize(&surf_norm[2]);
+		return (surf_norm[2]);
+	}
+	vec_normalize(&surf_norm[1]);
+	return (surf_norm[1]);
+}
+
 static void				find_hit_cyl(t_ray *ray, t_cyl *cyl,
 							t_hit *hit, t_cyl_utils utils)
 {
 	double	ret;
-	t_vec3	surf_norm[3];
 	t_vec3	temp;
 
 	ret = INFINITY;
@@ -50,64 +74,10 @@ static void				find_hit_cyl(t_ray *ray, t_cyl *cyl,
 		else
 			ret = hit->t2;
 	}
-
-	//hit->t1 = ret;
-
 	if (ret == hit->t1)
-	{
-		// surf_norm[0] = vec_x_d(&ray->dir, -1);
-		// surf_norm[1] = vec_plus(&ray->orig, &surf_norm[0]);
-		// surf_norm[2] = vec_sub(&surf_norm[1], &cyl->center);
-		// hit->surface_norm = vec_normalize(&surf_norm[2]);
-		
-		t_vec3	hb;
-		t_vec3	p;
-		t_vec3	t;
-		t_vec3	dir;
-		double	norm_temp;
-		double	r;
-		r = cyl->height / 2;
-		dir = vec_x_d(&ray->dir, -1);
-		t = vec_x_d(&ray->dir, hit->t1);
-		p = vec_plus(&ray->orig, &t);
-		hb = vec_sub(&p, &cyl->center);
-		norm_temp = vec_dot(&hb, &cyl->norm_vec);
-		surf_norm[0] = vec_x_d(&cyl->norm_vec, norm_temp);
-		surf_norm[1] = vec_sub(&hb, &surf_norm[0]);
-		surf_norm[2] = vec_sub(&surf_norm[1], &hb);
-		surf_norm[2] = vec_x_d(&surf_norm[2], -1);
-		//surf_norm[2] = (t_vec3){surf_norm[1].x / r, surf_norm[1].y / r, surf_norm[1].z / r}; 
-		hit->surface_norm = vec_normalize(&surf_norm[2]);
-
-		// t_vec3	vec[3];
-		// vec[0] = vec_x_d(&ray->dir, hit->t1);
-		// vec[1] = vec_plus(&ray->orig, &vec[0]);
-		// vec[2] = vec_sub(&vec[1], &cyl->center);
-		// hit->surface_norm = vec_normalize(&vec[2]);
-	}
+		hit->surface_norm = cyl_normal(ray, cyl, hit->t1, 1);
 	if (ret == hit->t2)
-	{
-		t_vec3	hb;
-		t_vec3	p;
-		t_vec3	t;
-		double	norm_temp;
-		double	r;
-		r = cyl->height / 2;
-		t = vec_x_d(&ray->dir, hit->t2);
-		p = vec_plus(&ray->orig, &t);
-		hb = vec_sub(&p, &cyl->center);
-		norm_temp = vec_dot(&hb, &cyl->norm_vec);
-		surf_norm[0] = vec_x_d(&cyl->norm_vec, norm_temp);
-		surf_norm[1] = vec_sub(&hb, &surf_norm[0]);
-		//surf_norm[2] = (t_vec3){surf_norm[1].x / r, surf_norm[1].y / r, surf_norm[1].z / r}; 
-		hit->surface_norm = vec_normalize(&surf_norm[1]);
-
-		// t_vec3	vec[3];
-		// vec[0] = vec_x_d(&ray->dir, hit->t2);
-		// vec[1] = vec_plus(&ray->orig, &vec[0]);
-		// vec[2] = vec_sub(&vec[1], &cyl->center);
-		// hit->surface_norm = vec_normalize(&vec[2]);
-	}
+		hit->surface_norm = cyl_normal(ray, cyl, hit->t2, 2);
 	hit->t1 = ret;
 	temp = vec_x_d(&ray->dir, hit->t1 - 10 * 1e-6);
 	hit->hit_p = vec_plus(&ray->orig, &temp);
