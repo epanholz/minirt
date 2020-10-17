@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:27 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/15 15:38:28 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/17 18:16:08 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ typedef struct		s_ray
 
 typedef struct		s_color
 {
-	int	r;
-	int	g;
-	int	b;
+	double	r;
+	double	g;
+	double	b;
 }					t_color;
 
 typedef	struct		s_cam
