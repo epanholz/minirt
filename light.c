@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:18 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/17 18:20:41 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/19 15:33:14 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
 	t_vec3	dist;
 	t_vec3	dist_norm;
 	double	dotnormal;
-	
-	//(void)diffuse;
+
+	(void)diffuse;
 	light_color = light->color;
 	dist = vec_sub(&light->light_point, &hit->hit_p);
 	dist_norm = vec_normalize(&dist);
@@ -46,9 +46,9 @@ static t_color		apply_light(t_hit *hit, t_light *light, double diffuse)
 		dotnormal = fabs(dotnormal);
 	if (dotnormal <= 1e-6)
 		return ((t_color){0, 0, 0});
-	temp.r = light->color.r * light->light_b * fmax(0, dotnormal) * diffuse;
-	temp.g = light->color.g * light->light_b * fmax(0, dotnormal) * diffuse;
-	temp.b = light->color.b * light->light_b * fmax(0, dotnormal) * diffuse;
+	temp.r = light->color.r * light->light_b * fmax(0, dotnormal);
+	temp.g = light->color.g * light->light_b * fmax(0, dotnormal);
+	temp.b = light->color.b * light->light_b * fmax(0, dotnormal);
 	temp = (t_color){fmin(temp.r, 255), fmin(temp.g, 255), fmin(temp.b, 255)};
 	return (temp);
 }
@@ -86,31 +86,4 @@ void				calc_color(t_minirt *m, t_hit *hit)
 		current = current->next;
 	}
 	hit->col = (t_color){fmin(amb.r, 255), fmin(amb.g, 255), fmin(amb.b, 255)};
-
-	// t_vec3			hit_p;
-	// t_color			color;
-	// t_light_list	*current;
-	// t_vec3			dist;
-	// t_ray			ray;
-	
-	// color = apply_color(hit->col, m->scene.a_color, m->scene.alight_r);
-	// hit_p = hit->hit_p;
-	// current = m->list.l_head;
-	// if (current->light_index == 0)
-	// {
-	// 	ft_color_help(hit, color);
-	// 	return ;
-	// }
-	// while (current)
-	// {
-	// 	dist = vec_sub(&current->light->light_point, &hit_p);
-	// 	ray.dir = vec_normalize(&dist);
-	// 	ray.orig = hit_p;
-	// 	find_hit_light(m, &ray, sqrt(vec_dot(&dist, &dist) - 10 * 1e-6), hit);
-	// 	if (hit->hit == 0)
-	// 		color = col_add(color, apply_light(hit, current->light, 1 - m->scene.alight_r));
-	// 	current = current->next;
-	// }
-	// color = (t_color){fmin(color.r, 255), fmin(color.g, 255),fmin(color.b, 255)};
-	// hit->col = color;
 }
