@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:27 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/17 18:16:08 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/19 19:52:53 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,8 +271,8 @@ typedef struct		s_scene
 	int		ambient_light;
 	int		camera;
 	int		save;
-	double	res_x;
-	double	res_y;
+	int		res_x;
+	int		res_y;
 	double	alight_r;
 	t_color	a_color;
 }					t_scene;

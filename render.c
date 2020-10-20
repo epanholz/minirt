@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:59 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/17 17:56:50 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/10/19 19:53:41 by epanholz      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void		generate_ray(t_minirt *minirt)
 	ray = (t_ray*)malloc(sizeof(t_ray));
 	if (ray == NULL)
 		ft_error(MALLOC);
-	ray->u.asp_rat = minirt->scene.res_x / minirt->scene.res_y;
+	ray->u.asp_rat = (double)minirt->scene.res_x / (double)minirt->scene.res_y;
 	while (current)
 	{
 		ray->u.pixx = 0;
