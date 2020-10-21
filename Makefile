@@ -6,10 +6,13 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/10/19 20:39:07 by epanholz      ########   odam.nl          #
+#    Updated: 2020/10/21 16:29:45 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
+RED = \033[1;38;5;168m
+BLU = \033[3;38;5;146m
+RES = \033[0m
 NAME := miniRT
 
 SRC := main.c read_file.c read_file_utils.c get_scene.c			\
@@ -36,26 +39,27 @@ OBJ := $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(MLX) $(OBJ)
-	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍɪɴɪʀᴛ ♥\n\e[0m\n"
+	@echo "$(RED) \n ┌──────────────────────┐\n │ \xe2\x99\xa5 compiling miniRT \xe2\x99\xa5 │\n └──────────────────────┘\n$(RES)"
 	@gcc $(FLAGS) $(MFLAGS) -o $(NAME) $(SRC) $(MLX)
 
 $(MLX):
-	@printf "\n\e[1;36m ♥ ᴄᴏᴍᴘɪʟɪɴɢ ᴍʟx ♥\n\e[0m\n"
+	@echo "$(RED) \n ┌──────────────────────┐\n │   \xe2\x99\xa5 compiling mlx \xe2\x99\xa5  │\n └──────────────────────┘\n$(RES)$(BLU)"
 	@$(MAKE) -C $(MLX_PATH)
-	@printf "\e[1;36m ♥ ᴍᴏᴠɪɴɢ ᴅʏʟɪʙ ♥\n\e[0m"
+	@echo "$(RES)$(RED) \n ┌──────────────────────┐\n │   \xe2\x99\xa5 moving dylib \xe2\x99\xa5   │\n └──────────────────────┘\n$(RES)"
 	@mv mlx/$(MLX) .
 
 %.o: %.c
-	@printf "\e[1;36m ᴄᴏᴍᴘɪʟɪɴɢ ᴏʙᴊᴇᴄᴛꜱ \e[0m\n"
+	@echo "$(BLU) compiling objects $(RES)"
 	@gcc $(FLAGS) -c $< -o $@
 
 clean:
-	@printf "\n\e[1;36m ♥ ᴍᴀᴋᴇ ᴄʟᴇᴀɴ ♥\n\e[0m\n"
+	@echo "$(RED) \n ┌──────────────────────┐\n │     \xe2\x99\xa5 make clean \xe2\x99\xa5   │\n └──────────────────────┘\n$(RES)$(BLU)"
 	@$(RM) $(OBJ)
 	@$(MAKE) -C $(MLX_PATH) clean
+	@echo "$(RES)"
 
 fclean: clean
-	@printf "\n\e[1;36m ♥ ᴍᴀᴋᴇ ꜰᴄʟᴇᴀɴ ♥\n\e[0m\n"
+	@echo "$(RED) \n ┌──────────────────────┐\n │    \xe2\x99\xa5 make fclean \xe2\x99\xa5   │\n └──────────────────────┘\n$(RES)"
 	@$(RM) $(NAME) $(MLX)
 
 re: fclean all
