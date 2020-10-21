@@ -6,27 +6,32 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/10/21 16:29:45 by epanholz      ########   odam.nl          #
+#    Updated: 2020/10/21 16:59:57 by epanholz      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 RED = \033[1;38;5;168m
 BLU = \033[3;38;5;146m
 RES = \033[0m
+
 NAME := miniRT
 
-SRC := main.c read_file.c read_file_utils.c get_scene.c			\
-	check_scene.c check_scene_utils.c cam_list.c utils.c		\
-	matrix.c atod.c object_list.c intersect_triangle.c			\
-	intersect_sphere.c image_list.c hooks.c light.c				\
-	bitmap.c check_scene_objects.c get_objects.c error.c		\
-	get_scene_loop.c light_list.c render.c render_loop.c		\
-	intersect_plane.c intersect_cylinder.c intersect_square.c	\
-	vector_library1.c vector_library2.c							\
+SRC := main.c ./sources/bitmap/bitmap.c ./sources/colors/light.c ./sources/hooks/hooks.c		\
+		./sources/intersect/intersect_cylinder.c ./sources/intersect/intersect_plane.c			\
+		./sources/intersect/intersect_square.c ./sources/intersect/intersect_triangle.c			\
+		./sources/intersect/intersect_sphere.c ./sources/lists/cam_list.c						\
+		./sources/lists/image_list.c ./sources/lists/light_list.c ./sources/lists/object_list.c	\
+		./sources/math/atod.c ./sources/math/matrix.c ./sources/math/vector_library1.c			\
+		./sources/math/vector_library2.c ./sources/parser/check_scene_objects.c					\
+		./sources/parser/check_scene_utils.c ./sources/parser/check_scene.c						\
+		./sources/parser/get_objects.c ./sources/parser/get_scene_loop.c						\
+		./sources/parser/get_scene.c ./sources/parser/read_file_utils.c							\
+		./sources/parser/read_file.c ./sources/render/render_loop.c								\
+		./sources/render/render.c ./sources/utils/error.c ./sources/utils/utils.c				\
 
 INC := minirt.h
 
-FLAGS := -Wall -Wextra -Werror -I mlx
+FLAGS := -Wall -Wextra -Werror -Imlx -Iinc
 
 MFLAGS := -Lmlx/ -Lmlx -framework OpenGL -framework AppKit
 
