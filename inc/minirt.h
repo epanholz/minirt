@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:19:27 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/19 19:52:53 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/11/23 21:46:22 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <unistd.h>
+# include <pthread.h> 
 # include <math.h>
 
 typedef enum		e_type
@@ -305,7 +306,7 @@ typedef	struct		s_minirt
 }					t_minirt;
 
 void				ft_error(int mod);
-void				ft_delay(void);
+void				*bmp_print(void *vargp);
 void				my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color);
 int					rgbt(int t, int r, int g, int b);
 int					ft_strlen(char *s);

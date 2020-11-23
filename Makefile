@@ -6,7 +6,7 @@
 #    By: epanholz <epanholz@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/11/05 17:08:43 by epanholz      #+#    #+#                  #
-#    Updated: 2020/10/21 16:59:57 by epanholz      ########   odam.nl          #
+#    Updated: 2020/11/23 20:54:34 by pani_zino     ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ all: $(NAME)
 
 $(NAME): $(MLX) $(OBJ)
 	@echo "$(RED) \n ┌──────────────────────┐\n │ \xe2\x99\xa5 compiling miniRT \xe2\x99\xa5 │\n └──────────────────────┘\n$(RES)"
-	@gcc $(FLAGS) $(MFLAGS) -o $(NAME) $(SRC) $(MLX)
+	@gcc $(FLAGS) $(MFLAGS) -o $(NAME) -lpthread $(SRC) $(MLX)
 
 $(MLX):
 	@echo "$(RED) \n ┌──────────────────────┐\n │   \xe2\x99\xa5 compiling mlx \xe2\x99\xa5  │\n └──────────────────────┘\n$(RES)$(BLU)"

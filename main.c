@@ -6,7 +6,7 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:21:23 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/15 16:25:19 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/11/23 21:48:34 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void		delete_lists(t_minirt *minirt)
 int				main(int ac, char **av)
 {
 	t_minirt	*minirt;
+	pthread_t	tid;
 
 	minirt = (t_minirt*)malloc(sizeof(t_minirt));
 	if (!minirt)
@@ -82,6 +83,8 @@ int				main(int ac, char **av)
 			if (check_save(av[2]) == 1)
 				ft_error(ARG);
 			minirt->scene.save = 1;
+			pthread_create(&tid, NULL, bmp_print, NULL);
+			pthread_join(tid, NULL);
 		}
 		if (check_rt(av[1]) == 1)
 			ft_error(RT);

@@ -6,18 +6,18 @@
 /*   By: epanholz <epanholz@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/10 18:22:04 by epanholz      #+#    #+#                 */
-/*   Updated: 2020/10/19 19:40:38 by epanholz      ########   odam.nl         */
+/*   Updated: 2020/11/23 21:50:39 by pani_zino     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int		rgbt(int t, int r, int g, int b)
+int				rgbt(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-void	my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
+void			my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
 {
 	char	*dst;
 
@@ -26,7 +26,7 @@ void	my_mlx_pixel_put(t_minirt *minirt, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void	ft_delay(void)
+static void		ft_delay(void)
 {
 	int	c;
 	int	d;
@@ -39,4 +39,19 @@ void	ft_delay(void)
 			d++;
 		c++;
 	}
+}
+
+void			*bmp_print(void *vargp)
+{
+	int *myid;
+
+	myid = (int *)vargp;
+	write(1, "\033[1;38;5;168m\nSaving Bitmap \033[0m", 33);
+	ft_delay();
+	write(1, "\033[1;38;5;168m. \033[0m", 20);
+	ft_delay();
+	write(1, "\033[1;38;5;168m. \033[0m", 20);
+	ft_delay();
+	write(1, "\033[1;38;5;168m. \n\n\033[0m", 22);
+	return (NULL);
 }
